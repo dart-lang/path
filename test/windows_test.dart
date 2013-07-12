@@ -2,9 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library path_test;
-
-import 'dart:io' as io;
+library path.test.windows_test;
 
 import 'package:unittest/unittest.dart';
 import 'package:path/path.dart' as path;
@@ -333,6 +331,12 @@ main() {
         expect(builder.relative(r'..\a\b.txt'), r'..\a\b.txt');
         expect(builder.relative(r'a\.\b\..\c.txt'), r'a\c.txt');
       });
+
+      // Regression
+      test('from root-only path', () {
+        expect(builder.relative(r'C:\', from: r'C:\'), '.');
+        expect(builder.relative(r'C:\root\path', from: r'C:\'), r'root\path');
+      });
     });
 
     group('from relative root', () {
@@ -385,6 +389,12 @@ main() {
       expect(builder.relative(r'D:\a\b'), r'D:\a\b');
       expect(builder.relative(r'\\a\b'), r'\\a\b');
     });
+
+    test('from a . root', () {
+      var r = new path.Builder(style: path.Style.windows, root: '.');
+      expect(r.relative(r'C:\foo\bar\baz'), equals(r'C:\foo\bar\baz'));
+      expect(r.relative(r'foo\bar\baz'), equals(r'foo\bar\baz'));
+    });
   });
 
   group('resolve', () {
@@ -430,5 +440,39 @@ main() {
     expect(builder.withoutExtension(r'a\b/c.d'), r'a\b/c');
     expect(builder.withoutExtension(r'a.b/c'), r'a.b/c');
     expect(builder.withoutExtension(r'a\b.c\'), r'a\b\');
+  });
+
+  test('fromUri', () {
+    expect(builder.fromUri(Uri.parse('file:///C:/path/to/foo')),
+        r'C:\path\to\foo');
+    expect(builder.fromUri(Uri.parse('file://hostname/path/to/foo')),
+        r'\\hostname\path\to\foo');
+    expect(builder.fromUri(Uri.parse('file:///C:/')), r'C:\');
+    expect(builder.fromUri(Uri.parse('file://hostname/')), r'\\hostname\');
+    expect(builder.fromUri(Uri.parse('foo/bar')), r'foo\bar');
+    expect(builder.fromUri(Uri.parse('/C:/path/to/foo')), r'C:\path\to\foo');
+    expect(builder.fromUri(Uri.parse('///C:/path/to/foo')), r'C:\path\to\foo');
+    expect(builder.fromUri(Uri.parse('//hostname/path/to/foo')),
+        r'\\hostname\path\to\foo');
+    expect(builder.fromUri(Uri.parse('file:///C:/path/to/foo%23bar')),
+        r'C:\path\to\foo#bar');
+    expect(builder.fromUri(Uri.parse('file://hostname/path/to/foo%23bar')),
+        r'\\hostname\path\to\foo#bar');
+    expect(() => builder.fromUri(Uri.parse('http://dartlang.org')),
+        throwsArgumentError);
+  });
+
+  test('toUri', () {
+    expect(builder.toUri(r'C:\path\to\foo'),
+        Uri.parse('file:///C:/path/to/foo'));
+    expect(builder.toUri(r'C:\path\to\foo\'),
+        Uri.parse('file:///C:/path/to/foo/'));
+    expect(builder.toUri(r'C:\'), Uri.parse('file:///C:/'));
+    expect(builder.toUri(r'\\hostname\'), Uri.parse('file://hostname/'));
+    expect(builder.toUri(r'foo\bar'), Uri.parse('foo/bar'));
+    expect(builder.toUri(r'C:\path\to\foo#bar'),
+        Uri.parse('file:///C:/path/to/foo%23bar'));
+    expect(builder.toUri(r'\\hostname\path\to\foo#bar'),
+        Uri.parse('file://hostname/path/to/foo%23bar'));
   });
 }

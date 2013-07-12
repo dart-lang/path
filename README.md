@@ -1,12 +1,12 @@
 A comprehensive, cross-platform path manipulation library for Dart.
 
-The pathos library provides common operations for manipulating file paths:
+The path package provides common operations for manipulating file paths:
 joining, splitting, normalizing, etc.
 
 We've tried very hard to make this library do the "right" thing on whatever
-platform you run it on. When you use the top-level functions, it will assume
-the host OS's path style and work with that. If you want to specifically work
-with paths of a specific style, you can construct a `path.Builder` for that
+platform you run it on. When you use the top-level functions, it will assume the
+current platform's path style and work with that. If you want to specifically
+work with paths of a specific style, you can construct a `path.Builder` for that
 style.
 
 ## Using
@@ -14,22 +14,24 @@ style.
 The path library was designed to be imported with a prefix, though you don't
 have to if you don't want to:
 
-    import 'package:pathos/path.dart' as path;
+    import 'package:path/path.dart' as path; // TODO(bob): ???
 
 ## Top-level functions
 
 The most common way to use the library is through the top-level functions.
 These manipulate path strings based on your current working directory and the
-path style (POSIX or Windows) of the host operating system.
+path style (POSIX, Windows, or URLs) of the host platform.
 
 ### String get current
 
-Gets the path to the current working directory.
+Gets the path to the current working directory. In the browser, this means the
+current URL. When using dart2js, this currently returns `.` due to technical
+constraints. In the future, it will return the current URL.
 
 ### String get separator
 
-Gets the path separator for the current platform. On Mac and Linux, this
-is `/`. On Windows, it's `\`.
+Gets the path separator for the current platform. On Mac, Linux, and the
+browser, this is `/`. On Windows, it's `\`.
 
 ### String absolute(String path)
 
@@ -100,12 +102,23 @@ relative.
     path.rootPrefix(r'path\to\foo'); // -> ''
     path.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
 
+    // URL
+    path.rootPrefix('path/to/foo'); // -> ''
+    path.rootPrefix('http://dartlang.org/path/to/foo');
+      // -> 'http://dartlang.org'
+
 ### bool isAbsolute(String path)
 
-Returns `true` if [path] is an absolute path and `false` if it is a
-relative path. On POSIX systems, absolute paths start with a `/` (forward
-slash). On Windows, an absolute path starts with `\\`, or a drive letter
-followed by `:/` or `:\`.
+Returns `true` if [path] is an absolute path and `false` if it is a relative
+path. On POSIX systems, absolute paths start with a `/` (forward slash). On
+Windows, an absolute path starts with `\\`, or a drive letter followed by `:/`
+or `:\`. For URLs, absolute paths either start with a protocol and optional
+hostname (e.g. `http://dartlang.org`, `file://`) or with a `/`.
+
+URLs that start with `/` are known as "root-relative", since they're relative to
+the root of the current URL. Since root-relative paths are still absolute in
+every other sense, [isAbsolute] will return true for them. They can be detected
+using [isRootRelative].
 
 ### bool isRelative(String path)
 
@@ -113,6 +126,16 @@ Returns `true` if [path] is a relative path and `false` if it is absolute.
 On POSIX systems, absolute paths start with a `/` (forward slash). On
 Windows, an absolute path starts with `\\`, or a drive letter followed by
 `:/` or `:\`.
+
+### bool isRootRelative(String path)
+
+Returns `true` if [path] is a root-relative path and `false` if it's not. URLs
+that start with `/` are known as "root-relative", since they're relative to the
+root of the current URL. Since root-relative paths are still absolute in every
+other sense, [isAbsolute] will return true for them. They can be detected using
+[isRootRelative].
+
+No POSIX and Windows paths are root-relative.
 
 ### String join(String part1, [String part2, String part3, ...])
 
@@ -149,6 +172,10 @@ array. Example:
     // Windows
     path.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
 
+    // Browser
+    path.split('http://dartlang.org/path/to/foo');
+      // -> ['http://dartlang.org', 'path', 'to', 'foo']
+
 ### String normalize(String path)
 
 Normalizes [path], simplifying it by handling `..`, and `.`, and
@@ -176,13 +203,56 @@ If the [from] argument is passed, [path] is made relative to that instead.
 Since there is no relative path from one drive letter to another on Windows,
 this will return an absolute path in that case.
 
+    // Windows
     path.relative(r'D:\other', from: r'C:\home'); // -> 'D:\other'
+
+    // URL
+    path.relative('http://dartlang.org', from: 'http://pub.dartlang.org');
+      // -> 'http://dartlang.org'
 
 ### String withoutExtension(String path)
 
 Removes a trailing extension from the last part of [path].
 
     withoutExtension('path/to/foo.dart'); // -> 'path/to/foo'
+
+### String fromUri(Uri uri)
+
+Returns the path represented by [uri]. For POSIX and Windows styles, [uri] must
+be a `file:` URI. For the URL style, this will just convert [uri] to a string.
+
+    // POSIX
+    path.fromUri(Uri.parse('file:///path/to/foo'))
+      // -> '/path/to/foo'
+
+    // Windows
+    path.fromUri(Uri.parse('file:///C:/path/to/foo'))
+      // -> r'C:\path\to\foo'
+
+    // URL
+    path.fromUri(Uri.parse('http://dartlang.org/path/to/foo'))
+      // -> 'http://dartlang.org/path/to/foo'
+
+### Uri toUri(String path)
+
+Returns the URI that represents [path]. For POSIX and Windows styles, this will
+return a `file:` URI. For the URL style, this will just convert [path] to a
+[Uri].
+
+This will always convert relative paths to absolute ones before converting
+to a URI.
+
+    // POSIX
+    path.toUri('/path/to/foo')
+      // -> Uri.parse('file:///path/to/foo')
+
+    // Windows
+    path.toUri(r'C:\path\to\foo')
+      // -> Uri.parse('file:///C:/path/to/foo')
+
+    // URL
+    path.toUri('http://dartlang.org/path/to/foo')
+      // -> Uri.parse('http://dartlang.org/path/to/foo')
 
 ## The path.Builder class
 
@@ -234,6 +304,11 @@ relative.
     builder.rootPrefix(r'path\to\foo'); // -> ''
     builder.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
 
+    // URL
+    builder.rootPrefix('path/to/foo'); // -> ''
+    builder.rootPrefix('http://dartlang.org/path/to/foo');
+      // -> 'http://dartlang.org'
+
 ### String resolve(String part1, [String part2, String part3, ...])
 
 Creates a new path by appending the given path parts to the [root].
@@ -244,9 +319,9 @@ Equivalent to [join()] with [root] as the first argument. Example:
 
 ## The path.Style class
 
-The path library can work with two different "flavors" of path: POSIX and
-Windows. The differences between these are encapsulated by the `path.Style`
-enum class. There are two instances of it:
+The path library can work with three different "flavors" of path: POSIX,
+Windows, and URLs. The differences between these are encapsulated by the
+`path.Style` enum class. There are three instances of it:
 
 ### path.Style.posix
 
@@ -259,16 +334,22 @@ Windows paths use "\" (backslash) as separators. Absolute paths start with
 a drive letter followed by a colon (example, "C:") or two backslashes
 ("\\") for UNC paths.
 
+### path.Style.url
+
+URLs aren't filesystem paths, but they're supported by Pathos to make it easier
+to manipulate URL paths in the browser.
+
+URLs use "/" (forward slash) as separators. Absolute paths either start with a
+protocol and optional hostname (e.g. `http://dartlang.org`, `file://`) or with
+"/".
+
 ## FAQ
 
 ### Where can I use this?
 
-Currently, Dart has no way of encapsulating configuration-specific code.
-Ideally, this library would be able to import dart:io when that's available or
-dart:html when that is. That would let it seamlessly work on both.
-
-Until then, this only works on the standalone VM. It's API is not coupled to
-dart:io, but it uses it internally to determine the current working directory.
+Pathos runs on the Dart VM and in the browser under both dart2js and Dartium.
+Under dart2js, it currently returns "." as the current working directory, while
+under Dartium it returns the current URL.
 
 ### Why doesn't this make paths first-class objects?
 

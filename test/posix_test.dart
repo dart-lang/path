@@ -2,9 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library path_test;
-
-import 'dart:io' as io;
+library path.test.posix_test;
 
 import 'package:unittest/unittest.dart';
 import 'package:path/path.dart' as path;
@@ -300,6 +298,12 @@ main() {
         expect(builder.relative('../a/b.txt'), '../a/b.txt');
         expect(builder.relative('a/./b/../c.txt'), 'a/c.txt');
       });
+
+      // Regression
+      test('from root-only path', () {
+        expect(builder.relative('/', from: '/'), '.');
+        expect(builder.relative('/root/path', from: '/'), 'root/path');
+      });
     });
 
     group('from relative root', () {
@@ -343,6 +347,12 @@ main() {
       expect(r.relative('/foo/bar/baz', from: 'foo/bar'),
           equals('/foo/bar/baz'));
       expect(r.relative('..', from: 'foo/bar'), equals('../../..'));
+    });
+
+    test('from a . root', () {
+      var r = new path.Builder(style: path.Style.posix, root: '.');
+      expect(r.relative('/foo/bar/baz'), equals('/foo/bar/baz'));
+      expect(r.relative('foo/bar/baz'), equals('foo/bar/baz'));
     });
   });
 
@@ -388,5 +398,27 @@ main() {
     expect(builder.withoutExtension(r'a/b\c.d'), r'a/b\c');
     expect(builder.withoutExtension('a/b.c/'), 'a/b/');
     expect(builder.withoutExtension('a/b.c//'), 'a/b//');
+  });
+
+  test('fromUri', () {
+    expect(builder.fromUri(Uri.parse('file:///path/to/foo')), '/path/to/foo');
+    expect(builder.fromUri(Uri.parse('file:///path/to/foo/')), '/path/to/foo/');
+    expect(builder.fromUri(Uri.parse('file:///')), '/');
+    expect(builder.fromUri(Uri.parse('foo/bar')), 'foo/bar');
+    expect(builder.fromUri(Uri.parse('/path/to/foo')), '/path/to/foo');
+    expect(builder.fromUri(Uri.parse('///path/to/foo')), '/path/to/foo');
+    expect(builder.fromUri(Uri.parse('file:///path/to/foo%23bar')),
+        '/path/to/foo#bar');
+    expect(() => builder.fromUri(Uri.parse('http://dartlang.org')),
+        throwsArgumentError);
+  });
+
+  test('toUri', () {
+    expect(builder.toUri('/path/to/foo'), Uri.parse('file:///path/to/foo'));
+    expect(builder.toUri('/path/to/foo/'), Uri.parse('file:///path/to/foo/'));
+    expect(builder.toUri('/'), Uri.parse('file:///'));
+    expect(builder.toUri('foo/bar'), Uri.parse('foo/bar'));
+    expect(builder.toUri('/path/to/foo#bar'),
+        Uri.parse('file:///path/to/foo%23bar'));
   });
 }
