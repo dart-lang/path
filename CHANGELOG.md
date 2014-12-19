@@ -1,3 +1,7 @@
+## 1.3.1
+
+* Add a number of performance improvements.
+
 ## 1.3.0
 
 * Expose a top-level `context` field that provides access to a `Context` object
