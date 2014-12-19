@@ -15,7 +15,7 @@ packages/*: Skip
 test/*: Skip
 
 [ $browser ]
-*/io_test: Fail, OK # Uses dart:io.
+build/test/io_test: Fail, OK # Uses dart:io.
 
 [ $runtime == vm ]
-*/browser_test: Fail, OK # Uses dart:html
+build/test/browser_test: Fail, OK # Uses dart:html
