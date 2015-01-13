@@ -13,16 +13,16 @@ void main() {
   test("test relative", () {
     relativeTest(new path.Context(style: path.Style.posix, current: '.'), '/');
     relativeTest(new path.Context(style: path.Style.posix, current: '/'), '/');
-    relativeTest(new path.Context(style: path.Style.windows, current: r'd:\'),
-                 r'c:\');
-    relativeTest(new path.Context(style: path.Style.windows, current: '.'),
-                 r'c:\');
+    relativeTest(
+        new path.Context(style: path.Style.windows, current: r'd:\'), r'c:\');
+    relativeTest(
+        new path.Context(style: path.Style.windows, current: '.'), r'c:\');
     relativeTest(new path.Context(style: path.Style.url, current: 'file:///'),
-                 'http://myserver/');
+        'http://myserver/');
     relativeTest(new path.Context(style: path.Style.url, current: '.'),
-                 'http://myserver/');
-    relativeTest(new path.Context(style: path.Style.url, current: 'file:///'),
-                 '/');
+        'http://myserver/');
+    relativeTest(
+        new path.Context(style: path.Style.url, current: 'file:///'), '/');
     relativeTest(new path.Context(style: path.Style.url, current: '.'), '/');
   });
 }
@@ -78,10 +78,9 @@ void relativeTest(path.Context context, String prefix) {
   // Should always throw - no relative path can be constructed.
   if (isRelative) {
     expect(() => context.relative('.', from: '..'), throwsPathException);
-    expect(() => context.relative('a/b', from: '../../d'),
-           throwsPathException);
+    expect(() => context.relative('a/b', from: '../../d'), throwsPathException);
     expect(() => context.relative('a/b', from: '${prefix}a/b'),
-           throwsPathException);
+        throwsPathException);
     // An absolute path relative from a relative path returns the absolute path.
     expectRelative('${prefix}a/b', '${prefix}a/b', 'c/d');
   }

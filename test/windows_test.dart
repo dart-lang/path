@@ -10,8 +10,8 @@ import 'package:path/path.dart' as path;
 import 'utils.dart';
 
 main() {
-  var context = new path.Context(style: path.Style.windows,
-                                 current: r'C:\root\path');
+  var context =
+      new path.Context(style: path.Style.windows, current: r'C:\root\path');
 
   group('separator', () {
     expect(context.separator, '\\');
@@ -247,7 +247,7 @@ main() {
     test('join does not modify internal ., .., or trailing separators', () {
       expect(context.join('a/', 'b/c/'), 'a/b/c/');
       expect(context.join(r'a\b\./c\..\\', r'd\..\.\..\\e\f\\'),
-             r'a\b\./c\..\\d\..\.\..\\e\f\\');
+          r'a\b\./c\..\\d\..\.\..\\e\f\\');
       expect(context.join(r'a\b', r'c\..\..\..\..'), r'a\b\c\..\..\..\..');
       expect(context.join(r'a', 'b${context.separator}'), r'a\b\');
     });
@@ -301,8 +301,8 @@ main() {
           equals([r'\\server\share', 'foo', 'bar', 'baz']));
       expect(context.split(r'\\server\share'), equals([r'\\server\share']));
 
-      expect(context.split(r'\foo\bar\baz'),
-          equals([r'\', 'foo', 'bar', 'baz']));
+      expect(
+          context.split(r'\foo\bar\baz'), equals([r'\', 'foo', 'bar', 'baz']));
       expect(context.split(r'\'), equals([r'\']));
     });
   });
@@ -321,7 +321,7 @@ main() {
       expect(context.normalize(r'C:\'), r'C:\');
       expect(context.normalize(r'\\server\share'), r'\\server\share');
       expect(context.normalize('a\\.\\\xc5\u0bf8-;\u{1f085}\u{00}\\c\\d\\..\\'),
-             'a\\\xc5\u0bf8-;\u{1f085}\u{00}\x5cc');
+          'a\\\xc5\u0bf8-;\u{1f085}\u{00}\x5cc');
     });
 
     test('collapses redundant separators', () {
@@ -350,8 +350,8 @@ main() {
       expect(context.normalize(r'..\..\..'), r'..\..\..');
       expect(context.normalize(r'../..\..\'), r'..\..\..');
       expect(context.normalize(r'\\server\share\..'), r'\\server\share');
-      expect(context.normalize(r'\\server\share\..\../..\a'),
-          r'\\server\share\a');
+      expect(
+          context.normalize(r'\\server\share\..\../..\a'), r'\\server\share\a');
       expect(context.normalize(r'c:\..'), r'c:\');
       expect(context.normalize(r'A:/..\..\..'), r'A:\');
       expect(context.normalize(r'b:\..\..\..\a'), r'b:\a');
@@ -483,16 +483,16 @@ main() {
     });
 
     test('from a root with extension', () {
-      var r = new path.Context(
-          style: path.Style.windows, current: r'C:\dir.ext');
+      var r =
+          new path.Context(style: path.Style.windows, current: r'C:\dir.ext');
       expect(r.relative(r'C:\dir.ext\file'), 'file');
     });
 
     test('with a root parameter', () {
       expect(context.relative(r'C:\foo\bar\baz', from: r'C:\foo\bar'),
           equals('baz'));
-      expect(context.relative('..', from: r'C:\foo\bar'),
-          equals(r'..\..\root'));
+      expect(
+          context.relative('..', from: r'C:\foo\bar'), equals(r'..\..\root'));
       expect(context.relative('..', from: r'D:\foo\bar'), equals(r'C:\root'));
       expect(context.relative(r'C:\foo\bar\baz', from: r'foo\bar'),
           equals(r'..\..\..\..\foo\bar\baz'));
@@ -553,8 +553,8 @@ main() {
       expect(context.absolute('a', 'b'), r'C:\root\path\a\b');
       expect(context.absolute('a', 'b', 'c'), r'C:\root\path\a\b\c');
       expect(context.absolute('a', 'b', 'c', 'd'), r'C:\root\path\a\b\c\d');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e'),
-          r'C:\root\path\a\b\c\d\e');
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e'), r'C:\root\path\a\b\c\d\e');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f'),
           r'C:\root\path\a\b\c\d\e\f');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g'),
@@ -600,18 +600,18 @@ main() {
       expect(context.fromUri(Uri.parse('file://server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/')), r'C:\');
-      expect(context.fromUri(Uri.parse('file://server/share')),
-          r'\\server\share');
+      expect(
+          context.fromUri(Uri.parse('file://server/share')), r'\\server\share');
       expect(context.fromUri(Uri.parse('foo/bar')), r'foo\bar');
       expect(context.fromUri(Uri.parse('/C:/path/to/foo')), r'C:\path\to\foo');
-      expect(context.fromUri(Uri.parse('///C:/path/to/foo')),
-          r'C:\path\to\foo');
+      expect(
+          context.fromUri(Uri.parse('///C:/path/to/foo')), r'C:\path\to\foo');
       expect(context.fromUri(Uri.parse('//server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo%23bar')),
           r'C:\path\to\foo#bar');
-      expect(context.fromUri(
-          Uri.parse('file://server/share/path/to/foo%23bar')),
+      expect(
+          context.fromUri(Uri.parse('file://server/share/path/to/foo%23bar')),
           r'\\server\share\path\to\foo#bar');
       expect(context.fromUri(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
           r'_{_}_`_^_ _"_%_');
@@ -625,14 +625,14 @@ main() {
   });
 
   test('toUri', () {
-    expect(context.toUri(r'C:\path\to\foo'),
-        Uri.parse('file:///C:/path/to/foo'));
+    expect(
+        context.toUri(r'C:\path\to\foo'), Uri.parse('file:///C:/path/to/foo'));
     expect(context.toUri(r'C:\path\to\foo\'),
         Uri.parse('file:///C:/path/to/foo/'));
     expect(context.toUri(r'C:\'), Uri.parse('file:///C:/'));
     expect(context.toUri(r'\\server\share'), Uri.parse('file://server/share'));
-    expect(context.toUri(r'\\server\share\'),
-        Uri.parse('file://server/share/'));
+    expect(
+        context.toUri(r'\\server\share\'), Uri.parse('file://server/share/'));
     expect(context.toUri(r'foo\bar'), Uri.parse('foo/bar'));
     expect(context.toUri(r'C:\path\to\foo#bar'),
         Uri.parse('file:///C:/path/to/foo%23bar'));
@@ -648,12 +648,11 @@ main() {
     test('with a file: URI', () {
       expect(context.prettyUri('file:///C:/root/path/a/b'), r'a\b');
       expect(context.prettyUri('file:///C:/root/path/a/../b'), r'b');
-      expect(context.prettyUri('file:///C:/other/path/a/b'),
-          r'C:\other\path\a\b');
-      expect(context.prettyUri('file:///D:/root/path/a/b'),
-          r'D:\root\path\a\b');
-      expect(context.prettyUri('file:///C:/root/other'),
-          r'..\other');
+      expect(
+          context.prettyUri('file:///C:/other/path/a/b'), r'C:\other\path\a\b');
+      expect(
+          context.prettyUri('file:///D:/root/path/a/b'), r'D:\root\path\a\b');
+      expect(context.prettyUri('file:///C:/root/other'), r'..\other');
     });
 
     test('with an http: URI', () {

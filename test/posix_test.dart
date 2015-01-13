@@ -10,8 +10,8 @@ import 'package:path/path.dart' as path;
 import 'utils.dart';
 
 main() {
-  var context = new path.Context(
-      style: path.Style.posix, current: '/root/path');
+  var context =
+      new path.Context(style: path.Style.posix, current: '/root/path');
 
   test('separator', () {
     expect(context.separator, '/');
@@ -184,7 +184,7 @@ main() {
     test('join does not modify internal ., .., or trailing separators', () {
       expect(context.join('a/', 'b/c/'), 'a/b/c/');
       expect(context.join('a/b/./c/..//', 'd/.././..//e/f//'),
-             'a/b/./c/..//d/.././..//e/f//');
+          'a/b/./c/..//d/.././..//e/f//');
       expect(context.join('a/b', 'c/../../../..'), 'a/b/c/../../../..');
       expect(context.join('a', 'b${context.separator}'), 'a/b/');
     });
@@ -245,7 +245,7 @@ main() {
       expect(context.normalize(r'C:\'), r'C:\');
       expect(context.normalize(r'\\'), r'\\');
       expect(context.normalize('a/./\xc5\u0bf8-;\u{1f085}\u{00}/c/d/../'),
-             'a/\xc5\u0bf8-;\u{1f085}\u{00}/c');
+          'a/\xc5\u0bf8-;\u{1f085}\u{00}/c');
     });
 
     test('collapses redundant separators', () {
@@ -392,12 +392,12 @@ main() {
     });
 
     test('with a root parameter and a relative root', () {
-      var r = new path.Context(
-          style: path.Style.posix, current: 'relative/root');
+      var r =
+          new path.Context(style: path.Style.posix, current: 'relative/root');
       expect(r.relative('/foo/bar/baz', from: '/foo/bar'), equals('baz'));
       expect(() => r.relative('..', from: '/foo/bar'), throwsPathException);
-      expect(r.relative('/foo/bar/baz', from: 'foo/bar'),
-          equals('/foo/bar/baz'));
+      expect(
+          r.relative('/foo/bar/baz', from: 'foo/bar'), equals('/foo/bar/baz'));
       expect(r.relative('..', from: 'foo/bar'), equals('../../..'));
     });
 
@@ -449,8 +449,8 @@ main() {
 
     test('ignores parts before an absolute path', () {
       expect(context.absolute('a', '/b', '/c', 'd'), '/c/d');
-      expect(context.absolute('a', r'c:\b', 'c', 'd'),
-          r'/root/path/a/c:\b/c/d');
+      expect(
+          context.absolute('a', r'c:\b', 'c', 'd'), r'/root/path/a/c:\b/c/d');
       expect(context.absolute('a', r'\\b', 'c', 'd'), r'/root/path/a/\\b/c/d');
     });
   });
@@ -477,8 +477,8 @@ main() {
   group('fromUri', () {
     test('with a URI', () {
       expect(context.fromUri(Uri.parse('file:///path/to/foo')), '/path/to/foo');
-      expect(context.fromUri(Uri.parse('file:///path/to/foo/')),
-          '/path/to/foo/');
+      expect(
+          context.fromUri(Uri.parse('file:///path/to/foo/')), '/path/to/foo/');
       expect(context.fromUri(Uri.parse('file:///')), '/');
       expect(context.fromUri(Uri.parse('foo/bar')), 'foo/bar');
       expect(context.fromUri(Uri.parse('/path/to/foo')), '/path/to/foo');

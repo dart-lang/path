@@ -48,11 +48,7 @@ main(args) {
   }
 }
 
-const COMMON_PATHS = const [
-  '.',
-  '..',
-  'out/ReleaseIA32/packages',
-];
+const COMMON_PATHS = const ['.', '..', 'out/ReleaseIA32/packages'];
 
 final STYLE_PATHS = {
   path.Style.posix: [

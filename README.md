@@ -14,13 +14,17 @@ construct a `path.Context` for that style.
 The path library was designed to be imported with a prefix, though you don't
 have to if you don't want to:
 
-    import 'package:path/path.dart' as path;
+```dart
+import 'package:path/path.dart' as path;
+```
 
 The most common way to use the library is through the top-level functions.
 These manipulate path strings based on your current working directory and
 the path style (POSIX, Windows, or URLs) of the host platform. For example:
 
-    path.join("directory", "file.txt");
+```dart
+path.join("directory", "file.txt");
+```
 
 This calls the top-level [join] function to join "directory" and
 "file.txt" using the current platform's directory separator.
@@ -29,8 +33,10 @@ If you want to work with paths for a specific platform regardless of the
 underlying platform that the program is running on, you can create a
 [Context] and give it an explicit [Style]:
 
-    var context = new path.Context(style: Style.windows);
-    context.join("directory", "file.txt");
+```dart
+var context = new path.Context(style: Style.windows);
+context.join("directory", "file.txt");
+```
 
 This will join "directory" and "file.txt" using the Windows path separator,
 even when the program is run on a POSIX machine.

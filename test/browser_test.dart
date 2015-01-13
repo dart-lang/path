@@ -15,7 +15,7 @@ main() {
     test('uses the window location if root and style are omitted', () {
       var context = new path.Context();
       expect(context.current,
-             Uri.parse(window.location.href).resolve('.').toString());
+          Uri.parse(window.location.href).resolve('.').toString());
     });
 
     test('uses "." if root is omitted', () {
@@ -34,7 +34,7 @@ main() {
   });
 
   test('current', () {
-    expect(path.current,
-           Uri.parse(window.location.href).resolve('.').toString());
+    expect(
+        path.current, Uri.parse(window.location.href).resolve('.').toString());
   });
 }
