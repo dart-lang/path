@@ -539,11 +539,11 @@ main() {
 
     test('from a relative root', () {
       var r = new path.Context(style: path.Style.windows, current: r'foo\bar');
-      expect(context.isWithin('.', r'a\b\c'), isTrue);
-      expect(context.isWithin('.', r'..\a\b\c'), isFalse);
-      expect(context.isWithin('.', r'..\..\a\foo\b\c'), isFalse);
-      expect(context.isWithin(r'C:\', r'C:\baz\bang'), isTrue);
-      expect(context.isWithin('.', r'C:\baz\bang'), isFalse);
+      expect(r.isWithin('.', r'a\b\c'), isTrue);
+      expect(r.isWithin('.', r'..\a\b\c'), isFalse);
+      expect(r.isWithin('.', r'..\..\a\foo\b\c'), isFalse);
+      expect(r.isWithin(r'C:\', r'C:\baz\bang'), isTrue);
+      expect(r.isWithin('.', r'C:\baz\bang'), isFalse);
     });
   });
 

@@ -639,13 +639,12 @@ main() {
 
     test('from a relative root', () {
       var r = new path.Context(style: path.Style.url, current: 'foo/bar');
-      expect(context.isWithin('.', 'a/b/c'), isTrue);
-      expect(context.isWithin('.', '../a/b/c'), isFalse);
-      expect(context.isWithin('.', '../../a/foo/b/c'), isFalse);
-      expect(context.isWithin(
-              'http://dartlang.org/', 'http://dartlang.org/baz/bang'),
-          isTrue);
-      expect(context.isWithin('.', 'http://dartlang.org/baz/bang'), isFalse);
+      expect(r.isWithin('.', 'a/b/c'), isTrue);
+      expect(r.isWithin('.', '../a/b/c'), isFalse);
+      expect(r.isWithin('.', '../../a/foo/b/c'), isFalse);
+      expect(r.isWithin(
+          'http://dartlang.org/', 'http://dartlang.org/baz/bang'), isTrue);
+      expect(r.isWithin('.', 'http://dartlang.org/baz/bang'), isFalse);
     });
   });
 
