@@ -1,3 +1,7 @@
+## 1.3.2
+
+* Fix some analyzer hints.
+
 ## 1.3.1
 
 * Add a number of performance improvements.
