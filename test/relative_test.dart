@@ -31,7 +31,7 @@ void relativeTest(path.Context context, String prefix) {
   var isRelative = (context.current == '.');
   // Cases where the arguments are absolute paths.
   expectRelative(result, pathArg, fromArg) {
-    expect(context.normalize(result), context.relative(pathArg, from: fromArg));
+    expect(context.relative(pathArg, from: fromArg), context.normalize(result));
   }
 
   expectRelative('c/d', '${prefix}a/b/c/d', '${prefix}a/b');

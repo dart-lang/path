@@ -1,3 +1,8 @@
+## 1.3.3
+
+* Performance improvement in `Context.relative` - don't call `current` if `from`
+  is not relative.
+
 ## 1.3.2
 
 * Fix some analyzer hints.
