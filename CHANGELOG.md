@@ -1,3 +1,7 @@
+## 1.3.4
+
+* Fix dev_compiler warnings.
+
 ## 1.3.3
 
 * Performance improvement in `Context.relative` - don't call `current` if `from`
