@@ -1,3 +1,7 @@
+## 1.3.5
+
+* Added type annotations to top-level and static fields.
+
 ## 1.3.4
 
 * Fix dev_compiler warnings.
