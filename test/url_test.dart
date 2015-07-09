@@ -721,6 +721,7 @@ main() {
         Uri.parse('http://dartlang.org/path/to/foo'));
     expect(context.toUri('http://dartlang.org/path/to/foo/'),
         Uri.parse('http://dartlang.org/path/to/foo/'));
+    expect(context.toUri('path/to/foo/'), Uri.parse('path/to/foo/'));
     expect(
         context.toUri('file:///path/to/foo'), Uri.parse('file:///path/to/foo'));
     expect(context.toUri('foo/bar'), Uri.parse('foo/bar'));

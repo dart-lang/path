@@ -629,6 +629,7 @@ main() {
         context.toUri(r'C:\path\to\foo'), Uri.parse('file:///C:/path/to/foo'));
     expect(context.toUri(r'C:\path\to\foo\'),
         Uri.parse('file:///C:/path/to/foo/'));
+    expect(context.toUri(r'path\to\foo\'), Uri.parse('path/to/foo/'));
     expect(context.toUri(r'C:\'), Uri.parse('file:///C:/'));
     expect(context.toUri(r'\\server\share'), Uri.parse('file://server/share'));
     expect(

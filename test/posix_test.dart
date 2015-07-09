@@ -499,6 +499,7 @@ main() {
   test('toUri', () {
     expect(context.toUri('/path/to/foo'), Uri.parse('file:///path/to/foo'));
     expect(context.toUri('/path/to/foo/'), Uri.parse('file:///path/to/foo/'));
+    expect(context.toUri('path/to/foo/'), Uri.parse('path/to/foo/'));
     expect(context.toUri('/'), Uri.parse('file:///'));
     expect(context.toUri('foo/bar'), Uri.parse('foo/bar'));
     expect(context.toUri('/path/to/foo#bar'),

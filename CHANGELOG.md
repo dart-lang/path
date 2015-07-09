@@ -1,3 +1,7 @@
+## 1.3.6
+
+* Ensure that `path.toUri` preserves trailing slashes for relative paths.
+
 ## 1.3.5
 
 * Added type annotations to top-level and static fields.
