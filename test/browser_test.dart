@@ -2,15 +2,14 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+@TestOn('browser')
+
 import 'dart:html';
 
-import 'package:unittest/unittest.dart';
-import 'package:unittest/html_config.dart';
+import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
 main() {
-  useHtmlConfiguration();
-
   group('new Context()', () {
     test('uses the window location if root and style are omitted', () {
       var context = new path.Context();

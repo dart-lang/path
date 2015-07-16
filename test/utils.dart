@@ -4,7 +4,7 @@
 
 library path.test.utils;
 
-import "package:unittest/unittest.dart";
+import "package:test/test.dart";
 import "package:path/path.dart" as path;
 
 /// A matcher for a closure that throws a [path.PathException].

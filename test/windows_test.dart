@@ -4,7 +4,7 @@
 
 library path.test.windows_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
 import 'utils.dart';
@@ -13,7 +13,7 @@ main() {
   var context =
       new path.Context(style: path.Style.windows, current: r'C:\root\path');
 
-  group('separator', () {
+  test('separator', () {
     expect(context.separator, '\\');
   });
 

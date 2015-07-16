@@ -4,7 +4,7 @@
 
 library path.test.posix_test;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
 import 'utils.dart';
