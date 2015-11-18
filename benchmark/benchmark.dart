@@ -33,6 +33,7 @@ main(args) {
       }
     }
 
+    benchmark('absolute', context.absolute);
     benchmark('basename', context.basename);
     benchmark('basenameWithoutExtension', context.basenameWithoutExtension);
     benchmark('dirname', context.dirname);

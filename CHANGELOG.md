@@ -1,3 +1,7 @@
+## 1.3.7
+
+* Improve the performance of `absolute()` and `normalize()`.
+
 ## 1.3.6
 
 * Ensure that `path.toUri` preserves trailing slashes for relative paths.

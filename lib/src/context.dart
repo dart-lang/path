@@ -4,6 +4,7 @@
 
 library path.context;
 
+import 'characters.dart' as chars;
 import 'internal_style.dart';
 import 'style.dart';
 import 'parsed_path.dart';
@@ -73,6 +74,15 @@ class Context {
   /// If [current] isn't absolute, this won't return an absolute path.
   String absolute(String part1, [String part2, String part3, String part4,
       String part5, String part6, String part7]) {
+    _validateArgList(
+        "absolute", [part1, part2, part3, part4, part5, part6, part7]);
+
+    // If there's a single absolute path, just return it. This is a lot faster
+    // for the common case of `p.absolute(path)`.
+    if (part2 == null && isAbsolute(part1) && !isRootRelative(part1)) {
+      return part1;
+    }
+
     return join(current, part1, part2, part3, part4, part5, part6, part7);
   }
 
@@ -295,9 +305,77 @@ class Context {
   ///
   ///     context.normalize('path/./to/..//file.text'); // -> 'path/file.txt'
   String normalize(String path) {
+    if (!_needsNormalization(path)) return path;
+
     var parsed = _parse(path);
     parsed.normalize();
     return parsed.toString();
+  }
+
+  /// Returns whether [path] needs to be normalized.
+  bool _needsNormalization(String path) {
+    var start = 0;
+    var codeUnits = path.codeUnits;
+    var previousPrevious;
+    var previous;
+
+    // Skip past the root before we start looking for snippets that need
+    // normalization. We want to normalize "//", but not when it's part of
+    // "http://".
+    var root = style.rootLength(path);
+    if (root != 0) {
+      start = root;
+      previous = chars.SLASH;
+
+      // On Windows, the root still needs to be normalized if it contains a
+      // forward slash.
+      if (style == Style.windows) {
+        for (var i = 0; i < root; i++) {
+          if (codeUnits[i] == chars.SLASH) return true;
+        }
+      }
+    }
+
+    for (var i = start; i < codeUnits.length; i++) {
+      var codeUnit = codeUnits[i];
+      if (style.isSeparator(codeUnit)) {
+        // Forward slashes in Windows paths are normalized to backslashes.
+        if (style == Style.windows && codeUnit == chars.SLASH) return true;
+
+        // Multiple separators are normalized to single separators.
+        if (previous != null && style.isSeparator(previous)) return true;
+
+        // Single dots and double dots are normalized to directory traversals.
+        //
+        // This can return false positives for ".../", but that's unlikely
+        // enough that it's probably not going to cause performance issues.
+        if (previous == chars.PERIOD &&
+            (previousPrevious == null ||
+             previousPrevious == chars.PERIOD ||
+             style.isSeparator(previousPrevious))) {
+          return true;
+        }
+      }
+
+      previousPrevious = previous;
+      previous = codeUnit;
+    }
+
+    // Empty paths are normalized to ".".
+    if (previous == null) return true;
+
+    // Trailing separators are removed.
+    if (style.isSeparator(previous)) return true;
+
+    // Single dots and double dots are normalized to directory traversals.
+    if (previous == chars.PERIOD &&
+        (previousPrevious == null ||
+         previousPrevious == chars.SLASH ||
+         previousPrevious == chars.PERIOD)) {
+      return true;
+    }
+
+    return false;
   }
 
   /// Attempts to convert [path] to an equivalent relative path relative to
