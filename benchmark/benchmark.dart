@@ -47,6 +47,10 @@ main(args) {
     benchmark('toUri', context.toUri);
     benchmark('prettyUri', context.prettyUri);
   }
+
+  if (args.isEmpty || args.any((arg) => arg == 'current')) {
+    runBenchmark('current', (_) => path.current, [null]);
+  }
 }
 
 const COMMON_PATHS = const ['.', '..', 'out/ReleaseIA32/packages'];
