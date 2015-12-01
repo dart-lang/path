@@ -412,7 +412,7 @@ class Context {
   /// thrown.
   String relative(String path, {String from}) {
     // Avoid expensive computation if the path is already relative.
-    if (from == null && this.isRelative(path)) return path;
+    if (from == null && this.isRelative(path)) return this.normalize(path);
 
     // Avoid calling [current] since it is slow and calling join() when
     // [from] is absolute does nothing.
