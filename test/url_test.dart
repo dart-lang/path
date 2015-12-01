@@ -629,6 +629,31 @@ main() {
           isFalse);
     });
 
+    test('complex cases', () {
+      expect(context.isWithin('foo/./bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo//bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo/qux/../bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/../..'), isFalse);
+      expect(context.isWithin('foo/bar', 'foo/bar///'), isFalse);
+      expect(context.isWithin('foo/.bar', 'foo/.bar/baz'), isTrue);
+      expect(context.isWithin('foo/./bar', 'foo/.bar/baz'), isFalse);
+      expect(context.isWithin('foo/..bar', 'foo/..bar/baz'), isTrue);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/..'), isFalse);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/../qux'), isTrue);
+      expect(context.isWithin('http://example.org/', 'http://example.com/foo'),
+          isFalse);
+      expect(context.isWithin('http://example.org/', 'http://dartlang.org/foo'),
+          isFalse);
+    });
+
+    test('with root-relative paths', () {
+      expect(context.isWithin('/foo', 'http://dartlang.org/foo/bar'), isTrue);
+      expect(context.isWithin('http://dartlang.org/foo', '/foo/bar'), isTrue);
+      expect(context.isWithin('/root', 'foo/bar'), isTrue);
+      expect(context.isWithin('foo', '/root/path/foo/bar'), isTrue);
+      expect(context.isWithin('/foo', '/foo/bar'), isTrue);
+    });
+
     test('from a relative root', () {
       var r = new path.Context(style: path.Style.url, current: 'foo/bar');
       expect(r.isWithin('.', 'a/b/c'), isTrue);

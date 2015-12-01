@@ -419,6 +419,19 @@ main() {
       expect(context.isWithin('baz', '/root/path/bang/baz'), isFalse);
     });
 
+    test('complex cases', () {
+      expect(context.isWithin('foo/./bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo//bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo/qux/../bar', 'foo/bar/baz'), isTrue);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/../..'), isFalse);
+      expect(context.isWithin('foo/bar', 'foo/bar///'), isFalse);
+      expect(context.isWithin('foo/.bar', 'foo/.bar/baz'), isTrue);
+      expect(context.isWithin('foo/./bar', 'foo/.bar/baz'), isFalse);
+      expect(context.isWithin('foo/..bar', 'foo/..bar/baz'), isTrue);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/..'), isFalse);
+      expect(context.isWithin('foo/bar', 'foo/bar/baz/../qux'), isTrue);
+    });
+
     test('from a relative root', () {
       var r = new path.Context(style: path.Style.posix, current: 'foo/bar');
       expect(r.isWithin('.', 'a/b/c'), isTrue);

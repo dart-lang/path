@@ -21,15 +21,44 @@ void runBenchmark(String name, Function func, List files) {
   print("$name: ${count / sw.elapsedMicroseconds} iter/us (${sw.elapsed})");
 }
 
+void runBenchmarkTwoArgs(String name, Function func, List files) {
+  // Warmup.
+  for (int i = 0; i < 1000; i++) {
+    for (var file1 in files) {
+      for (var file2 in files) {
+        func(file1, file2);
+      }
+    }
+  }
+
+  var count = 10000;
+  var sw = new Stopwatch()..start();
+  for (int i = 0; i < count; i++) {
+    for (var file1 in files) {
+      for (var file2 in files) {
+        func(file1, file2);
+      }
+    }
+  }
+  print("$name: ${count / sw.elapsedMicroseconds} iter/us (${sw.elapsed})");
+}
+
 main(args) {
   for (var style in [path.Style.posix, path.Style.url, path.Style.windows]) {
     var context = new path.Context(style: style);
     var files = COMMON_PATHS.toList()..addAll(STYLE_PATHS[style]);
 
-    void benchmark(name, func) {
+    benchmark(name, func) {
       name = style.name + '-' + name;
       if (args.isEmpty || args.any((arg) => name.contains(arg))) {
         runBenchmark(name, func, files);
+      }
+    }
+
+    benchmarkTwoArgs(name, func) {
+      name = style.name + '-' + name + '-two';
+      if (args.isEmpty || args.any((arg) => name.contains(arg))) {
+        runBenchmarkTwoArgs(name, func, files);
       }
     }
 
@@ -44,8 +73,10 @@ main(args) {
     benchmark('isRootRelative', context.isRootRelative);
     benchmark('normalize', context.normalize);
     benchmark('relative', context.relative);
+    benchmarkTwoArgs('relative', context.relative);
     benchmark('toUri', context.toUri);
     benchmark('prettyUri', context.prettyUri);
+    benchmarkTwoArgs('isWithin', context.isWithin);
   }
 
   if (args.isEmpty || args.any((arg) => arg == 'current')) {
