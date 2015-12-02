@@ -1,3 +1,8 @@
+## 1.3.9
+
+* Further improve the performance of `isWithin()` when paths contain `/.`
+  sequences that aren't `/../`.
+
 ## 1.3.8
 
 * Improve the performance of `isWithin()` when the paths don't contain

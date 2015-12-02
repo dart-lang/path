@@ -616,18 +616,63 @@ class Context {
         continue;
       }
 
-      // If a dot comes after a separator or another dot, it may be a
-      // directory traversal operator. Otherwise, it's just a normal
-      // non-matching character.
-      //
-      //     isWithin("foo/./bar", "foo/bar/baz") //=> true
-      //     isWithin("foo/bar/../baz", "foo/bar/.foo") //=> false
-      //
-      // We could stay on the fast path for "/./", but that adds a lot of
-      // complexity and isn't likely to come up much in practice.
-      if ((parentCodeUnit == chars.PERIOD || childCodeUnit == chars.PERIOD) &&
-          (style.isSeparator(lastCodeUnit) || lastCodeUnit == chars.PERIOD)) {
-        return null;
+      if (parentCodeUnit == chars.PERIOD) {
+        // If a dot comes after a separator, it may be a directory traversal
+        // operator. To check that, we need to know if it's followed by either
+        // "/" or "./". Otherwise, it's just a normal non-matching character.
+        //
+        //     isWithin("foo/./bar", "foo/bar/baz") //=> true
+        //     isWithin("foo/bar/../baz", "foo/bar/.foo") //=> false
+        if (style.isSeparator(lastCodeUnit)) {
+          parentIndex++;
+
+          // We've hit "/." at the end of the parent path, which we can ignore,
+          // since the paths were equivalent up to this point.
+          if (parentIndex == parent.length) break;
+          parentCodeUnit = parentCodeUnits[parentIndex];
+
+          // We've hit "/./", which we can ignore.
+          if (style.isSeparator(parentCodeUnit)) {
+            parentIndex++;
+            continue;
+          }
+
+          // We've hit "/..", which may be a directory traversal operator that
+          // we can't handle on the fast track.
+          if (parentCodeUnit == chars.PERIOD) {
+            parentIndex++;
+            if (parentIndex == parent.length ||
+                style.isSeparator(parentCodeUnits[parentIndex])) {
+              return null;
+            }
+          }
+        }
+
+        // If this isn't a directory traversal, fall through so we hit the
+        // normal handling for mismatched paths.
+      }
+
+      // This is the same logic as above, but for the child path instead of the
+      // parent.
+      if (childCodeUnit == chars.PERIOD) {
+        if (style.isSeparator(lastCodeUnit)) {
+          childIndex++;
+          if (childIndex == child.length) break;
+          childCodeUnit = childCodeUnits[childIndex];
+
+          if (style.isSeparator(childCodeUnit)) {
+            childIndex++;
+            continue;
+          }
+
+          if (childCodeUnit == chars.PERIOD) {
+            childIndex++;
+            if (childIndex == child.length ||
+                style.isSeparator(childCodeUnits[childIndex])) {
+              return null;
+            }
+          }
+        }
       }
 
       // If we're here, we've hit two non-matching, non-significant characters.
