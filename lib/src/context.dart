@@ -558,16 +558,13 @@ class Context {
     //     isWithin("http://example.com/", "http://google.com/bar") //=> false
     if (parentRootLength != childRootLength) return false;
 
-    var parentCodeUnits = parent.codeUnits;
-    var childCodeUnits = child.codeUnits;
-
     // Make sure that the roots are textually the same as well.
     //
     //     isWithin("C:/bar", "D:/bar/baz") //=> false
     //     isWithin("http://example.com/", "http://example.org/bar") //=> false
     for (var i = 0; i < parentRootLength; i++) {
-      var parentCodeUnit = parentCodeUnits[i];
-      var childCodeUnit = childCodeUnits[i];
+      var parentCodeUnit = parent.codeUnitAt(i);
+      var childCodeUnit = child.codeUnitAt(i);
       if (parentCodeUnit == childCodeUnit) continue;
 
       // If both code units are separators, that's fine too.
@@ -588,8 +585,8 @@ class Context {
     var parentIndex = parentRootLength;
     var childIndex = childRootLength;
     while (parentIndex < parent.length && childIndex < child.length) {
-      var parentCodeUnit = parentCodeUnits[parentIndex];
-      var childCodeUnit = childCodeUnits[childIndex];
+      var parentCodeUnit = parent.codeUnitAt(parentIndex);
+      var childCodeUnit = child.codeUnitAt(childIndex);
       if (parentCodeUnit == childCodeUnit) {
         lastCodeUnit = parentCodeUnit;
         parentIndex++;
@@ -629,7 +626,7 @@ class Context {
           // We've hit "/." at the end of the parent path, which we can ignore,
           // since the paths were equivalent up to this point.
           if (parentIndex == parent.length) break;
-          parentCodeUnit = parentCodeUnits[parentIndex];
+          parentCodeUnit = parent.codeUnitAt(parentIndex);
 
           // We've hit "/./", which we can ignore.
           if (style.isSeparator(parentCodeUnit)) {
@@ -642,7 +639,7 @@ class Context {
           if (parentCodeUnit == chars.PERIOD) {
             parentIndex++;
             if (parentIndex == parent.length ||
-                style.isSeparator(parentCodeUnits[parentIndex])) {
+                style.isSeparator(parent.codeUnitAt(parentIndex))) {
               return null;
             }
           }
@@ -658,7 +655,7 @@ class Context {
         if (style.isSeparator(lastCodeUnit)) {
           childIndex++;
           if (childIndex == child.length) break;
-          childCodeUnit = childCodeUnits[childIndex];
+          childCodeUnit = child.codeUnitAt(childIndex);
 
           if (style.isSeparator(childCodeUnit)) {
             childIndex++;
@@ -668,7 +665,7 @@ class Context {
           if (childCodeUnit == chars.PERIOD) {
             childIndex++;
             if (childIndex == child.length ||
-                style.isSeparator(childCodeUnits[childIndex])) {
+                style.isSeparator(child.codeUnitAt(childIndex))) {
               return null;
             }
           }
@@ -679,9 +676,9 @@ class Context {
       // As long as the remainders of the two paths don't have any unresolved
       // ".." components, we can be confident that [child] is not within
       // [parent].
-      var childDirection = _pathDirection(childCodeUnits, childIndex);
+      var childDirection = _pathDirection(child, childIndex);
       if (childDirection != _PathDirection.belowRoot) return null;
-      var parentDirection = _pathDirection(parentCodeUnits, parentIndex);
+      var parentDirection = _pathDirection(parent, parentIndex);
       if (parentDirection != _PathDirection.belowRoot) return null;
 
       return false;
@@ -694,14 +691,14 @@ class Context {
     //     isWithin("foo/bar/baz", "foo/bar") //=> false
     //     isWithin("foo/bar/baz/../..", "foo/bar") //=> true
     if (childIndex == child.length) {
-      var direction = _pathDirection(parentCodeUnits, parentIndex);
+      var direction = _pathDirection(parent, parentIndex);
       return direction == _PathDirection.aboveRoot ? null : false;
     }
 
     // We've reached the end of the parent path, which means it's time to make a
     // decision. Before we do, though, we'll check the rest of the child to see
     // what that tells us.
-    var direction = _pathDirection(childCodeUnits, childIndex);
+    var direction = _pathDirection(child, childIndex);
 
     // If there are no more components in the child, then it's the same as
     // the parent, not within it.
@@ -724,7 +721,7 @@ class Context {
     //     isWithin("foo/bar", "foo/bar/baz") //=> true
     //     isWithin("foo/bar/", "foo/bar/baz") //=> true
     //     isWithin("foo/bar", "foo/barbaz") //=> false
-    return style.isSeparator(childCodeUnits[childIndex]) ||
+    return style.isSeparator(child.codeUnitAt(childIndex)) ||
         style.isSeparator(lastCodeUnit);
   }
 
@@ -741,31 +738,31 @@ class Context {
   //     pathDirection("foo/../baz") //=> reaches root
   //     pathDirection("foo/../..") //=> above root
   //     pathDirection("foo/../../foo/bar/baz") //=> above root
-  _PathDirection _pathDirection(List<int> codeUnits, int index) {
+  _PathDirection _pathDirection(String path, int index) {
     var depth = 0;
     var reachedRoot = false;
     var i = index;
-    while (i < codeUnits.length) {
+    while (i < path.length) {
       // Ignore initial separators or doubled separators.
-      while (i < codeUnits.length && style.isSeparator(codeUnits[i])) {
+      while (i < path.length && style.isSeparator(path.codeUnitAt(i))) {
         i++;
       }
 
       // If we're at the end, stop.
-      if (i == codeUnits.length) break;
+      if (i == path.length) break;
 
       // Move through the path component to the next separator.
       var start = i;
-      while (i < codeUnits.length && !style.isSeparator(codeUnits[i])) {
+      while (i < path.length && !style.isSeparator(path.codeUnitAt(i))) {
         i++;
       }
 
       // See if the path component is ".", "..", or a name.
-      if (i - start == 1 && codeUnits[start] == chars.PERIOD) {
+      if (i - start == 1 && path.codeUnitAt(start) == chars.PERIOD) {
         // Don't change the depth.
       } else if (i - start == 2 &&
-          codeUnits[start] == chars.PERIOD &&
-          codeUnits[start + 1] == chars.PERIOD) {
+          path.codeUnitAt(start) == chars.PERIOD &&
+          path.codeUnitAt(start + 1) == chars.PERIOD) {
         // ".." backs out a directory.
         depth--;
 
@@ -781,7 +778,7 @@ class Context {
       }
 
       // If we're at the end, stop.
-      if (i == codeUnits.length) break;
+      if (i == path.length) break;
 
       // Move past the separator.
       i++;
