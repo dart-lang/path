@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library path.utils;
-
 import 'characters.dart' as chars;
 
 /// Returns whether [char] is the code for an ASCII letter (uppercase or

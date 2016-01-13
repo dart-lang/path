@@ -2,8 +2,6 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-library path.internal_style;
-
 import 'context.dart';
 import 'style.dart';
 

@@ -3,8 +3,6 @@
 // BSD-style license that can be found in the LICENSE file.
 
 /// This library contains character-code definitions.
-library path.characters;
-
 const PLUS = 0x2b;
 const MINUS = 0x2d;
 const PERIOD = 0x2e;

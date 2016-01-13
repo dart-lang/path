@@ -44,8 +44,6 @@
 ///
 /// This will join "directory" and "file.txt" using the Windows path separator,
 /// even when the program is run on a POSIX machine.
-library path;
-
 import 'src/context.dart';
 import 'src/style.dart';
 
