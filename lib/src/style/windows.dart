@@ -7,6 +7,10 @@ import '../internal_style.dart';
 import '../parsed_path.dart';
 import '../utils.dart';
 
+// `0b100000` can be bitwise-ORed with uppercase ASCII letters to get their
+// lowercase equivalents.
+const _asciiCaseBit = 0x20;
+
 /// The style for Windows paths.
 class WindowsStyle extends InternalStyle {
   WindowsStyle();
@@ -119,5 +123,32 @@ class WindowsStyle extends InternalStyle {
 
       return new Uri(scheme: 'file', pathSegments: parsed.parts);
     }
+  }
+
+  bool codeUnitsEqual(int codeUnit1, int codeUnit2) {
+    if (codeUnit1 == codeUnit2) return true;
+
+    /// Forward slashes and backslashes are equivalent on Windows.
+    if (codeUnit1 == chars.SLASH) return codeUnit2 == chars.BACKSLASH;
+    if (codeUnit1 == chars.BACKSLASH) return codeUnit2 == chars.SLASH;
+
+    // If this check fails, the code units are definitely different. If it
+    // succeeds *and* either codeUnit is an ASCII letter, they're equivalent.
+    if (codeUnit1 ^ codeUnit2 != _asciiCaseBit) return false;
+
+    // Now we just need to verify that one of the code units is an ASCII letter.
+    var upperCase1 = codeUnit1 | _asciiCaseBit;
+    return upperCase1 >= chars.LOWER_A && upperCase1 <= chars.LOWER_Z;
+  }
+
+  bool pathsEqual(String path1, String path2) {
+    if (identical(path1, path2)) return true;
+    if (path1.length != path2.length) return false;
+    for (var i = 0; i < path1.length; i++) {
+      if (!codeUnitsEqual(path1.codeUnitAt(i), path2.codeUnitAt(i))) {
+        return false;
+      }
+    }
+    return true;
   }
 }

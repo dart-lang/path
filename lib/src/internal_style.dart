@@ -66,4 +66,14 @@ abstract class InternalStyle extends Style {
 
   /// Returns the URI that represents [path], which is assumed to be absolute.
   Uri absolutePathToUri(String path);
+
+  /// Returns whether [codeUnit1] and [codeUnit2] are considered equivalent for
+  /// this style.
+  bool codeUnitsEqual(int codeUnit1, int codeUnit2) => codeUnit1 == codeUnit2;
+
+  /// Returns whether [path1] and [path2] are equivalent.
+  ///
+  /// This only needs to handle character-by-character comparison; it can assume
+  /// the paths are normalized and contain no `..` components.
+  bool pathsEqual(String path1, String path2) => path1 == path2;
 }

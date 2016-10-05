@@ -479,6 +479,15 @@ main() {
         expect(context.relative('a/./b/../c.txt'), 'a/c.txt');
       });
 
+      test('is case-sensitive', () {
+        expect(context.relative('HtTp://dartlang.org/root'),
+            'HtTp://dartlang.org/root');
+        expect(context.relative('http://DaRtLaNg.OrG/root'),
+            'http://DaRtLaNg.OrG/root');
+        expect(context.relative('/RoOt'), '../../RoOt');
+        expect(context.relative('/rOoT/pAtH/a'), '../../rOoT/pAtH/a');
+      });
+
       // Regression
       test('from root-only path', () {
         expect(context.relative('http://dartlang.org',

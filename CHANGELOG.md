@@ -1,5 +1,7 @@
 ## 1.3.10
 
+* Properly compare Windows paths case-insensitively.
+
 * Further improve the performance of `isWithin()`.
 
 ## 1.3.9
