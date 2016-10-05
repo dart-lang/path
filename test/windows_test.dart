@@ -425,6 +425,12 @@ main() {
         expect(context.relative(r'a\.\b\..\c.txt'), r'a\c.txt');
       });
 
+      test('is case-insensitive', () {
+        expect(context.relative(r'c:\'), r'..\..');
+        expect(context.relative(r'c:\RoOt'), r'..');
+        expect(context.relative(r'c:\rOoT\pAtH\a'), r'a');
+      });
+
       // Regression
       test('from root-only path', () {
         expect(context.relative(r'C:\', from: r'C:\'), '.');
@@ -566,6 +572,12 @@ main() {
       expect(r.isWithin('.', r'..\..\a\foo\b\c'), isFalse);
       expect(r.isWithin(r'C:\', r'C:\baz\bang'), isTrue);
       expect(r.isWithin('.', r'C:\baz\bang'), isFalse);
+    });
+
+    test('is case-insensitive', () {
+      expect(context.isWithin(r'FoO', r'fOo\bar'), isTrue);
+      expect(context.isWithin(r'C:\', r'c:\foo'), isTrue);
+      expect(context.isWithin(r'fOo\qux\..\BaR', r'FoO\bAr\baz'), isTrue);
     });
   });
 

@@ -444,15 +444,14 @@ class Context {
     // calculation of relative paths, even if a path has not been normalized.
     if (fromParsed.root != pathParsed.root &&
         ((fromParsed.root == null || pathParsed.root == null) ||
-            fromParsed.root.toLowerCase().replaceAll('/', '\\') !=
-                pathParsed.root.toLowerCase().replaceAll('/', '\\'))) {
+            !style.pathsEqual(fromParsed.root, pathParsed.root))) {
       return pathParsed.toString();
     }
 
     // Strip off their common prefix.
     while (fromParsed.parts.length > 0 &&
         pathParsed.parts.length > 0 &&
-        fromParsed.parts[0] == pathParsed.parts[0]) {
+        style.pathsEqual(fromParsed.parts[0], pathParsed.parts[0])) {
       fromParsed.parts.removeAt(0);
       fromParsed.separators.removeAt(1);
       pathParsed.parts.removeAt(0);
@@ -563,15 +562,7 @@ class Context {
     for (var i = 0; i < parentRootLength; i++) {
       var parentCodeUnit = parent.codeUnitAt(i);
       var childCodeUnit = child.codeUnitAt(i);
-      if (parentCodeUnit == childCodeUnit) continue;
-
-      // If both code units are separators, that's fine too.
-      //
-      //     isWithin("C:/", r"C:\foo") //=> true
-      if (!style.isSeparator(parentCodeUnit) ||
-          !style.isSeparator(childCodeUnit)) {
-        return false;
-      }
+      if (!style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) return false;
     }
 
     // Start by considering the last code unit as a separator, since
@@ -585,17 +576,7 @@ class Context {
     while (parentIndex < parent.length && childIndex < child.length) {
       var parentCodeUnit = parent.codeUnitAt(parentIndex);
       var childCodeUnit = child.codeUnitAt(childIndex);
-      if (parentCodeUnit == childCodeUnit) {
-        lastCodeUnit = parentCodeUnit;
-        parentIndex++;
-        childIndex++;
-        continue;
-      }
-
-      // Different separators are considered identical.
-      var parentIsSeparator = style.isSeparator(parentCodeUnit);
-      var childIsSeparator = style.isSeparator(childCodeUnit);
-      if (parentIsSeparator && childIsSeparator) {
+      if (style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
         lastCodeUnit = parentCodeUnit;
         parentIndex++;
         childIndex++;
@@ -603,10 +584,12 @@ class Context {
       }
 
       // Ignore multiple separators in a row.
-      if (parentIsSeparator && style.isSeparator(lastCodeUnit)) {
+      if (style.isSeparator(parentCodeUnit) &&
+          style.isSeparator(lastCodeUnit)) {
         parentIndex++;
         continue;
-      } else if (childIsSeparator && style.isSeparator(lastCodeUnit)) {
+      } else if (style.isSeparator(childCodeUnit) &&
+          style.isSeparator(lastCodeUnit)) {
         childIndex++;
         continue;
       }
