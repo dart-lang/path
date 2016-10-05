@@ -1,4 +1,7 @@
-## 1.3.10
+## 1.4.0
+
+* Add `equals()`, `hash()` and `canonicalize()` top-level functions and
+  `Context` methods. These make it easier to treat paths as map keys.
 
 * Properly compare Windows paths case-insensitively.
 

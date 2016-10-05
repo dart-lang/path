@@ -76,4 +76,8 @@ abstract class InternalStyle extends Style {
   /// This only needs to handle character-by-character comparison; it can assume
   /// the paths are normalized and contain no `..` components.
   bool pathsEqual(String path1, String path2) => path1 == path2;
+
+  int canonicalizeCodeUnit(int codeUnit) => codeUnit;
+
+  String canonicalizePart(String part) => part;
 }

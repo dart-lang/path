@@ -3,7 +3,27 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import "package:test/test.dart";
-import "package:path/path.dart" as path;
+import "package:path/path.dart" as p;
 
 /// A matcher for a closure that throws a [path.PathException].
-final throwsPathException = throwsA(new isInstanceOf<path.PathException>());
+final throwsPathException = throwsA(new isInstanceOf<p.PathException>());
+
+void expectEquals(p.Context context, String path1, String path2) {
+  expect(context.equals(path1, path2), isTrue,
+      reason: 'Expected "$path1" to equal "$path2".');
+  expect(context.equals(path2, path1), isTrue,
+      reason: 'Expected "$path2" to equal "$path1".');
+  expect(context.hash(path1), equals(context.hash(path2)),
+      reason: 'Expected "$path1" to hash the same as "$path2".');
+}
+
+void expectNotEquals(p.Context context, String path1, String path2,
+    {bool allowSameHash: false}) {
+  expect(context.equals(path1, path2), isFalse,
+      reason: 'Expected "$path1" not to equal "$path2".');
+  expect(context.equals(path2, path1), isFalse,
+      reason: 'Expected "$path2" not to equal "$path1".');
+  if (allowSameHash) return;
+  expect(context.hash(path1), isNot(equals(context.hash(path2))),
+      reason: 'Expected "$path1" not to hash the same as "$path2".');
+}
