@@ -71,8 +71,9 @@ abstract class InternalStyle extends Style {
   /// this style.
   bool codeUnitsEqual(int codeUnit1, int codeUnit2) => codeUnit1 == codeUnit2;
 
-  /// Returns whether [path1] and [path2] are textually equivalent.
+  /// Returns whether [path1] and [path2] are equivalent.
   ///
-  /// Note that this expects both paths to be normalized.
+  /// This only needs to handle character-by-character comparison; it can assume
+  /// the paths are normalized and contain no `..` components.
   bool pathsEqual(String path1, String path2) => path1 == path2;
 }

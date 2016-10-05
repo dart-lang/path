@@ -348,6 +348,11 @@ main() {
         expect(context.relative('a/./b/../c.txt'), 'a/c.txt');
       });
 
+      test('is case-sensitive', () {
+        expect(context.relative('/RoOt'), '../../RoOt');
+        expect(context.relative('/rOoT/pAtH/a'), '../../rOoT/pAtH/a');
+      });
+
       // Regression
       test('from root-only path', () {
         expect(context.relative('/', from: '/'), '.');
