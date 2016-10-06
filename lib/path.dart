@@ -288,6 +288,8 @@ List<String> split(String path) => context.split(path);
 /// [normalize], it returns absolute paths when possible and canonicalizes
 /// ASCII case on Windows.
 ///
+/// Note that this does not resolve symlinks.
+///
 /// If you want a map that uses path keys, it's probably more efficient to
 /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
 /// key.
@@ -347,7 +349,8 @@ bool isWithin(String parent, String child) => context.isWithin(parent, child);
 /// semantics.
 bool equals(String path1, String path2) => context.equals(path1, path2);
 
-/// Returns a hash code for [path] that matches the semantics of [equals].
+/// Returns a hash code for [path] such that, if [equals] returns `true` for two
+/// paths, their hash codes are the same.
 ///
 /// Note that the same path may have different hash codes on different platforms
 /// or with different [current] directories.

@@ -307,6 +307,8 @@ class Context {
   /// [normalize], it returns absolute paths when possible and canonicalizes
   /// ASCII case on Windows.
   ///
+  /// Note that this does not resolve symlinks.
+  ///
   /// If you want a map that uses path keys, it's probably more efficient to
   /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
   /// key.
@@ -522,7 +524,7 @@ class Context {
   ///     path.isWithin('/root/path', '/root/other'); // -> false
   ///     path.isWithin('/root/path', '/root/path'); // -> false
   bool isWithin(String parent, String child) =>
-      _isWithinOrEquals(parent, child) == _IsWithinOrEquals.within;
+      _isWithinOrEquals(parent, child) == _PathRelation.within;
 
   /// Returns `true` if [path1] points to the same location as [path2], and
   /// `false` otherwise.
@@ -530,13 +532,13 @@ class Context {
   /// The [hash] function returns a hash code that matches these equality
   /// semantics.
   bool equals(String path1, String path2) =>
-      _isWithinOrEquals(path1, path2) == _IsWithinOrEquals.equal;
+      _isWithinOrEquals(path1, path2) == _PathRelation.equal;
 
-  /// Compares two paths an returns an enum value indicating their relationship
+  /// Compares two paths and returns an enum value indicating their relationship
   /// to one another.
   ///
-  /// This never returns [_IsWithinOrEquals.inconclusive].
-  _IsWithinOrEquals _isWithinOrEquals(String parent, String child) {
+  /// This never returns [_PathRelation.inconclusive].
+  _PathRelation _isWithinOrEquals(String parent, String child) {
     // Make both paths the same level of relative. We're only able to do the
     // quick comparison if both paths are in the same format, and making a path
     // absolute is faster than making it relative.
@@ -560,7 +562,7 @@ class Context {
     }
 
     var result = _isWithinOrEqualsFast(parent, child);
-    if (result != _IsWithinOrEquals.inconclusive) return result;
+    if (result != _PathRelation.inconclusive) return result;
 
     var relative;
     try {
@@ -568,22 +570,22 @@ class Context {
     } on PathException catch (_) {
       // If no relative path from [parent] to [child] is found, [child]
       // definitely isn't a child of [parent].
-      return _IsWithinOrEquals.different;
+      return _PathRelation.different;
     }
 
-    if (!this.isRelative(relative)) return _IsWithinOrEquals.different;
-    if (relative == '.') return _IsWithinOrEquals.equal;
-    if (relative == '..') return _IsWithinOrEquals.different;
+    if (!this.isRelative(relative)) return _PathRelation.different;
+    if (relative == '.') return _PathRelation.equal;
+    if (relative == '..') return _PathRelation.different;
     return (relative.length >= 3 &&
             relative.startsWith('..') &&
              style.isSeparator(relative.codeUnitAt(2)))
-        ? _IsWithinOrEquals.different
-        : _IsWithinOrEquals.within;
+        ? _PathRelation.different
+        : _PathRelation.within;
   }
 
   /// An optimized implementation of [_isWithinOrEquals] that doesn't handle a
   /// few complex cases.
-  _IsWithinOrEquals _isWithinOrEqualsFast(String parent, String child) {
+  _PathRelation _isWithinOrEqualsFast(String parent, String child) {
     // Normally we just bail when we see "." path components, but we can handle
     // a single dot easily enough.
     if (parent == '.') parent = '';
@@ -597,7 +599,7 @@ class Context {
     //
     //     isWithin("C:/bar", "//foo/bar/baz") //=> false
     //     isWithin("http://example.com/", "http://google.com/bar") //=> false
-    if (parentRootLength != childRootLength) return _IsWithinOrEquals.different;
+    if (parentRootLength != childRootLength) return _PathRelation.different;
 
     // Make sure that the roots are textually the same as well.
     //
@@ -607,7 +609,7 @@ class Context {
       var parentCodeUnit = parent.codeUnitAt(i);
       var childCodeUnit = child.codeUnitAt(i);
       if (!style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
-        return _IsWithinOrEquals.different;
+        return _PathRelation.different;
       }
     }
 
@@ -675,7 +677,7 @@ class Context {
           parentIndex++;
           if (parentIndex == parent.length ||
               style.isSeparator(parent.codeUnitAt(parentIndex))) {
-            return _IsWithinOrEquals.inconclusive;
+            return _PathRelation.inconclusive;
           }
         }
 
@@ -699,7 +701,7 @@ class Context {
           childIndex++;
           if (childIndex == child.length ||
               style.isSeparator(child.codeUnitAt(childIndex))) {
-            return _IsWithinOrEquals.inconclusive;
+            return _PathRelation.inconclusive;
           }
         }
       }
@@ -710,15 +712,15 @@ class Context {
       // [parent].
       var childDirection = _pathDirection(child, childIndex);
       if (childDirection != _PathDirection.belowRoot) {
-        return _IsWithinOrEquals.inconclusive;
+        return _PathRelation.inconclusive;
       }
 
       var parentDirection = _pathDirection(parent, parentIndex);
       if (parentDirection != _PathDirection.belowRoot) {
-        return _IsWithinOrEquals.inconclusive;
+        return _PathRelation.inconclusive;
       }
 
-      return _IsWithinOrEquals.different;
+      return _PathRelation.different;
     }
 
     // If the child is shorter than the parent, it's probably not within the
@@ -737,10 +739,10 @@ class Context {
 
       var direction = _pathDirection(parent,
           lastParentSeparator ?? parentRootLength - 1);
-      if (direction == _PathDirection.atRoot) return _IsWithinOrEquals.equal;
+      if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
-          ? _IsWithinOrEquals.inconclusive
-          : _IsWithinOrEquals.different;
+          ? _PathRelation.inconclusive
+          : _PathRelation.different;
     }
 
     // We've reached the end of the parent path, which means it's time to make a
@@ -755,7 +757,7 @@ class Context {
     //     isWithin("foo/bar", "foo/bar//") //=> false
     //     equals("foo/bar", "foo/bar") //=> true
     //     equals("foo/bar", "foo/bar//") //=> true
-    if (direction == _PathDirection.atRoot) return _IsWithinOrEquals.equal;
+    if (direction == _PathDirection.atRoot) return _PathRelation.equal;
 
     // If there are unresolved ".." components in the child, no decision we make
     // will be valid. We'll abort and do the slow check instead.
@@ -764,7 +766,7 @@ class Context {
     //     isWithin("foo/bar", "foo/bar/baz/bang/../../..") //=> false
     //     isWithin("foo/bar", "foo/bar/baz/bang/../../../bar/baz") //=> true
     if (direction == _PathDirection.aboveRoot) {
-      return _IsWithinOrEquals.inconclusive;
+      return _PathRelation.inconclusive;
     }
 
     // The child is within the parent if and only if we're on a separator
@@ -775,8 +777,8 @@ class Context {
     //     isWithin("foo/bar", "foo/barbaz") //=> false
     return (style.isSeparator(child.codeUnitAt(childIndex)) ||
             style.isSeparator(lastCodeUnit))
-        ? _IsWithinOrEquals.within
-        : _IsWithinOrEquals.different;
+        ? _PathRelation.within
+        : _PathRelation.different;
   }
 
   // Returns a [_PathDirection] describing the path represented by [codeUnits]
@@ -1079,29 +1081,29 @@ class _PathDirection {
 }
 
 /// An enum of possible return values for [Context._isWithinOrEquals].
-class _IsWithinOrEquals {
+class _PathRelation {
   /// The first path is a proper parent of the second.
   ///
   /// For example, `foo` is a proper parent of `foo/bar`, but not of `foo`.
-  static const within = const _IsWithinOrEquals("within");
+  static const within = const _PathRelation("within");
 
   /// The two paths are equivalent.
   ///
   /// For example, `foo//bar` is equivalent to `foo/bar`.
-  static const equal = const _IsWithinOrEquals("equal");
+  static const equal = const _PathRelation("equal");
 
   /// The first path is neither a parent of nor equal to the second.
-  static const different = const _IsWithinOrEquals("different");
+  static const different = const _PathRelation("different");
 
   /// We couldn't quickly determine any information about the paths'
   /// relationship to each other.
   ///
   /// Only returned by [Context._isWithinOrEqualsFast].
-  static const inconclusive = const _IsWithinOrEquals("inconclusive");
+  static const inconclusive = const _PathRelation("inconclusive");
 
   final String name;
 
-  const _IsWithinOrEquals(this.name);
+  const _PathRelation(this.name);
 
   String toString() => name;
 }
