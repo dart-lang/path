@@ -151,4 +151,13 @@ class WindowsStyle extends InternalStyle {
     }
     return true;
   }
+
+  int canonicalizeCodeUnit(int codeUnit) {
+    if (codeUnit == chars.SLASH) return chars.BACKSLASH;
+    if (codeUnit < chars.UPPER_A) return codeUnit;
+    if (codeUnit > chars.UPPER_Z) return codeUnit;
+    return codeUnit | _asciiCaseBit;
+  }
+
+  String canonicalizePart(String part) => part.toLowerCase();
 }

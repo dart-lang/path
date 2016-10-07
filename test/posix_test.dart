@@ -317,6 +317,12 @@ main() {
       expect(context.normalize(r'a/b\'), r'a/b\');
       expect(context.normalize('a/b///'), 'a/b');
     });
+
+    test('when canonicalizing', () {
+      expect(context.canonicalize('.'), '/root/path');
+      expect(context.canonicalize('foo/bar'), '/root/path/foo/bar');
+      expect(context.canonicalize('FoO'), '/root/path/FoO');
+    });
   });
 
   group('relative', () {
@@ -442,6 +448,44 @@ main() {
       expect(r.isWithin('.', '../../a/foo/b/c'), isFalse);
       expect(r.isWithin('/', '/baz/bang'), isTrue);
       expect(r.isWithin('.', '/baz/bang'), isFalse);
+    });
+  });
+
+  group('equals and hash', () {
+    test('simple cases', () {
+      expectEquals(context, 'foo/bar', 'foo/bar');
+      expectNotEquals(context, 'foo/bar', 'foo/bar/baz');
+      expectNotEquals(context, 'foo/bar', 'foo');
+      expectNotEquals(context, 'foo/bar', 'foo/baz');
+      expectEquals(context, 'foo/bar', '../path/foo/bar');
+      expectEquals(context, '/', '/');
+      expectEquals(context, '/', '../..');
+      expectEquals(context, 'baz', '/root/path/baz');
+    });
+
+    test('complex cases', () {
+      expectEquals(context, 'foo/./bar', 'foo/bar');
+      expectEquals(context, 'foo//bar', 'foo/bar');
+      expectEquals(context, 'foo/qux/../bar', 'foo/bar');
+      expectNotEquals(context, 'foo/qux/../bar', 'foo/qux');
+      expectNotEquals(context, 'foo/bar', 'foo/bar/baz/../..');
+      expectEquals(context, 'foo/bar', 'foo/bar///');
+      expectEquals(context, 'foo/.bar', 'foo/.bar');
+      expectNotEquals(context, 'foo/./bar', 'foo/.bar');
+      expectEquals(context, 'foo/..bar', 'foo/..bar');
+      expectNotEquals(context, 'foo/../bar', 'foo/..bar');
+      expectEquals(context, 'foo/bar', 'foo/bar/baz/..');
+      expectNotEquals(context, 'FoO/bAr', 'foo/bar');
+    });
+
+    test('from a relative root', () {
+      var r = new path.Context(style: path.Style.posix, current: 'foo/bar');
+      expectEquals(r, 'a/b', 'a/b');
+      expectNotEquals(r, '.', 'foo/bar');
+      expectNotEquals(r, '.', '../a/b');
+      expectEquals(r, '.', '../bar');
+      expectEquals(r, '/baz/bang', '/baz/bang');
+      expectNotEquals(r, 'baz/bang', '/baz/bang');
     });
   });
 
