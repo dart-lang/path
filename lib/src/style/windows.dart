@@ -36,7 +36,7 @@ class WindowsStyle extends InternalStyle {
     return !isSeparator(path.codeUnitAt(path.length - 1));
   }
 
-  int rootLength(String path) {
+  int rootLength(String path, {bool withDrive: false}) {
     if (path.isEmpty) return 0;
     if (path.codeUnitAt(0) == chars.SLASH) return 1;
     if (path.codeUnitAt(0) == chars.BACKSLASH) {
