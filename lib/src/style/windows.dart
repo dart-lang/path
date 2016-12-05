@@ -78,8 +78,13 @@ class WindowsStyle extends InternalStyle {
     var path = uri.path;
     if (uri.host == '') {
       // Drive-letter paths look like "file:///C:/path/to/file". The
-      // replaceFirst removes the extra initial slash.
-      if (path.startsWith('/')) path = path.replaceFirst("/", "");
+      // replaceFirst removes the extra initial slash. Otherwise, leave the
+      // slash to match IE's interpretation of "/foo" as a root-relative path.
+      if (path.length >= 3 &&
+          path.startsWith('/') &&
+          isDriveLetter(path, 1)) {
+        path = path.replaceFirst("/", "");
+      }
     } else {
       // Network paths look like "file://hostname/path/to/file".
       path = '\\\\${uri.host}$path';
