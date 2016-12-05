@@ -41,13 +41,34 @@ context.join("directory", "file.txt");
 This will join "directory" and "file.txt" using the Windows path separator,
 even when the program is run on a POSIX machine.
 
+## Stability
+
+The `path` package is used by many Dart packages, and as such it strives for a
+very high degree of stability. For the same reason, though, releasing a new
+major version would probably cause a lot of versioning pain, so some flexibility
+is necessary.
+
+We try to guarantee that **operations with valid inputs and correct output will
+not change**. Operations where one or more inputs are invalid according to the
+semantics of the corresponding platform may produce different output over time.
+Operations for which `path` produces incorrect output will also change so that
+we can fix bugs.
+
+Also, the `path` package's URL handling is based on [the WHATWG URL spec][].
+This is a living standard, and some parts of it haven't yet been entirely
+solidified by vendor support. The `path` package reserves the right to change
+its URL behavior if the underlying specification changes, although if the change
+is big enough to break many valid uses we may elect to treat it as a breaking
+change anyway.
+
+[the WHATWG URL spec]: https://url.spec.whatwg.org/
+
 ## FAQ
 
 ### Where can I use this?
 
-Pathos runs on the Dart VM and in the browser under both dart2js and Dartium.
-Under dart2js, it currently returns "." as the current working directory, while
-under Dartium it returns the current URL.
+The `path` package runs on the Dart VM and in the browser under both dart2js and
+Dartium. On the browser, `window.location.href` is used as the current path.
 
 ### Why doesn't this make paths first-class objects?
 
