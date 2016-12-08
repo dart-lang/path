@@ -704,6 +704,7 @@ main() {
           r'\\server\share\path\to\foo#bar');
       expect(context.fromUri(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
           r'_{_}_`_^_ _"_%_');
+      expect(context.fromUri(Uri.parse('/foo')), r'\foo');
       expect(() => context.fromUri(Uri.parse('http://dartlang.org')),
           throwsArgumentError);
     });

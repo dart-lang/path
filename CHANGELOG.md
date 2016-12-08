@@ -1,3 +1,15 @@
+## 1.4.1
+
+* Root-relative URLs like `/foo` are now resolved relative to the drive letter
+  for `file` URLs that begin with a Windows-style drive letter. This matches the
+  [WHATWG URL specification][].
+
+[WHATWG URL specification]: https://url.spec.whatwg.org/#file-slash-state
+
+* When a root-relative URLs like `/foo` is converted to a Windows path using
+  `fromUrl()`, it is now resolved relative to the drive letter. This matches
+  IE's behavior.
+
 ## 1.4.0
 
 * Add `equals()`, `hash()` and `canonicalize()` top-level functions and

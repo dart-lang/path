@@ -245,12 +245,32 @@ main() {
       expect(() => context.join(null, 'a'), throwsArgumentError);
     });
 
-    test('Join does not modify internal ., .., or trailing separators', () {
+    test('does not modify internal ., .., or trailing separators', () {
       expect(context.join('a/', 'b/c/'), 'a/b/c/');
       expect(context.join('a/b/./c/..//', 'd/.././..//e/f//'),
           'a/b/./c/..//d/.././..//e/f//');
       expect(context.join('a/b', 'c/../../../..'), 'a/b/c/../../../..');
       expect(context.join('a', 'b${context.separator}'), 'a/b/');
+    });
+
+    test('treats drive letters as part of the root for file: URLs', () {
+      expect(context.join('file:///c:/foo/bar', '/baz/qux'),
+          'file:///c:/baz/qux');
+      expect(context.join('file:///D:/foo/bar', '/baz/qux'),
+          'file:///D:/baz/qux');
+      expect(context.join('file:///c:/', '/baz/qux'), 'file:///c:/baz/qux');
+      expect(context.join('file:///c:', '/baz/qux'), 'file:///c:/baz/qux');
+      expect(context.join('file://host/c:/foo/bar', '/baz/qux'),
+          'file://host/c:/baz/qux');
+    });
+
+    test('treats drive letters as normal components for non-file: URLs', () {
+      expect(context.join('http://foo.com/c:/foo/bar', '/baz/qux'),
+          'http://foo.com/baz/qux');
+      expect(context.join('misfile:///c:/foo/bar', '/baz/qux'),
+          'misfile:///baz/qux');
+      expect(context.join('filer:///c:/foo/bar', '/baz/qux'),
+          'filer:///baz/qux');
     });
   });
 
