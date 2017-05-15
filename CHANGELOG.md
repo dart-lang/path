@@ -1,5 +1,7 @@
 ## 1.4.2
 
+* Treat `package:` URLs as absolute.
+
 * Normalize `c:\foo\.` to `c:\foo`.
 
 ## 1.4.1
