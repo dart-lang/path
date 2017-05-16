@@ -330,6 +330,7 @@ main() {
     test('eliminates "." parts', () {
       expect(context.normalize(r'.\'), '.');
       expect(context.normalize(r'c:\.'), r'c:\');
+      expect(context.normalize(r'c:\foo\.'), r'c:\foo');
       expect(context.normalize(r'B:\.\'), r'B:\');
       expect(context.normalize(r'\\server\share\.'), r'\\server\share');
       expect(context.normalize(r'.\.'), '.');
@@ -351,6 +352,7 @@ main() {
       expect(
           context.normalize(r'\\server\share\..\../..\a'), r'\\server\share\a');
       expect(context.normalize(r'c:\..'), r'c:\');
+      expect(context.normalize(r'c:\foo\..'), r'c:\');
       expect(context.normalize(r'A:/..\..\..'), r'A:\');
       expect(context.normalize(r'b:\..\..\..\a'), r'b:\a');
       expect(context.normalize(r'b:\r\..\..\..\a\c\.\..'), r'b:\a');
