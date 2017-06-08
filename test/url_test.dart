@@ -40,6 +40,8 @@ main() {
     expect(context.rootPrefix('file://'), 'file://');
     expect(context.rootPrefix('/'), '/');
     expect(context.rootPrefix('foo/bar://'), '');
+    expect(context.rootPrefix('package:foo/bar.dart'), 'package:foo');
+    expect(context.rootPrefix('foo/bar:baz/qux'), '');
   });
 
   test('dirname', () {
@@ -136,8 +138,10 @@ main() {
     expect(context.isAbsolute('~'), false);
     expect(context.isAbsolute('.'), false);
     expect(context.isAbsolute('../a'), false);
-    expect(context.isAbsolute('C:/a'), false);
-    expect(context.isAbsolute(r'C:\a'), false);
+    expect(context.isAbsolute('C:/a'), true);
+    expect(context.isAbsolute(r'C:\a'), true);
+    expect(context.isAbsolute('package:foo/bar.dart'), true);
+    expect(context.isAbsolute('foo/bar:baz/qux'), false);
     expect(context.isAbsolute(r'\\a'), false);
   });
 
@@ -159,8 +163,10 @@ main() {
     expect(context.isRelative('~'), true);
     expect(context.isRelative('.'), true);
     expect(context.isRelative('../a'), true);
-    expect(context.isRelative('C:/a'), true);
-    expect(context.isRelative(r'C:\a'), true);
+    expect(context.isRelative('C:/a'), false);
+    expect(context.isRelative(r'C:\a'), false);
+    expect(context.isRelative(r'package:foo/bar.dart'), false);
+    expect(context.isRelative('foo/bar:baz/qux'), true);
     expect(context.isRelative(r'\\a'), true);
   });
 
@@ -184,6 +190,8 @@ main() {
     expect(context.isRootRelative('../a'), false);
     expect(context.isRootRelative('C:/a'), false);
     expect(context.isRootRelative(r'C:\a'), false);
+    expect(context.isRootRelative(r'package:foo/bar.dart'), false);
+    expect(context.isRootRelative('foo/bar:baz/qux'), false);
     expect(context.isRootRelative(r'\\a'), false);
   });
 
@@ -216,7 +224,9 @@ main() {
               'a', 'http://google.com/b', 'http://dartlang.org/c', 'd'),
           'http://dartlang.org/c/d');
       expect(context.join('a', '/b', '/c', 'd'), '/c/d');
-      expect(context.join('a', r'c:\b', 'c', 'd'), r'a/c:\b/c/d');
+      expect(context.join('a', r'c:\b', 'c', 'd'), r'c:\b/c/d');
+      expect(context.join('a', 'package:foo/bar', 'c', 'd'),
+          r'package:foo/bar/c/d');
       expect(context.join('a', r'\\b', 'c', 'd'), r'a/\\b/c/d');
     });
 
@@ -225,6 +235,8 @@ main() {
           'http://dartlang.org/b/c');
       expect(context.join('file://', 'a', '/b', 'c'), 'file:///b/c');
       expect(context.join('file://', 'a', '/b', 'c', '/d'), 'file:///d');
+      expect(context.join('package:foo/bar.dart', '/baz.dart'),
+          'package:foo/baz.dart');
     });
 
     test('ignores trailing nulls', () {
@@ -294,7 +306,9 @@ main() {
         'd'
       ]), 'http://dartlang.org/c/d');
       expect(context.joinAll(['a', '/b', '/c', 'd']), '/c/d');
-      expect(context.joinAll(['a', r'c:\b', 'c', 'd']), r'a/c:\b/c/d');
+      expect(context.joinAll(['a', r'c:\b', 'c', 'd']), r'c:\b/c/d');
+      expect(context.joinAll(['a', 'package:foo/bar', 'c', 'd']),
+          r'package:foo/bar/c/d');
       expect(context.joinAll(['a', r'\\b', 'c', 'd']), r'a/\\b/c/d');
     });
 
@@ -405,8 +419,9 @@ main() {
           'http://dartlang.org/a');
       expect(context.normalize('file:///../../../a'), 'file:///a');
       expect(context.normalize('/../../../a'), '/a');
-      expect(context.normalize('c:/..'), '.');
-      expect(context.normalize('A:/../../..'), '../..');
+      expect(context.normalize('c:/..'), 'c:');
+      expect(context.normalize('package:foo/..'), 'package:foo');
+      expect(context.normalize('A:/../../..'), 'A:');
       expect(context.normalize('a/..'), '.');
       expect(context.normalize('a/b/..'), 'a');
       expect(context.normalize('a/../b'), 'b');
@@ -430,7 +445,8 @@ main() {
       expect(context.normalize('a/..'), '.');
       expect(context.normalize('../a'), '../a');
       expect(context.normalize('/../a'), '/a');
-      expect(context.normalize('c:/../a'), 'a');
+      expect(context.normalize('c:/../a'), 'c:/a');
+      expect(context.normalize('package:foo/../a'), 'package:foo/a');
       expect(context.normalize('/../a'), '/a');
       expect(context.normalize('a/b/..'), 'a');
       expect(context.normalize('../a/b/..'), '../a');
@@ -778,8 +794,7 @@ main() {
     test('ignores parts before an absolute path', () {
       expect(context.absolute('a', '/b', '/c', 'd'), 'http://dartlang.org/c/d');
       expect(context.absolute('a', '/b', 'file:///c', 'd'), 'file:///c/d');
-      expect(context.absolute('a', r'c:\b', 'c', 'd'),
-          r'http://dartlang.org/root/path/a/c:\b/c/d');
+      expect(context.absolute('a', r'c:\b', 'c', 'd'), r'c:\b/c/d');
       expect(context.absolute('a', r'\\b', 'c', 'd'),
           r'http://dartlang.org/root/path/a/\\b/c/d');
     });
