@@ -97,8 +97,8 @@ Given that, we've decided this library should simply treat paths as strings.
 We believe this library handles most of the corner cases of Windows paths
 (POSIX paths are generally pretty straightforward):
 
- *  It understands that *both* "/" and "\" are valid path separators, not just
-    "\".
+ *  It understands that *both* "/" and "\\" are valid path separators, not just
+    "\\".
 
  *  It can accurately tell if a path is absolute based on drive-letters or UNC
     prefix.
