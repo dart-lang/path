@@ -343,8 +343,8 @@ class Context {
   bool _needsNormalization(String path) {
     var start = 0;
     var codeUnits = path.codeUnits;
-    var previousPrevious;
-    var previous;
+    int previousPrevious;
+    int previous;
 
     // Skip past the root before we start looking for snippets that need
     // normalization. We want to normalize "//", but not when it's part of
@@ -566,7 +566,7 @@ class Context {
     var result = _isWithinOrEqualsFast(parent, child);
     if (result != _PathRelation.inconclusive) return result;
 
-    var relative;
+    String relative;
     try {
       relative = this.relative(child, from: parent);
     } on PathException catch (_) {
@@ -958,9 +958,13 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(uri) {
-    if (uri is String) uri = Uri.parse(uri);
-    return style.pathFromUri(uri);
+  String fromUri(dynamic uri) {
+    if (uri is String) {
+      return style.pathFromUri(Uri.parse(uri));
+    } else if (uri is Uri) {
+      return style.pathFromUri(uri);
+    }
+    throw new ArgumentError.value(uri, 'uri');
   }
 
   /// Returns the URI that represents [path].
@@ -1012,14 +1016,21 @@ class Context {
   ///     context.prettyUri('http://dartlang.org/root/path/a/b.dart');
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
-  String prettyUri(uri) {
-    if (uri is String) uri = Uri.parse(uri);
-    if (uri.scheme == 'file' && style == Style.url) return uri.toString();
-    if (uri.scheme != 'file' && uri.scheme != '' && style != Style.url) {
-      return uri.toString();
+  String prettyUri(dynamic uri) {
+    Uri uri_;
+    if (uri is String) {
+      uri_ = Uri.parse(uri);
+    } else if (uri is Uri) {
+      uri_ = uri;
+    } else {
+      throw new ArgumentError.value(uri, 'uri');
+    }
+    if (uri_.scheme == 'file' && style == Style.url) return uri_.toString();
+    if (uri_.scheme != 'file' && uri_.scheme != '' && style != Style.url) {
+      return uri_.toString();
     }
 
-    var path = normalize(fromUri(uri));
+    var path = normalize(fromUri(uri_));
     var rel = relative(path);
 
     // Only return a relative path if it's actually shorter than the absolute
@@ -1033,12 +1044,12 @@ class Context {
 
 /// Validates that there are no non-null arguments following a null one and
 /// throws an appropriate [ArgumentError] on failure.
-_validateArgList(String method, List<String> args) {
+void _validateArgList(String method, List<String> args) {
   for (var i = 1; i < args.length; i++) {
     // Ignore nulls hanging off the end.
     if (args[i] == null || args[i - 1] != null) continue;
 
-    var numArgs;
+    int numArgs;
     for (numArgs = args.length; numArgs >= 1; numArgs--) {
       if (args[numArgs - 1] != null) break;
     }

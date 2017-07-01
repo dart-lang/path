@@ -384,7 +384,7 @@ String withoutExtension(String path) => context.withoutExtension(path);
 /// If [uri] is relative, a relative path will be returned.
 ///
 ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-String fromUri(uri) => context.fromUri(uri);
+String fromUri(dynamic uri) => context.fromUri(uri);
 
 /// Returns the URI that represents [path].
 ///
@@ -430,4 +430,4 @@ Uri toUri(String path) => context.toUri(path);
 ///     path.prettyUri('http://dartlang.org/root/path/a/b.dart');
 ///         // -> r'a/b.dart'
 ///     path.prettyUri('file:///root/path'); // -> 'file:///root/path'
-String prettyUri(uri) => context.prettyUri(uri);
+String prettyUri(dynamic uri) => context.prettyUri(uri);
