@@ -39,7 +39,7 @@ void main(List<String> args) {
     var context = new p.Context(style: style);
     var files = genericPaths.toList()..addAll(platformPaths[style]);
 
-    benchmark(name, function) {
+    benchmark(String name, Function function) {
       runBenchmark("${style.name}-$name", 100000, () {
         for (var file in files) {
           function(file);
@@ -47,7 +47,7 @@ void main(List<String> args) {
       });
     }
 
-    benchmarkPairs(name, function) {
+    benchmarkPairs(String name, Function function) {
       runBenchmark("${style.name}-$name", 1000, () {
         for (var file1 in files) {
           for (var file2 in files) {
@@ -68,7 +68,7 @@ void main(List<String> args) {
     benchmark('isRootRelative', context.isRootRelative);
     benchmark('normalize', context.normalize);
     benchmark('relative', context.relative);
-    benchmarkPairs('relative from', (file, from) {
+    benchmarkPairs('relative from', (String file, String from) {
       try {
         return context.relative(file, from: from);
       } on p.PathException {

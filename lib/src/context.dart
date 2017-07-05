@@ -343,8 +343,8 @@ class Context {
   bool _needsNormalization(String path) {
     var start = 0;
     var codeUnits = path.codeUnits;
-    var previousPrevious;
-    var previous;
+    int previousPrevious;
+    int previous;
 
     // Skip past the root before we start looking for snippets that need
     // normalization. We want to normalize "//", but not when it's part of
@@ -566,7 +566,7 @@ class Context {
     var result = _isWithinOrEqualsFast(parent, child);
     if (result != _PathRelation.inconclusive) return result;
 
-    var relative;
+    String relative;
     try {
       relative = this.relative(child, from: parent);
     } on PathException catch (_) {
@@ -958,10 +958,7 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(uri) {
-    if (uri is String) uri = Uri.parse(uri);
-    return style.pathFromUri(uri);
-  }
+  String fromUri(uri) => style.pathFromUri(_parseUri(uri));
 
   /// Returns the URI that represents [path].
   ///
@@ -1013,13 +1010,16 @@ class Context {
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {
-    if (uri is String) uri = Uri.parse(uri);
-    if (uri.scheme == 'file' && style == Style.url) return uri.toString();
-    if (uri.scheme != 'file' && uri.scheme != '' && style != Style.url) {
-      return uri.toString();
+    var typedUri = _parseUri(uri);
+    if (typedUri.scheme == 'file' && style == Style.url) {
+      return typedUri.toString();
+    } else if (typedUri.scheme != 'file' &&
+        typedUri.scheme != '' &&
+        style != Style.url) {
+      return typedUri.toString();
     }
 
-    var path = normalize(fromUri(uri));
+    var path = normalize(fromUri(typedUri));
     var rel = relative(path);
 
     // Only return a relative path if it's actually shorter than the absolute
@@ -1031,14 +1031,23 @@ class Context {
   ParsedPath _parse(String path) => new ParsedPath.parse(path, style);
 }
 
+/// Parses argument if it's a [String] or returns it intact if it's a [Uri].
+///
+/// Throws an [ArgumentError] otherwise.
+Uri _parseUri(uri) {
+  if (uri is String) return Uri.parse(uri);
+  if (uri is Uri) return uri;
+  throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
+}
+
 /// Validates that there are no non-null arguments following a null one and
 /// throws an appropriate [ArgumentError] on failure.
-_validateArgList(String method, List<String> args) {
+void _validateArgList(String method, List<String> args) {
   for (var i = 1; i < args.length; i++) {
     // Ignore nulls hanging off the end.
     if (args[i] == null || args[i - 1] != null) continue;
 
-    var numArgs;
+    int numArgs;
     for (numArgs = args.length; numArgs >= 1; numArgs--) {
       if (args[numArgs - 1] != null) break;
     }
