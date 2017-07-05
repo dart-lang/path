@@ -958,14 +958,7 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(uri) {
-    if (uri is String) {
-      return style.pathFromUri(Uri.parse(uri));
-    } else if (uri is Uri) {
-      return style.pathFromUri(uri);
-    }
-    throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
-  }
+  String fromUri(uri) => style.pathFromUri(_parseUri(uri));
 
   /// Returns the URI that represents [path].
   ///
@@ -1017,14 +1010,7 @@ class Context {
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {
-    Uri typedUri;
-    if (uri is String) {
-      typedUri = Uri.parse(uri);
-    } else if (uri is Uri) {
-      typedUri = uri;
-    } else {
-      throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
-    }
+    final typedUri = _parseUri(uri);
     if (typedUri.scheme == 'file' && style == Style.url)
       return typedUri.toString();
     if (typedUri.scheme != 'file' &&
@@ -1043,6 +1029,18 @@ class Context {
   }
 
   ParsedPath _parse(String path) => new ParsedPath.parse(path, style);
+}
+
+/// Parses argument if it's [String] or returns it intact if it's [Uri].
+/// Throws [ArgumentError] otherwise.
+Uri _parseUri(uri) {
+  if (uri is String) {
+    return Uri.parse(uri);
+  } else if (uri is Uri) {
+    return uri;
+  } else {
+    throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
+  }
 }
 
 /// Validates that there are no non-null arguments following a null one and
