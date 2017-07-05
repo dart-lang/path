@@ -1010,10 +1010,10 @@ class Context {
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {
-    final typedUri = _parseUri(uri);
-    if (typedUri.scheme == 'file' && style == Style.url)
+    var typedUri = _parseUri(uri);
+    if (typedUri.scheme == 'file' && style == Style.url) {
       return typedUri.toString();
-    if (typedUri.scheme != 'file' &&
+    } else if (typedUri.scheme != 'file' &&
         typedUri.scheme != '' &&
         style != Style.url) {
       return typedUri.toString();
@@ -1031,16 +1031,13 @@ class Context {
   ParsedPath _parse(String path) => new ParsedPath.parse(path, style);
 }
 
-/// Parses argument if it's [String] or returns it intact if it's [Uri].
-/// Throws [ArgumentError] otherwise.
+/// Parses argument if it's a [String] or returns it intact if it's a [Uri].
+///
+/// Throws an [ArgumentError] otherwise.
 Uri _parseUri(uri) {
-  if (uri is String) {
-    return Uri.parse(uri);
-  } else if (uri is Uri) {
-    return uri;
-  } else {
-    throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
-  }
+  if (uri is String) return Uri.parse(uri);
+  if (uri is Uri) return uri;
+  throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
 }
 
 /// Validates that there are no non-null arguments following a null one and
