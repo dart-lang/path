@@ -958,13 +958,13 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(dynamic uri) {
+  String fromUri(uri) {
     if (uri is String) {
       return style.pathFromUri(Uri.parse(uri));
     } else if (uri is Uri) {
       return style.pathFromUri(uri);
     }
-    throw new ArgumentError.value(uri, 'uri');
+    throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
   }
 
   /// Returns the URI that represents [path].
@@ -1016,21 +1016,24 @@ class Context {
   ///     context.prettyUri('http://dartlang.org/root/path/a/b.dart');
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
-  String prettyUri(dynamic uri) {
-    Uri uri_;
+  String prettyUri(uri) {
+    Uri typedUri;
     if (uri is String) {
-      uri_ = Uri.parse(uri);
+      typedUri = Uri.parse(uri);
     } else if (uri is Uri) {
-      uri_ = uri;
+      typedUri = uri;
     } else {
-      throw new ArgumentError.value(uri, 'uri');
+      throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
     }
-    if (uri_.scheme == 'file' && style == Style.url) return uri_.toString();
-    if (uri_.scheme != 'file' && uri_.scheme != '' && style != Style.url) {
-      return uri_.toString();
+    if (typedUri.scheme == 'file' && style == Style.url)
+      return typedUri.toString();
+    if (typedUri.scheme != 'file' &&
+        typedUri.scheme != '' &&
+        style != Style.url) {
+      return typedUri.toString();
     }
 
-    var path = normalize(fromUri(uri_));
+    var path = normalize(fromUri(typedUri));
     var rel = relative(path);
 
     // Only return a relative path if it's actually shorter than the absolute
