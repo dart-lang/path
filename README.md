@@ -7,7 +7,9 @@ We've tried very hard to make this library do the "right" thing on whatever
 platform you run it on, including in the browser. When you use the top-level
 functions, it will assume the current platform's path style and work with
 that. If you want to explicitly work with paths of a specific style, you can
-construct a `path.Context` for that style.
+construct a [`p.Context`][Context] for that style.
+
+[Context]: https://www.dartdocs.org/documentation/path/latest/path/Context-class.html
 
 ## Using
 
@@ -15,7 +17,7 @@ The path library was designed to be imported with a prefix, though you don't
 have to if you don't want to:
 
 ```dart
-import 'package:path/path.dart' as path;
+import 'package:path/path.dart' as p;
 ```
 
 The most common way to use the library is through the top-level functions.
@@ -23,7 +25,7 @@ These manipulate path strings based on your current working directory and
 the path style (POSIX, Windows, or URLs) of the host platform. For example:
 
 ```dart
-path.join("directory", "file.txt");
+p.join("directory", "file.txt");
 ```
 
 This calls the top-level [join] function to join "directory" and
@@ -34,7 +36,7 @@ underlying platform that the program is running on, you can create a
 [Context] and give it an explicit [Style]:
 
 ```dart
-var context = new path.Context(style: Style.windows);
+var context = new p.Context(style: Style.windows);
 context.join("directory", "file.txt");
 ```
 
