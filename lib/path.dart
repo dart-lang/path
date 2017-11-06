@@ -363,6 +363,18 @@ int hash(String path) => context.hash(path);
 ///     p.withoutExtension('path/to/foo.dart'); // -> 'path/to/foo'
 String withoutExtension(String path) => context.withoutExtension(path);
 
+/// Returns [path] with the trailing extension set to [extension].
+///
+/// If [path] doesn't have a trailing extension, this just adds [extension] to
+/// the end.
+///
+///     p.setExtension('path/to/foo.dart', '.js') // -> 'path/to/foo.js'
+///     p.setExtension('path/to/foo.dart.js', '.map')
+///       // -> 'path/to/foo.dart.map'
+///     p.setExtension('path/to/foo', '.js') // -> 'path/to/foo.js'
+String setExtension(String path, String extension) =>
+    context.setExtension(path, extension);
+
 /// Returns the path represented by [uri], which may be a [String] or a [Uri].
 ///
 /// For POSIX and Windows styles, [uri] must be a `file:` URI. For the URL

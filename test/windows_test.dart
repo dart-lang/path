@@ -684,6 +684,25 @@ main() {
     expect(context.withoutExtension(r'a\b.c\'), r'a\b\');
   });
 
+  test('withoutExtension', () {
+    expect(context.setExtension('', '.x'), '.x');
+    expect(context.setExtension('a', '.x'), 'a.x');
+    expect(context.setExtension('.a', '.x'), '.a.x');
+    expect(context.setExtension('a.b', '.x'), 'a.x');
+    expect(context.setExtension(r'a\b.c', '.x'), r'a\b.x');
+    expect(context.setExtension(r'a\b.c.d', '.x'), r'a\b.c.x');
+    expect(context.setExtension(r'a\', '.x'), r'a\.x');
+    expect(context.setExtension(r'a\b\', '.x'), r'a\b\.x');
+    expect(context.setExtension(r'a\.', '.x'), r'a\..x');
+    expect(context.setExtension(r'a\.b', '.x'), r'a\.b.x');
+    expect(context.setExtension(r'a.b\c', '.x'), r'a.b\c.x');
+    expect(context.setExtension(r'a/b.c/d', '.x'), r'a/b.c/d.x');
+    expect(context.setExtension(r'a\b/c', '.x'), r'a\b/c.x');
+    expect(context.setExtension(r'a\b/c.d', '.x'), r'a\b/c.x');
+    expect(context.setExtension(r'a.b/c', '.x'), r'a.b/c.x');
+    expect(context.setExtension(r'a\b.c\', '.x'), r'a\b\.x');
+  });
+
   group('fromUri', () {
     test('with a URI', () {
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo')),

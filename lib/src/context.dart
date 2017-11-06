@@ -938,6 +938,20 @@ class Context {
     return parsed.toString();
   }
 
+  /// Returns [path] with the trailing extension set to [extension].
+  ///
+  /// If [path] doesn't have a trailing extension, this just adds [extension] to
+  /// the end.
+  ///
+  ///     context.setExtension('path/to/foo.dart', '.js')
+  ///       // -> 'path/to/foo.js'
+  ///     context.setExtension('path/to/foo.dart.js', '.map')
+  ///       // -> 'path/to/foo.dart.map'
+  ///     context.setExtension('path/to/foo', '.js')
+  ///       // -> 'path/to/foo.js'
+  String setExtension(String path, String extension) =>
+      withoutExtension(path) + extension;
+
   /// Returns the path represented by [uri], which may be a [String] or a [Uri].
   ///
   /// For POSIX and Windows styles, [uri] must be a `file:` URI. For the URL
