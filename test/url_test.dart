@@ -819,6 +819,25 @@ main() {
     expect(context.withoutExtension('a/b.c//'), 'a/b//');
   });
 
+  test('withoutExtension', () {
+    expect(context.setExtension('', '.x'), '.x');
+    expect(context.setExtension('a', '.x'), 'a.x');
+    expect(context.setExtension('.a', '.x'), '.a.x');
+    expect(context.setExtension('a.b', '.x'), 'a.x');
+    expect(context.setExtension('a/b.c', '.x'), 'a/b.x');
+    expect(context.setExtension('a/b.c.d', '.x'), 'a/b.c.x');
+    expect(context.setExtension('a/', '.x'), 'a/.x');
+    expect(context.setExtension('a/b/', '.x'), 'a/b/.x');
+    expect(context.setExtension('a/.', '.x'), 'a/..x');
+    expect(context.setExtension('a/.b', '.x'), 'a/.b.x');
+    expect(context.setExtension('a.b/c', '.x'), 'a.b/c.x');
+    expect(context.setExtension(r'a.b\c', '.x'), r'a.x');
+    expect(context.setExtension(r'a/b\c', '.x'), r'a/b\c.x');
+    expect(context.setExtension(r'a/b\c.d', '.x'), r'a/b\c.x');
+    expect(context.setExtension('a/b.c/', '.x'), 'a/b/.x');
+    expect(context.setExtension('a/b.c//', '.x'), 'a/b//.x');
+  });
+
   group('fromUri', () {
     test('with a URI', () {
       expect(context.fromUri(Uri.parse('http://dartlang.org/path/to/foo')),

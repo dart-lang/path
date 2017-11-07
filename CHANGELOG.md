@@ -1,3 +1,7 @@
+## 1.5.0
+
+* Add a `setExtension()` top-level function and `Context` method.
+
 ## 1.4.2
 
 * Treat `package:` URLs as absolute.
