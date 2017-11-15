@@ -220,7 +220,8 @@ main() {
       expect(context.join('a', '/', 'b', 'c'), '/b/c');
       expect(context.join('a', '/b', 'http://dartlang.org/c', 'd'),
           'http://dartlang.org/c/d');
-      expect(context.join(
+      expect(
+          context.join(
               'a', 'http://google.com/b', 'http://dartlang.org/c', 'd'),
           'http://dartlang.org/c/d');
       expect(context.join('a', '/b', '/c', 'd'), '/c/d');
@@ -266,10 +267,10 @@ main() {
     });
 
     test('treats drive letters as part of the root for file: URLs', () {
-      expect(context.join('file:///c:/foo/bar', '/baz/qux'),
-          'file:///c:/baz/qux');
-      expect(context.join('file:///D:/foo/bar', '/baz/qux'),
-          'file:///D:/baz/qux');
+      expect(
+          context.join('file:///c:/foo/bar', '/baz/qux'), 'file:///c:/baz/qux');
+      expect(
+          context.join('file:///D:/foo/bar', '/baz/qux'), 'file:///D:/baz/qux');
       expect(context.join('file:///c:/', '/baz/qux'), 'file:///c:/baz/qux');
       expect(context.join('file:///c:', '/baz/qux'), 'file:///c:/baz/qux');
       expect(context.join('file://host/c:/foo/bar', '/baz/qux'),
@@ -281,8 +282,8 @@ main() {
           'http://foo.com/baz/qux');
       expect(context.join('misfile:///c:/foo/bar', '/baz/qux'),
           'misfile:///baz/qux');
-      expect(context.join('filer:///c:/foo/bar', '/baz/qux'),
-          'filer:///baz/qux');
+      expect(
+          context.join('filer:///c:/foo/bar', '/baz/qux'), 'filer:///baz/qux');
     });
   });
 
@@ -299,12 +300,10 @@ main() {
       expect(context.joinAll(['a', '/', 'b', 'c']), '/b/c');
       expect(context.joinAll(['a', '/b', 'http://dartlang.org/c', 'd']),
           'http://dartlang.org/c/d');
-      expect(context.joinAll([
-        'a',
-        'http://google.com/b',
-        'http://dartlang.org/c',
-        'd'
-      ]), 'http://dartlang.org/c/d');
+      expect(
+          context.joinAll(
+              ['a', 'http://google.com/b', 'http://dartlang.org/c', 'd']),
+          'http://dartlang.org/c/d');
       expect(context.joinAll(['a', '/b', '/c', 'd']), '/c/d');
       expect(context.joinAll(['a', r'c:\b', 'c', 'd']), r'c:\b/c/d');
       expect(context.joinAll(['a', 'package:foo/bar', 'c', 'd']),
@@ -538,10 +537,14 @@ main() {
 
       // Regression
       test('from root-only path', () {
-        expect(context.relative('http://dartlang.org',
-            from: 'http://dartlang.org'), '.');
-        expect(context.relative('http://dartlang.org/root/path',
-            from: 'http://dartlang.org'), 'root/path');
+        expect(
+            context.relative('http://dartlang.org',
+                from: 'http://dartlang.org'),
+            '.');
+        expect(
+            context.relative('http://dartlang.org/root/path',
+                from: 'http://dartlang.org'),
+            'root/path');
       });
     });
 
@@ -608,10 +611,14 @@ main() {
       expect(
           context.relative('http://dartlang.org/foo/bar/baz', from: '/foo/bar'),
           equals('baz'));
-      expect(context.relative('http://dartlang.org/foo/bar/baz',
-          from: 'file:///foo/bar'), equals('http://dartlang.org/foo/bar/baz'));
-      expect(context.relative('http://dartlang.org/foo/bar/baz',
-          from: 'http://dartlang.org/foo/bar'), equals('baz'));
+      expect(
+          context.relative('http://dartlang.org/foo/bar/baz',
+              from: 'file:///foo/bar'),
+          equals('http://dartlang.org/foo/bar/baz'));
+      expect(
+          context.relative('http://dartlang.org/foo/bar/baz',
+              from: 'http://dartlang.org/foo/bar'),
+          equals('baz'));
       expect(context.relative('/foo/bar/baz', from: 'file:///foo/bar'),
           equals('http://dartlang.org/foo/bar/baz'));
       expect(context.relative('file:///foo/bar/baz', from: '/foo/bar'),
@@ -642,10 +649,14 @@ main() {
           equals('/foo/bar/baz'));
       expect(r.relative('http://dartlang.org/foo/bar/baz', from: '/foo/bar'),
           equals('http://dartlang.org/foo/bar/baz'));
-      expect(r.relative('http://dartlang.org/foo/bar/baz',
-          from: 'file:///foo/bar'), equals('http://dartlang.org/foo/bar/baz'));
-      expect(r.relative('http://dartlang.org/foo/bar/baz',
-          from: 'http://dartlang.org/foo/bar'), equals('baz'));
+      expect(
+          r.relative('http://dartlang.org/foo/bar/baz',
+              from: 'file:///foo/bar'),
+          equals('http://dartlang.org/foo/bar/baz'));
+      expect(
+          r.relative('http://dartlang.org/foo/bar/baz',
+              from: 'http://dartlang.org/foo/bar'),
+          equals('baz'));
 
       expect(r.relative('http://dartlang.org/foo/bar/baz', from: 'foo/bar'),
           equals('http://dartlang.org/foo/bar/baz'));
@@ -673,10 +684,14 @@ main() {
       expect(context.isWithin('foo/bar', 'foo/bar/baz'), isTrue);
       expect(context.isWithin('foo/bar', 'foo/baz'), isFalse);
       expect(context.isWithin('foo/bar', '../path/foo/bar/baz'), isTrue);
-      expect(context.isWithin(
-          'http://dartlang.org', 'http://dartlang.org/foo/bar'), isTrue);
-      expect(context.isWithin(
-          'http://dartlang.org', 'http://pub.dartlang.org/foo/bar'), isFalse);
+      expect(
+          context.isWithin(
+              'http://dartlang.org', 'http://dartlang.org/foo/bar'),
+          isTrue);
+      expect(
+          context.isWithin(
+              'http://dartlang.org', 'http://pub.dartlang.org/foo/bar'),
+          isFalse);
       expect(context.isWithin('http://dartlang.org', '/foo/bar'), isTrue);
       expect(context.isWithin('http://dartlang.org/foo', '/foo/bar'), isTrue);
       expect(context.isWithin('http://dartlang.org/foo', '/bar/baz'), isFalse);

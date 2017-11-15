@@ -72,8 +72,13 @@ class Context {
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
   /// If [current] isn't absolute, this won't return an absolute path.
-  String absolute(String part1, [String part2, String part3, String part4,
-      String part5, String part6, String part7]) {
+  String absolute(String part1,
+      [String part2,
+      String part3,
+      String part4,
+      String part5,
+      String part6,
+      String part7]) {
     _validateArgList(
         "absolute", [part1, part2, part3, part4, part5, part6, part7]);
 
@@ -205,8 +210,14 @@ class Context {
   ///
   ///     context.join('path', '/to', 'foo'); // -> '/to/foo'
   ///
-  String join(String part1, [String part2, String part3, String part4,
-      String part5, String part6, String part7, String part8]) {
+  String join(String part1,
+      [String part2,
+      String part3,
+      String part4,
+      String part5,
+      String part6,
+      String part7,
+      String part8]) {
     var parts = <String>[
       part1,
       part2,
@@ -246,8 +257,8 @@ class Context {
         // replaces the path after it.
         var parsed = _parse(part);
         var path = buffer.toString();
-        parsed.root = path.substring(
-            0, style.rootLength(path, withDrive: true));
+        parsed.root =
+            path.substring(0, style.rootLength(path, withDrive: true));
         if (style.needsSeparator(parsed.root)) {
           parsed.separators[0] = style.separator;
         }
@@ -378,8 +389,8 @@ class Context {
         // enough that it's probably not going to cause performance issues.
         if (previous == chars.PERIOD &&
             (previousPrevious == null ||
-             previousPrevious == chars.PERIOD ||
-             style.isSeparator(previousPrevious))) {
+                previousPrevious == chars.PERIOD ||
+                style.isSeparator(previousPrevious))) {
           return true;
         }
       }
@@ -397,8 +408,8 @@ class Context {
     // Single dots and double dots are normalized to directory traversals.
     if (previous == chars.PERIOD &&
         (previousPrevious == null ||
-         style.isSeparator(previousPrevious) ||
-         previousPrevious == chars.PERIOD)) {
+            style.isSeparator(previousPrevious) ||
+            previousPrevious == chars.PERIOD)) {
       return true;
     }
 
@@ -493,8 +504,8 @@ class Context {
     if (fromParsed.parts.length > 0 && fromParsed.parts[0] == '..') {
       throw new PathException('Unable to find a path to "$path" from "$from".');
     }
-    pathParsed.parts.insertAll(
-        0, new List.filled(fromParsed.parts.length, '..'));
+    pathParsed.parts
+        .insertAll(0, new List.filled(fromParsed.parts.length, '..'));
     pathParsed.separators[0] = '';
     pathParsed.separators.insertAll(
         1, new List.filled(fromParsed.parts.length, style.separator));
@@ -580,7 +591,7 @@ class Context {
     if (relative == '..') return _PathRelation.different;
     return (relative.length >= 3 &&
             relative.startsWith('..') &&
-             style.isSeparator(relative.codeUnitAt(2)))
+            style.isSeparator(relative.codeUnitAt(2)))
         ? _PathRelation.different
         : _PathRelation.within;
   }
@@ -739,8 +750,8 @@ class Context {
         lastParentSeparator ??= math.max(0, parentRootLength - 1);
       }
 
-      var direction = _pathDirection(parent,
-          lastParentSeparator ?? parentRootLength - 1);
+      var direction =
+          _pathDirection(parent, lastParentSeparator ?? parentRootLength - 1);
       if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
           ? _PathRelation.inconclusive
@@ -907,7 +918,7 @@ class Context {
         if (!beginning &&
             next == chars.PERIOD &&
             (i + 2 == path.length ||
-             style.isSeparator(path.codeUnitAt(i + 2)))) {
+                style.isSeparator(path.codeUnitAt(i + 2)))) {
           return null;
         }
       }
@@ -1132,4 +1143,3 @@ class _PathRelation {
 
   String toString() => name;
 }
-

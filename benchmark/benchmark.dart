@@ -22,7 +22,9 @@ final platformPaths = {
     '/',
     '/home/user/dart/sdk/lib/indexed_db/dart2js/indexed_db_dart2js.dart',
   ],
-  p.Style.url: ['https://example.server.org/443643002/path?top=yes#fragment',],
+  p.Style.url: [
+    'https://example.server.org/443643002/path?top=yes#fragment',
+  ],
   p.Style.windows: [
     r'C:\User\me\',
     r'\\server\share\my\folders\some\file.data',

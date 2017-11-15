@@ -118,9 +118,14 @@ String get separator => context.separator;
 /// Equivalent to [join()] with [current] as the first argument. Example:
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
-String absolute(String part1, [String part2, String part3, String part4,
-    String part5, String part6, String part7]) =>
-        context.absolute(part1, part2, part3, part4, part5, part6, part7);
+String absolute(String part1,
+        [String part2,
+        String part3,
+        String part4,
+        String part5,
+        String part6,
+        String part7]) =>
+    context.absolute(part1, part2, part3, part4, part5, part6, part7);
 
 /// Gets the part of [path] after the last separator.
 ///
@@ -240,9 +245,15 @@ bool isRootRelative(String path) => context.isRootRelative(path);
 /// If a part is an absolute path, then anything before that will be ignored:
 ///
 ///     p.join('path', '/to', 'foo'); // -> '/to/foo'
-String join(String part1, [String part2, String part3, String part4,
-    String part5, String part6, String part7, String part8]) =>
-        context.join(part1, part2, part3, part4, part5, part6, part7, part8);
+String join(String part1,
+        [String part2,
+        String part3,
+        String part4,
+        String part5,
+        String part6,
+        String part7,
+        String part8]) =>
+    context.join(part1, part2, part3, part4, part5, part6, part7, part8);
 
 /// Joins the given path parts into a single path using the current platform's
 /// [separator]. Example:
