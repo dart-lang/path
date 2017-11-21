@@ -56,25 +56,24 @@ main() {
     }
   });
 
+  // Regression test for #35. This tests against the *actual* working directory
+  // rather than just a custom context because we do some processing in
+  // [path.current] that has clobbered the root in the past.
   test('absolute works on root working directory', () {
-    var orgDir = io.Directory.current.path;
+    var dir = path.current;
     try {
-      while (io.Directory.current.parent != null &&
-          io.Directory.current.parent.path != io.Directory.current.path) {
-        io.Directory.current = io.Directory.current.parent;
-      }
-      var dir = io.Directory.current.path;
+      io.Directory.current = path.rootPrefix(path.current);
 
-      expect(path.relative(path.absolute('foo/bar'), from: dir),
+      expect(path.relative(path.absolute('foo/bar'), from: path.current),
           path.relative(path.absolute('foo/bar')));
 
       expect(path.normalize(path.absolute('foo/bar')),
-          equals(path.normalize(path.join(dir, '../foo/bar'))));
+          equals(path.normalize(path.join(path.current, '../foo/bar'))));
 
       expect(path.normalize(path.absolute('foo/bar')),
-          equals(path.normalize(path.context.join(dir, '../foo/bar'))));
+          equals(path.normalize(path.join(path.current, '../foo/bar'))));
     } finally {
-      io.Directory.current = orgDir;
+      io.Directory.current = dir;
     }
   });
 }

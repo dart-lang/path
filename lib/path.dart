@@ -95,11 +95,7 @@ String get current {
     // (for instance the root on Linux).
     var lastIndex = path.length - 1;
     assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
-    if (lastIndex > 0) {
-      _current = path.substring(0, lastIndex);
-    } else {
-      _current = path;
-    }
+    _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
     return _current;
   }
 }
