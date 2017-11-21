@@ -55,4 +55,25 @@ main() {
       io.Directory.current = dir;
     }
   });
+
+  // Regression test for #35. This tests against the *actual* working directory
+  // rather than just a custom context because we do some processing in
+  // [path.current] that has clobbered the root in the past.
+  test('absolute works on root working directory', () {
+    var dir = path.current;
+    try {
+      io.Directory.current = path.rootPrefix(path.current);
+
+      expect(path.relative(path.absolute('foo/bar'), from: path.current),
+          path.relative(path.absolute('foo/bar')));
+
+      expect(path.normalize(path.absolute('foo/bar')),
+          equals(path.normalize(path.join(path.current, '../foo/bar'))));
+
+      expect(path.normalize(path.absolute('foo/bar')),
+          equals(path.normalize(path.join(path.current, '../foo/bar'))));
+    } finally {
+      io.Directory.current = dir;
+    }
+  });
 }

@@ -91,10 +91,11 @@ String get current {
     return _current;
   } else {
     var path = uri.toFilePath();
-    // Remove trailing '/' or '\'.
+    // Remove trailing '/' or '\' unless it is the only thing left
+    // (for instance the root on Linux).
     var lastIndex = path.length - 1;
     assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
-    _current = path.substring(0, lastIndex);
+    _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
     return _current;
   }
 }
