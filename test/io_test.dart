@@ -55,4 +55,26 @@ main() {
       io.Directory.current = dir;
     }
   });
+
+  test('absolute works on root working directory', () {
+    var orgDir = io.Directory.current.path;
+    try {
+      while (io.Directory.current.parent != null &&
+          io.Directory.current.parent.path != io.Directory.current.path) {
+        io.Directory.current = io.Directory.current.parent;
+      }
+      var dir = io.Directory.current.path;
+
+      expect(path.relative(path.absolute('foo/bar'), from: dir),
+          path.relative(path.absolute('foo/bar')));
+
+      expect(path.normalize(path.absolute('foo/bar')),
+          equals(path.normalize(path.join(dir, '../foo/bar'))));
+
+      expect(path.normalize(path.absolute('foo/bar')),
+          equals(path.normalize(path.context.join(dir, '../foo/bar'))));
+    } finally {
+      io.Directory.current = orgDir;
+    }
+  });
 }
