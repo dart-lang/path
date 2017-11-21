@@ -1,3 +1,8 @@
+## 1.5.1
+
+* Fix a number of bugs that occurred when the current working directory was `/`
+  on Linux or Mac OS.
+
 ## 1.5.0
 
 * Add a `setExtension()` top-level function and `Context` method.
