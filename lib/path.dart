@@ -49,6 +49,7 @@ import 'src/style.dart';
 
 export 'src/context.dart' hide createInternal;
 export 'src/path_exception.dart';
+export 'src/path_map.dart';
 export 'src/style.dart';
 
 /// A default context for manipulating POSIX paths.
