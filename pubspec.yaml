@@ -9,4 +9,4 @@ homepage: http://github.com/dart-lang/path
 dev_dependencies:
   test: ">=0.12.0 <0.13.0"
 environment:
-  sdk: ">=1.0.0 <2.0.0"
+  sdk: ">=2.0.0-dev.35.0 <2.0.0"
