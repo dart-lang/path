@@ -10,7 +10,6 @@ matrix:
   include:
     - dart: dev
       dart_task: dartfmt
-  include:
     - dart: dev
       dart_task: dartanalyzer
 
