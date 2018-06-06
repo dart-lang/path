@@ -5,13 +5,8 @@ dart:
 
 dart_task:
   - test
-
-matrix:
-  include:
-    - dart: dev
-      dart_task: dartfmt
-    - dart: dev
-      dart_task: dartanalyzer
+  - dartfmt
+  - dartanalyze
 
 # Only building master means that we don't run two builds for each pull request.
 branches:
