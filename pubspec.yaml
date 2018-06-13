@@ -1,5 +1,5 @@
 name: path
-version: 1.6.0
+version: 1.6.1
 author: Dart Team <misc@dartlang.org>
 description: >
  A string-based path manipulation library. All of the path operations you know
@@ -9,4 +9,4 @@ homepage: http://github.com/dart-lang/path
 dev_dependencies:
   test: ">=0.12.0 <0.13.0"
 environment:
-  sdk: ">=2.0.0-dev.35.0 <2.0.0"
+  sdk: ">=2.0.0-dev.62.0 <2.0.0"
