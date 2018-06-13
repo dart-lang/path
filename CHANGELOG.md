@@ -1,3 +1,7 @@
+## 1.6.1
+
+* Drop the `retype` implementation for compatibility with the latest SDK.
+
 ## 1.6.0
 
 * Add a `PathMap` class that uses path equality for its keys.
