@@ -25,10 +25,10 @@ These manipulate path strings based on your current working directory and
 the path style (POSIX, Windows, or URLs) of the host platform. For example:
 
 ```dart
-p.join("directory", "file.txt");
+p.join('directory', 'file.txt');
 ```
 
-This calls the top-level [join] function to join "directory" and
+This calls the top-level `join()` function to join "directory" and
 "file.txt" using the current platform's directory separator.
 
 If you want to work with paths for a specific platform regardless of the
@@ -37,7 +37,7 @@ underlying platform that the program is running on, you can create a
 
 ```dart
 var context = new p.Context(style: Style.windows);
-context.join("directory", "file.txt");
+context.join('directory', 'file.txt');
 ```
 
 This will join "directory" and "file.txt" using the Windows path separator,

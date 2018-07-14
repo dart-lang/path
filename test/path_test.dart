@@ -13,7 +13,9 @@ main() {
     });
 
     test('separator', () {
+      // ignore: deprecated_member_use
       expect(path.Style.posix.separator, '/');
+      // ignore: deprecated_member_use
       expect(path.Style.windows.separator, '\\');
     });
 

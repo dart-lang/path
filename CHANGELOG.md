@@ -1,3 +1,7 @@
+## 1.6.2
+
+* Set max SDK version to `<3.0.0`, and adjust other dependencies.
+
 ## 1.6.1
 
 * Drop the `retype` implementation for compatibility with the latest SDK.
