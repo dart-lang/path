@@ -13,11 +13,11 @@ abstract class Style {
   /// start with "/". Used by UNIX, Linux, Mac OS X, and others.
   static final Style posix = new PosixStyle();
 
-  /// Windows paths use "\" (backslash) as separators. Absolute paths start with
-  /// a drive letter followed by a colon (example, "C:") or two backslashes
-  /// ("\\") for UNC paths.
+  /// Windows paths use `\` (backslash) as separators. Absolute paths start with
+  /// a drive letter followed by a colon (example, `C:`) or two backslashes
+  /// (`\\`) for UNC paths.
   // TODO(rnystrom): The UNC root prefix should include the drive name too, not
-  // just the "\\".
+  // just the `\\`.
   static final Style windows = new WindowsStyle();
 
   /// URLs aren't filesystem paths, but they're supported to make it easier to
