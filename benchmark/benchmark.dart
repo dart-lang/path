@@ -49,7 +49,7 @@ void main(List<String> args) {
       });
     }
 
-    benchmarkPairs(String name, Function function) {
+    void benchmarkPairs(String name, void Function(String, String) function) {
       runBenchmark("${style.name}-$name", 1000, () {
         for (var file1 in files) {
           for (var file2 in files) {
@@ -72,7 +72,7 @@ void main(List<String> args) {
     benchmark('relative', context.relative);
     benchmarkPairs('relative from', (String file, String from) {
       try {
-        return context.relative(file, from: from);
+        context.relative(file, from: from);
       } on p.PathException {
         // Do nothing.
       }

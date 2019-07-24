@@ -3,8 +3,8 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import '../characters.dart' as chars;
-import '../parsed_path.dart';
 import '../internal_style.dart';
+import '../parsed_path.dart';
 
 /// The style for POSIX paths.
 class PosixStyle extends InternalStyle {
@@ -23,7 +23,7 @@ class PosixStyle extends InternalStyle {
 
   bool containsSeparator(String path) => path.contains('/');
 
-  bool isSeparator(int codeUnit) => codeUnit == chars.SLASH;
+  bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
   bool needsSeparator(String path) =>
       path.isNotEmpty && !isSeparator(path.codeUnitAt(path.length - 1));

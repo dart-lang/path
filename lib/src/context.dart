@@ -4,12 +4,12 @@
 
 import 'dart:math' as math;
 
+import '../path.dart' as p;
 import 'characters.dart' as chars;
 import 'internal_style.dart';
-import 'style.dart';
 import 'parsed_path.dart';
 import 'path_exception.dart';
-import '../path.dart' as p;
+import 'style.dart';
 
 Context createInternal() => Context._internal();
 
@@ -270,7 +270,7 @@ class Context {
         buffer.clear();
         buffer.write(part);
       } else {
-        if (part.length > 0 && style.containsSeparator(part[0])) {
+        if (part.isNotEmpty && style.containsSeparator(part[0])) {
           // The part starts with a separator, so we don't need to add one.
         } else if (needsSeparator) {
           buffer.write(separator);
@@ -308,7 +308,7 @@ class Context {
   List<String> split(String path) {
     var parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
-    parsed.parts = parsed.parts.where((part) => !part.isEmpty).toList();
+    parsed.parts = parsed.parts.where((part) => part.isNotEmpty).toList();
     if (parsed.root != null) parsed.parts.insert(0, parsed.root);
     return parsed.parts;
   }
@@ -363,13 +363,13 @@ class Context {
     var root = style.rootLength(path);
     if (root != 0) {
       start = root;
-      previous = chars.SLASH;
+      previous = chars.slash;
 
       // On Windows, the root still needs to be normalized if it contains a
       // forward slash.
       if (style == Style.windows) {
         for (var i = 0; i < root; i++) {
-          if (codeUnits[i] == chars.SLASH) return true;
+          if (codeUnits[i] == chars.slash) return true;
         }
       }
     }
@@ -378,7 +378,7 @@ class Context {
       var codeUnit = codeUnits[i];
       if (style.isSeparator(codeUnit)) {
         // Forward slashes in Windows paths are normalized to backslashes.
-        if (style == Style.windows && codeUnit == chars.SLASH) return true;
+        if (style == Style.windows && codeUnit == chars.slash) return true;
 
         // Multiple separators are normalized to single separators.
         if (previous != null && style.isSeparator(previous)) return true;
@@ -387,9 +387,9 @@ class Context {
         //
         // This can return false positives for ".../", but that's unlikely
         // enough that it's probably not going to cause performance issues.
-        if (previous == chars.PERIOD &&
+        if (previous == chars.period &&
             (previousPrevious == null ||
-                previousPrevious == chars.PERIOD ||
+                previousPrevious == chars.period ||
                 style.isSeparator(previousPrevious))) {
           return true;
         }
@@ -406,10 +406,10 @@ class Context {
     if (style.isSeparator(previous)) return true;
 
     // Single dots and double dots are normalized to directory traversals.
-    if (previous == chars.PERIOD &&
+    if (previous == chars.period &&
         (previousPrevious == null ||
             style.isSeparator(previousPrevious) ||
-            previousPrevious == chars.PERIOD)) {
+            previousPrevious == chars.period)) {
       return true;
     }
 
@@ -474,7 +474,7 @@ class Context {
     var fromParsed = _parse(from)..normalize();
     var pathParsed = _parse(path)..normalize();
 
-    if (fromParsed.parts.length > 0 && fromParsed.parts[0] == '.') {
+    if (fromParsed.parts.isNotEmpty && fromParsed.parts[0] == '.') {
       return pathParsed.toString();
     }
 
@@ -489,8 +489,8 @@ class Context {
     }
 
     // Strip off their common prefix.
-    while (fromParsed.parts.length > 0 &&
-        pathParsed.parts.length > 0 &&
+    while (fromParsed.parts.isNotEmpty &&
+        pathParsed.parts.isNotEmpty &&
         style.pathsEqual(fromParsed.parts[0], pathParsed.parts[0])) {
       fromParsed.parts.removeAt(0);
       fromParsed.separators.removeAt(1);
@@ -501,7 +501,7 @@ class Context {
     // If there are any directories left in the from path, we need to walk up
     // out of them. If a directory left in the from path is '..', it cannot
     // be cancelled by adding a '..'.
-    if (fromParsed.parts.length > 0 && fromParsed.parts[0] == '..') {
+    if (fromParsed.parts.isNotEmpty && fromParsed.parts[0] == '..') {
       throw PathException('Unable to find a path to "$path" from "$from".');
     }
     pathParsed.parts.insertAll(0, List.filled(fromParsed.parts.length, '..'));
@@ -510,7 +510,7 @@ class Context {
         .insertAll(1, List.filled(fromParsed.parts.length, style.separator));
 
     // Corner case: the paths completely collapsed.
-    if (pathParsed.parts.length == 0) return '.';
+    if (pathParsed.parts.isEmpty) return '.';
 
     // Corner case: path was '.' and some '..' directories were added in front.
     // Don't add a final '/.' in that case.
@@ -628,7 +628,7 @@ class Context {
     // Start by considering the last code unit as a separator, since
     // semantically we're starting at a new path component even if we're
     // comparing relative paths.
-    var lastCodeUnit = chars.SLASH;
+    var lastCodeUnit = chars.slash;
 
     /// The index of the last separator in [parent].
     int lastParentSeparator;
@@ -668,7 +668,7 @@ class Context {
       //
       //     isWithin("foo/./bar", "foo/bar/baz") //=> true
       //     isWithin("foo/bar/../baz", "foo/bar/.foo") //=> false
-      if (parentCodeUnit == chars.PERIOD && style.isSeparator(lastCodeUnit)) {
+      if (parentCodeUnit == chars.period && style.isSeparator(lastCodeUnit)) {
         parentIndex++;
 
         // We've hit "/." at the end of the parent path, which we can ignore,
@@ -685,7 +685,7 @@ class Context {
 
         // We've hit "/..", which may be a directory traversal operator that
         // we can't handle on the fast track.
-        if (parentCodeUnit == chars.PERIOD) {
+        if (parentCodeUnit == chars.period) {
           parentIndex++;
           if (parentIndex == parent.length ||
               style.isSeparator(parent.codeUnitAt(parentIndex))) {
@@ -699,7 +699,7 @@ class Context {
 
       // This is the same logic as above, but for the child path instead of the
       // parent.
-      if (childCodeUnit == chars.PERIOD && style.isSeparator(lastCodeUnit)) {
+      if (childCodeUnit == chars.period && style.isSeparator(lastCodeUnit)) {
         childIndex++;
         if (childIndex == child.length) break;
         childCodeUnit = child.codeUnitAt(childIndex);
@@ -709,7 +709,7 @@ class Context {
           continue;
         }
 
-        if (childCodeUnit == chars.PERIOD) {
+        if (childCodeUnit == chars.period) {
           childIndex++;
           if (childIndex == child.length ||
               style.isSeparator(child.codeUnitAt(childIndex))) {
@@ -826,11 +826,11 @@ class Context {
       }
 
       // See if the path component is ".", "..", or a name.
-      if (i - start == 1 && path.codeUnitAt(start) == chars.PERIOD) {
+      if (i - start == 1 && path.codeUnitAt(start) == chars.period) {
         // Don't change the depth.
       } else if (i - start == 2 &&
-          path.codeUnitAt(start) == chars.PERIOD &&
-          path.codeUnitAt(start + 1) == chars.PERIOD) {
+          path.codeUnitAt(start) == chars.period &&
+          path.codeUnitAt(start + 1) == chars.period) {
         // ".." backs out a directory.
         depth--;
 
@@ -894,7 +894,7 @@ class Context {
         continue;
       }
 
-      if (codeUnit == chars.PERIOD && wasSeparator) {
+      if (codeUnit == chars.period && wasSeparator) {
         // If a dot comes after a separator, it may be a directory traversal
         // operator. To check that, we need to know if it's followed by either
         // "/" or "./". Otherwise, it's just a normal character.
@@ -915,7 +915,7 @@ class Context {
         // at the beginning of the path, since those may appear even in a
         // canonicalized path.
         if (!beginning &&
-            next == chars.PERIOD &&
+            next == chars.period &&
             (i + 2 == path.length ||
                 style.isSeparator(path.codeUnitAt(i + 2)))) {
           return null;
@@ -939,7 +939,7 @@ class Context {
     var parsed = _parse(path);
 
     for (var i = parsed.parts.length - 1; i >= 0; i--) {
-      if (!parsed.parts[i].isEmpty) {
+      if (parsed.parts[i].isNotEmpty) {
         parsed.parts[i] = parsed.basenameWithoutExtension;
         break;
       }
