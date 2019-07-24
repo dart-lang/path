@@ -6,7 +6,7 @@ description: >-
   and love, with solid support for Windows, POSIX (Linux and Mac OS X), and the
   web.
 author: Dart Team <misc@dartlang.org>
-homepage: http://github.com/dart-lang/path
+homepage: https://github.com/dart-lang/path
 
 environment:
  sdk: '>=2.0.0 <3.0.0'
