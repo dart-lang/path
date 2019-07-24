@@ -23,7 +23,7 @@ class UrlStyle extends InternalStyle {
 
   bool containsSeparator(String path) => path.contains('/');
 
-  bool isSeparator(int codeUnit) => codeUnit == chars.SLASH;
+  bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
   bool needsSeparator(String path) {
     if (path.isEmpty) return false;
@@ -43,7 +43,7 @@ class UrlStyle extends InternalStyle {
     for (var i = 0; i < path.length; i++) {
       var codeUnit = path.codeUnitAt(i);
       if (isSeparator(codeUnit)) return 0;
-      if (codeUnit == chars.COLON) {
+      if (codeUnit == chars.colon) {
         if (i == 0) return 0;
 
         // The root part is up until the next '/', or the full path. Skip ':'

@@ -29,7 +29,7 @@ class WindowsStyle extends InternalStyle {
   bool containsSeparator(String path) => path.contains('/');
 
   bool isSeparator(int codeUnit) =>
-      codeUnit == chars.SLASH || codeUnit == chars.BACKSLASH;
+      codeUnit == chars.slash || codeUnit == chars.backslash;
 
   bool needsSeparator(String path) {
     if (path.isEmpty) return false;
@@ -38,9 +38,9 @@ class WindowsStyle extends InternalStyle {
 
   int rootLength(String path, {bool withDrive = false}) {
     if (path.isEmpty) return 0;
-    if (path.codeUnitAt(0) == chars.SLASH) return 1;
-    if (path.codeUnitAt(0) == chars.BACKSLASH) {
-      if (path.length < 2 || path.codeUnitAt(1) != chars.BACKSLASH) return 1;
+    if (path.codeUnitAt(0) == chars.slash) return 1;
+    if (path.codeUnitAt(0) == chars.backslash) {
+      if (path.length < 2 || path.codeUnitAt(1) != chars.backslash) return 1;
       // The path is a network share. Search for up to two '\'s, as they are
       // the server and share - and part of the root part.
       var index = path.indexOf('\\', 2);
@@ -56,7 +56,7 @@ class WindowsStyle extends InternalStyle {
     // Check for the letter.
     if (!isAlphabetic(path.codeUnitAt(0))) return 0;
     // Check for the ':'.
-    if (path.codeUnitAt(1) != chars.COLON) return 0;
+    if (path.codeUnitAt(1) != chars.colon) return 0;
     // Check for either '/' or '\'.
     if (!isSeparator(path.codeUnitAt(2))) return 0;
     return 3;
@@ -115,7 +115,7 @@ class WindowsStyle extends InternalStyle {
       // be empty. We add an empty component so the URL constructor produces
       // "file:///C:/", with a trailing slash. We also add an empty component if
       // the URL otherwise has a trailing slash.
-      if (parsed.parts.length == 0 || parsed.hasTrailingSeparator) {
+      if (parsed.parts.isEmpty || parsed.hasTrailingSeparator) {
         parsed.parts.add("");
       }
 
@@ -132,8 +132,8 @@ class WindowsStyle extends InternalStyle {
     if (codeUnit1 == codeUnit2) return true;
 
     /// Forward slashes and backslashes are equivalent on Windows.
-    if (codeUnit1 == chars.SLASH) return codeUnit2 == chars.BACKSLASH;
-    if (codeUnit1 == chars.BACKSLASH) return codeUnit2 == chars.SLASH;
+    if (codeUnit1 == chars.slash) return codeUnit2 == chars.backslash;
+    if (codeUnit1 == chars.backslash) return codeUnit2 == chars.slash;
 
     // If this check fails, the code units are definitely different. If it
     // succeeds *and* either codeUnit is an ASCII letter, they're equivalent.
@@ -141,7 +141,7 @@ class WindowsStyle extends InternalStyle {
 
     // Now we just need to verify that one of the code units is an ASCII letter.
     var upperCase1 = codeUnit1 | _asciiCaseBit;
-    return upperCase1 >= chars.LOWER_A && upperCase1 <= chars.LOWER_Z;
+    return upperCase1 >= chars.lowerA && upperCase1 <= chars.lowerZ;
   }
 
   bool pathsEqual(String path1, String path2) {
@@ -156,9 +156,9 @@ class WindowsStyle extends InternalStyle {
   }
 
   int canonicalizeCodeUnit(int codeUnit) {
-    if (codeUnit == chars.SLASH) return chars.BACKSLASH;
-    if (codeUnit < chars.UPPER_A) return codeUnit;
-    if (codeUnit > chars.UPPER_Z) return codeUnit;
+    if (codeUnit == chars.slash) return chars.backslash;
+    if (codeUnit < chars.upperA) return codeUnit;
+    if (codeUnit > chars.upperZ) return codeUnit;
     return codeUnit | _asciiCaseBit;
   }
 

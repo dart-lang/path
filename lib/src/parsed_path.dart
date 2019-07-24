@@ -87,14 +87,14 @@ class ParsedPath {
   String get basenameWithoutExtension => _splitExtension()[0];
 
   bool get hasTrailingSeparator =>
-      !parts.isEmpty && (parts.last == '' || separators.last != '');
+      parts.isNotEmpty && (parts.last == '' || separators.last != '');
 
   void removeTrailingSeparators() {
-    while (!parts.isEmpty && parts.last == '') {
+    while (parts.isNotEmpty && parts.last == '') {
       parts.removeLast();
       separators.removeLast();
     }
-    if (separators.length > 0) separators[separators.length - 1] = '';
+    if (separators.isNotEmpty) separators[separators.length - 1] = '';
   }
 
   void normalize({bool canonicalize = false}) {
@@ -106,7 +106,7 @@ class ParsedPath {
         // Do nothing. Ignore it.
       } else if (part == '..') {
         // Pop the last part off.
-        if (newParts.length > 0) {
+        if (newParts.isNotEmpty) {
           newParts.removeLast();
         } else {
           // Backed out past the beginning, so preserve the "..".
@@ -123,7 +123,7 @@ class ParsedPath {
     }
 
     // If we collapsed down to nothing, do ".".
-    if (newParts.length == 0 && !isAbsolute) {
+    if (newParts.isEmpty && !isAbsolute) {
       newParts.add('.');
     }
 
@@ -133,7 +133,7 @@ class ParsedPath {
         growable: true);
     newSeparators.insert(
         0,
-        isAbsolute && newParts.length > 0 && style.needsSeparator(root)
+        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root)
             ? style.separator
             : '');
 
