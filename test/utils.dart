@@ -6,7 +6,7 @@ import "package:test/test.dart";
 import "package:path/path.dart" as p;
 
 /// A matcher for a closure that throws a [path.PathException].
-final throwsPathException = throwsA(new TypeMatcher<p.PathException>());
+final throwsPathException = throwsA(TypeMatcher<p.PathException>());
 
 void expectEquals(p.Context context, String path1, String path2) {
   expect(context.equals(path1, path2), isTrue,
@@ -18,7 +18,7 @@ void expectEquals(p.Context context, String path1, String path2) {
 }
 
 void expectNotEquals(p.Context context, String path1, String path2,
-    {bool allowSameHash: false}) {
+    {bool allowSameHash = false}) {
   expect(context.equals(path1, path2), isFalse,
       reason: 'Expected "$path1" not to equal "$path2".');
   expect(context.equals(path2, path1), isFalse,

@@ -26,7 +26,7 @@ class PathMap<V> extends MapView<String, V> {
   /// Creates a map that uses [context] for equality and hashing.
   static Map<String, V> _create<V>(p.Context context) {
     context ??= p.context;
-    return new LinkedHashMap(
+    return LinkedHashMap(
         equals: (path1, path2) {
           if (path1 == null) return path2 == null;
           if (path2 == null) return false;

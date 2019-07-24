@@ -5,7 +5,7 @@
 import 'package:path/path.dart' as p;
 
 /// Some hopefully real-world representative platform-independent paths.
-const genericPaths = const [
+const genericPaths = [
   '.',
   '..',
   'out/ReleaseIA32/packages',
@@ -38,7 +38,7 @@ void main(List<String> args) {
   arguments = args;
 
   for (var style in [p.Style.posix, p.Style.url, p.Style.windows]) {
-    var context = new p.Context(style: style);
+    var context = p.Context(style: style);
     var files = genericPaths.toList()..addAll(platformPaths[style]);
 
     benchmark(String name, Function function) {
@@ -95,7 +95,7 @@ void runBenchmark(String name, int count, Function function) {
     function();
   }
 
-  var stopwatch = new Stopwatch()..start();
+  var stopwatch = Stopwatch()..start();
   for (var i = 0; i < count; i++) {
     function();
   }

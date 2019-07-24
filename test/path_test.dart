@@ -27,12 +27,12 @@ main() {
 
   group('new Context()', () {
     test('uses the given current directory', () {
-      var context = new path.Context(current: '/a/b/c');
+      var context = path.Context(current: '/a/b/c');
       expect(context.current, '/a/b/c');
     });
 
     test('uses the given style', () {
-      var context = new path.Context(style: path.Style.windows);
+      var context = path.Context(style: path.Style.windows);
       expect(context.style, path.Style.windows);
     });
   });

@@ -29,7 +29,7 @@ class PathSet extends IterableBase<String> implements Set<String> {
   /// Creates a set that uses [context] for equality and hashing.
   static Set<String> _create(p.Context context) {
     context ??= p.context;
-    return new LinkedHashSet(
+    return LinkedHashSet(
         equals: (path1, path2) {
           if (path1 == null) return path2 == null;
           if (path2 == null) return false;

@@ -54,16 +54,16 @@ export 'src/path_set.dart';
 export 'src/style.dart';
 
 /// A default context for manipulating POSIX paths.
-final Context posix = new Context(style: Style.posix);
+final Context posix = Context(style: Style.posix);
 
 /// A default context for manipulating Windows paths.
-final Context windows = new Context(style: Style.windows);
+final Context windows = Context(style: Style.windows);
 
 /// A default context for manipulating URLs.
 ///
 /// URL path equality is undefined for paths that differ only in their
 /// percent-encoding or only in the case of their host segment.
-final Context url = new Context(style: Style.url);
+final Context url = Context(style: Style.url);
 
 /// The system path context.
 ///

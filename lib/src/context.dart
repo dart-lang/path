@@ -11,7 +11,7 @@ import 'parsed_path.dart';
 import 'path_exception.dart';
 import '../path.dart' as p;
 
-Context createInternal() => new Context._internal();
+Context createInternal() => Context._internal();
 
 /// An instantiable class for manipulating paths. Unlike the top-level
 /// functions, this lets you explicitly select what platform the paths will use.
@@ -37,11 +37,11 @@ class Context {
     if (style == null) {
       style = Style.platform;
     } else if (style is! InternalStyle) {
-      throw new ArgumentError("Only styles defined by the path package are "
+      throw ArgumentError("Only styles defined by the path package are "
           "allowed.");
     }
 
-    return new Context._(style as InternalStyle, current);
+    return Context._(style as InternalStyle, current);
   }
 
   /// Create a [Context] to be used internally within path.
@@ -247,7 +247,7 @@ class Context {
   ///
   /// For a fixed number of parts, [join] is usually terser.
   String joinAll(Iterable<String> parts) {
-    var buffer = new StringBuffer();
+    var buffer = StringBuffer();
     var needsSeparator = false;
     var isAbsoluteAndNotRootRelative = false;
 
@@ -468,7 +468,7 @@ class Context {
     // If the path is still relative and `from` is absolute, we're unable to
     // find a path from `from` to `path`.
     if (this.isRelative(path) && this.isAbsolute(from)) {
-      throw new PathException('Unable to find a path to "$path" from "$from".');
+      throw PathException('Unable to find a path to "$path" from "$from".');
     }
 
     var fromParsed = _parse(from)..normalize();
@@ -502,13 +502,12 @@ class Context {
     // out of them. If a directory left in the from path is '..', it cannot
     // be cancelled by adding a '..'.
     if (fromParsed.parts.length > 0 && fromParsed.parts[0] == '..') {
-      throw new PathException('Unable to find a path to "$path" from "$from".');
+      throw PathException('Unable to find a path to "$path" from "$from".');
     }
-    pathParsed.parts
-        .insertAll(0, new List.filled(fromParsed.parts.length, '..'));
+    pathParsed.parts.insertAll(0, List.filled(fromParsed.parts.length, '..'));
     pathParsed.separators[0] = '';
-    pathParsed.separators.insertAll(
-        1, new List.filled(fromParsed.parts.length, style.separator));
+    pathParsed.separators
+        .insertAll(1, List.filled(fromParsed.parts.length, style.separator));
 
     // Corner case: the paths completely collapsed.
     if (pathParsed.parts.length == 0) return '.';
@@ -1053,7 +1052,7 @@ class Context {
     return split(rel).length > split(path).length ? path : rel;
   }
 
-  ParsedPath _parse(String path) => new ParsedPath.parse(path, style);
+  ParsedPath _parse(String path) => ParsedPath.parse(path, style);
 }
 
 /// Parses argument if it's a [String] or returns it intact if it's a [Uri].
@@ -1062,7 +1061,7 @@ class Context {
 Uri _parseUri(uri) {
   if (uri is String) return Uri.parse(uri);
   if (uri is Uri) return uri;
-  throw new ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
+  throw ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');
 }
 
 /// Validates that there are no non-null arguments following a null one and
@@ -1078,14 +1077,14 @@ void _validateArgList(String method, List<String> args) {
     }
 
     // Show the arguments.
-    var message = new StringBuffer();
+    var message = StringBuffer();
     message.write("$method(");
     message.write(args
         .take(numArgs)
         .map((arg) => arg == null ? "null" : '"$arg"')
         .join(", "));
     message.write("): part ${i - 1} was null, but part $i was not.");
-    throw new ArgumentError(message.toString());
+    throw ArgumentError(message.toString());
   }
 }
 
@@ -1096,18 +1095,18 @@ class _PathDirection {
   ///
   /// Note that this applies even if the path ends beneath its original root. It
   /// takes precendence over any other return values that may apple.
-  static const aboveRoot = const _PathDirection("above root");
+  static const aboveRoot = _PathDirection("above root");
 
   /// The path contains enough ".." components that it ends at its original
   /// root.
-  static const atRoot = const _PathDirection("at root");
+  static const atRoot = _PathDirection("at root");
 
   /// The path contains enough ".." components that at some point it reaches its
   /// original root, but it ends beneath that root.
-  static const reachesRoot = const _PathDirection("reaches root");
+  static const reachesRoot = _PathDirection("reaches root");
 
   /// The path never reaches to or above its original root.
-  static const belowRoot = const _PathDirection("below root");
+  static const belowRoot = _PathDirection("below root");
 
   final String name;
 
@@ -1121,21 +1120,21 @@ class _PathRelation {
   /// The first path is a proper parent of the second.
   ///
   /// For example, `foo` is a proper parent of `foo/bar`, but not of `foo`.
-  static const within = const _PathRelation("within");
+  static const within = _PathRelation("within");
 
   /// The two paths are equivalent.
   ///
   /// For example, `foo//bar` is equivalent to `foo/bar`.
-  static const equal = const _PathRelation("equal");
+  static const equal = _PathRelation("equal");
 
   /// The first path is neither a parent of nor equal to the second.
-  static const different = const _PathRelation("different");
+  static const different = _PathRelation("different");
 
   /// We couldn't quickly determine any information about the paths'
   /// relationship to each other.
   ///
   /// Only returned by [Context._isWithinOrEqualsFast].
-  static const inconclusive = const _PathRelation("inconclusive");
+  static const inconclusive = _PathRelation("inconclusive");
 
   final String name;
 
