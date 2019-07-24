@@ -81,7 +81,17 @@ Style get style => context.style;
 ///
 /// In the browser, this means the current URL, without the last file segment.
 String get current {
-  var uri = Uri.base;
+  // If the current working directory gets deleted out from under the program,
+  // accessing it will throw an IO exception. In order to avoid transient
+  // errors, if we already have a cached working directory, catch the error and
+  // use that.
+  Uri uri;
+  try {
+    uri = Uri.base;
+  } on Exception {
+    if (_current != null) return _current;
+    rethrow;
+  }
 
   // Converting the base URI to a file path is pretty slow, and the base URI
   // rarely changes in practice, so we cache the result here.

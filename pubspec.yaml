@@ -1,10 +1,10 @@
 name: path
-version: 1.6.2
+version: 1.6.3-dev
 
 description: >
   A string-based path manipulation library. All of the path operations you know
-  and love, with solid support on both Windows and POSIX (Linux and Mac OS X)
-  machines.
+  and love, with solid support for Windows, POSIX (Linux and Mac OS X), and the
+  web.
 author: Dart Team <misc@dartlang.org>
 homepage: http://github.com/dart-lang/path
 

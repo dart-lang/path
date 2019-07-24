@@ -1,3 +1,8 @@
+## 1.6.3
+
+* Don't throw a FileSystemException from `current` if the working directory has
+  been deleted but we have a cached one we can use.
+
 ## 1.6.2
 
 * Set max SDK version to `<3.0.0`, and adjust other dependencies.
