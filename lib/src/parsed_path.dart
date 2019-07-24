@@ -71,7 +71,7 @@ class ParsedPath {
       separators.add('');
     }
 
-    return new ParsedPath._(style, root, isRootRelative, parts, separators);
+    return ParsedPath._(style, root, isRootRelative, parts, separators);
   }
 
   ParsedPath._(
@@ -97,7 +97,7 @@ class ParsedPath {
     if (separators.length > 0) separators[separators.length - 1] = '';
   }
 
-  void normalize({bool canonicalize: false}) {
+  void normalize({bool canonicalize = false}) {
     // Handle '.', '..', and empty parts.
     var leadingDoubles = 0;
     var newParts = <String>[];
@@ -119,7 +119,7 @@ class ParsedPath {
 
     // A relative path can back out from the start directory.
     if (!isAbsolute) {
-      newParts.insertAll(0, new List.filled(leadingDoubles, '..'));
+      newParts.insertAll(0, List.filled(leadingDoubles, '..'));
     }
 
     // If we collapsed down to nothing, do ".".
@@ -128,7 +128,7 @@ class ParsedPath {
     }
 
     // Canonicalize separators.
-    var newSeparators = new List<String>.generate(
+    var newSeparators = List<String>.generate(
         newParts.length, (_) => style.separator,
         growable: true);
     newSeparators.insert(
@@ -149,7 +149,7 @@ class ParsedPath {
   }
 
   String toString() {
-    var builder = new StringBuffer();
+    var builder = StringBuffer();
     if (root != null) builder.write(root);
     for (var i = 0; i < parts.length; i++) {
       builder.write(separators[i]);
@@ -180,6 +180,6 @@ class ParsedPath {
     return [file.substring(0, lastDot), file.substring(lastDot)];
   }
 
-  ParsedPath clone() => new ParsedPath._(style, root, isRootRelative,
-      new List.from(parts), new List.from(separators));
+  ParsedPath clone() => ParsedPath._(
+      style, root, isRootRelative, List.from(parts), List.from(separators));
 }

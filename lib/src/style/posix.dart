@@ -16,9 +16,9 @@ class PosixStyle extends InternalStyle {
 
   // Deprecated properties.
 
-  final separatorPattern = new RegExp(r'/');
-  final needsSeparatorPattern = new RegExp(r'[^/]$');
-  final rootPattern = new RegExp(r'^/');
+  final separatorPattern = RegExp(r'/');
+  final needsSeparatorPattern = RegExp(r'[^/]$');
+  final rootPattern = RegExp(r'^/');
   final relativeRootPattern = null;
 
   bool containsSeparator(String path) => path.contains('/');
@@ -28,7 +28,7 @@ class PosixStyle extends InternalStyle {
   bool needsSeparator(String path) =>
       path.isNotEmpty && !isSeparator(path.codeUnitAt(path.length - 1));
 
-  int rootLength(String path, {bool withDrive: false}) {
+  int rootLength(String path, {bool withDrive = false}) {
     if (path.isNotEmpty && isSeparator(path.codeUnitAt(0))) return 1;
     return 0;
   }
@@ -41,11 +41,11 @@ class PosixStyle extends InternalStyle {
     if (uri.scheme == '' || uri.scheme == 'file') {
       return Uri.decodeComponent(uri.path);
     }
-    throw new ArgumentError("Uri $uri must have scheme 'file:'.");
+    throw ArgumentError("Uri $uri must have scheme 'file:'.");
   }
 
   Uri absolutePathToUri(String path) {
-    var parsed = new ParsedPath.parse(path, this);
+    var parsed = ParsedPath.parse(path, this);
     if (parsed.parts.isEmpty) {
       // If the path is a bare root (e.g. "/"), [components] will
       // currently be empty. We add two empty components so the URL constructor
@@ -57,6 +57,6 @@ class PosixStyle extends InternalStyle {
       parsed.parts.add("");
     }
 
-    return new Uri(scheme: 'file', pathSegments: parsed.parts);
+    return Uri(scheme: 'file', pathSegments: parsed.parts);
   }
 }

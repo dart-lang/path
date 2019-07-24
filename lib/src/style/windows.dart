@@ -21,10 +21,10 @@ class WindowsStyle extends InternalStyle {
 
   // Deprecated properties.
 
-  final separatorPattern = new RegExp(r'[/\\]');
-  final needsSeparatorPattern = new RegExp(r'[^/\\]$');
-  final rootPattern = new RegExp(r'^(\\\\[^\\]+\\[^\\/]+|[a-zA-Z]:[/\\])');
-  final relativeRootPattern = new RegExp(r"^[/\\](?![/\\])");
+  final separatorPattern = RegExp(r'[/\\]');
+  final needsSeparatorPattern = RegExp(r'[^/\\]$');
+  final rootPattern = RegExp(r'^(\\\\[^\\]+\\[^\\/]+|[a-zA-Z]:[/\\])');
+  final relativeRootPattern = RegExp(r"^[/\\](?![/\\])");
 
   bool containsSeparator(String path) => path.contains('/');
 
@@ -36,7 +36,7 @@ class WindowsStyle extends InternalStyle {
     return !isSeparator(path.codeUnitAt(path.length - 1));
   }
 
-  int rootLength(String path, {bool withDrive: false}) {
+  int rootLength(String path, {bool withDrive = false}) {
     if (path.isEmpty) return 0;
     if (path.codeUnitAt(0) == chars.SLASH) return 1;
     if (path.codeUnitAt(0) == chars.BACKSLASH) {
@@ -72,7 +72,7 @@ class WindowsStyle extends InternalStyle {
 
   String pathFromUri(Uri uri) {
     if (uri.scheme != '' && uri.scheme != 'file') {
-      throw new ArgumentError("Uri $uri must have scheme 'file:'.");
+      throw ArgumentError("Uri $uri must have scheme 'file:'.");
     }
 
     var path = uri.path;
@@ -91,7 +91,7 @@ class WindowsStyle extends InternalStyle {
   }
 
   Uri absolutePathToUri(String path) {
-    var parsed = new ParsedPath.parse(path, this);
+    var parsed = ParsedPath.parse(path, this);
     if (parsed.root.startsWith(r'\\')) {
       // Network paths become "file://server/share/path/to/file".
 
@@ -106,7 +106,7 @@ class WindowsStyle extends InternalStyle {
         parsed.parts.add("");
       }
 
-      return new Uri(
+      return Uri(
           scheme: 'file', host: rootParts.first, pathSegments: parsed.parts);
     } else {
       // Drive-letter paths become "file:///C:/path/to/file".
@@ -124,7 +124,7 @@ class WindowsStyle extends InternalStyle {
       parsed.parts
           .insert(0, parsed.root.replaceAll("/", "").replaceAll("\\", ""));
 
-      return new Uri(scheme: 'file', pathSegments: parsed.parts);
+      return Uri(scheme: 'file', pathSegments: parsed.parts);
     }
   }
 

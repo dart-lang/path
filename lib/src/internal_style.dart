@@ -37,7 +37,7 @@ abstract class InternalStyle extends Style {
   ///
   /// If [withDrive] is `true`, this should include the drive letter for `file:`
   /// URLs. Non-URL styles may ignore the parameter.
-  int rootLength(String path, {bool withDrive: false});
+  int rootLength(String path, {bool withDrive = false});
 
   /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
   /// returns `null`.
@@ -62,7 +62,7 @@ abstract class InternalStyle extends Style {
     // Ensure that a trailing slash in the path produces a trailing slash in the
     // URL.
     if (isSeparator(path.codeUnitAt(path.length - 1))) segments.add('');
-    return new Uri(pathSegments: segments);
+    return Uri(pathSegments: segments);
   }
 
   /// Returns the URI that represents [path], which is assumed to be absolute.

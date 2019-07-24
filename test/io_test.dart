@@ -12,17 +12,17 @@ import 'package:path/path.dart' as path;
 main() {
   group('new Context()', () {
     test('uses the current directory if root and style are omitted', () {
-      var context = new path.Context();
+      var context = path.Context();
       expect(context.current, io.Directory.current.path);
     });
 
     test('uses "." if root is omitted', () {
-      var context = new path.Context(style: path.Style.platform);
+      var context = path.Context(style: path.Style.platform);
       expect(context.current, ".");
     });
 
     test('uses the host platform if style is omitted', () {
-      var context = new path.Context();
+      var context = path.Context();
       expect(context.style, path.Style.platform);
     });
   });

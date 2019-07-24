@@ -8,8 +8,7 @@ import 'package:path/path.dart' as path;
 import 'utils.dart';
 
 main() {
-  var context =
-      new path.Context(style: path.Style.posix, current: '/root/path');
+  var context = path.Context(style: path.Style.posix, current: '/root/path');
 
   test('separator', () {
     expect(context.separator, '/');
@@ -367,7 +366,7 @@ main() {
     });
 
     group('from relative root', () {
-      var r = new path.Context(style: path.Style.posix, current: 'foo/bar');
+      var r = path.Context(style: path.Style.posix, current: 'foo/bar');
 
       test('given absolute path', () {
         expect(r.relative('/'), equals('/'));
@@ -388,7 +387,7 @@ main() {
     });
 
     test('from a root with extension', () {
-      var r = new path.Context(style: path.Style.posix, current: '/dir.ext');
+      var r = path.Context(style: path.Style.posix, current: '/dir.ext');
       expect(r.relative('/dir.ext/file'), 'file');
     });
 
@@ -401,8 +400,7 @@ main() {
     });
 
     test('with a root parameter and a relative root', () {
-      var r =
-          new path.Context(style: path.Style.posix, current: 'relative/root');
+      var r = path.Context(style: path.Style.posix, current: 'relative/root');
       expect(r.relative('/foo/bar/baz', from: '/foo/bar'), equals('baz'));
       expect(() => r.relative('..', from: '/foo/bar'), throwsPathException);
       expect(
@@ -411,7 +409,7 @@ main() {
     });
 
     test('from a . root', () {
-      var r = new path.Context(style: path.Style.posix, current: '.');
+      var r = path.Context(style: path.Style.posix, current: '.');
       expect(r.relative('/foo/bar/baz'), equals('/foo/bar/baz'));
       expect(r.relative('foo/bar/baz'), equals('foo/bar/baz'));
     });
@@ -442,7 +440,7 @@ main() {
     });
 
     test('from a relative root', () {
-      var r = new path.Context(style: path.Style.posix, current: 'foo/bar');
+      var r = path.Context(style: path.Style.posix, current: 'foo/bar');
       expect(r.isWithin('.', 'a/b/c'), isTrue);
       expect(r.isWithin('.', '../a/b/c'), isFalse);
       expect(r.isWithin('.', '../../a/foo/b/c'), isFalse);
@@ -479,7 +477,7 @@ main() {
     });
 
     test('from a relative root', () {
-      var r = new path.Context(style: path.Style.posix, current: 'foo/bar');
+      var r = path.Context(style: path.Style.posix, current: 'foo/bar');
       expectEquals(r, 'a/b', 'a/b');
       expectNotEquals(r, '.', 'foo/bar');
       expectNotEquals(r, '.', '../a/b');

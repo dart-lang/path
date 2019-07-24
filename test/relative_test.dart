@@ -11,19 +11,17 @@ import "utils.dart";
 
 void main() {
   test("test relative", () {
-    relativeTest(new path.Context(style: path.Style.posix, current: '.'), '/');
-    relativeTest(new path.Context(style: path.Style.posix, current: '/'), '/');
+    relativeTest(path.Context(style: path.Style.posix, current: '.'), '/');
+    relativeTest(path.Context(style: path.Style.posix, current: '/'), '/');
     relativeTest(
-        new path.Context(style: path.Style.windows, current: r'd:\'), r'c:\');
-    relativeTest(
-        new path.Context(style: path.Style.windows, current: '.'), r'c:\');
-    relativeTest(new path.Context(style: path.Style.url, current: 'file:///'),
-        'http://myserver/');
-    relativeTest(new path.Context(style: path.Style.url, current: '.'),
+        path.Context(style: path.Style.windows, current: r'd:\'), r'c:\');
+    relativeTest(path.Context(style: path.Style.windows, current: '.'), r'c:\');
+    relativeTest(path.Context(style: path.Style.url, current: 'file:///'),
         'http://myserver/');
     relativeTest(
-        new path.Context(style: path.Style.url, current: 'file:///'), '/');
-    relativeTest(new path.Context(style: path.Style.url, current: '.'), '/');
+        path.Context(style: path.Style.url, current: '.'), 'http://myserver/');
+    relativeTest(path.Context(style: path.Style.url, current: 'file:///'), '/');
+    relativeTest(path.Context(style: path.Style.url, current: '.'), '/');
   });
 }
 

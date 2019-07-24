@@ -16,11 +16,10 @@ class UrlStyle extends InternalStyle {
 
   // Deprecated properties.
 
-  final separatorPattern = new RegExp(r'/');
-  final needsSeparatorPattern =
-      new RegExp(r"(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$");
-  final rootPattern = new RegExp(r"[a-zA-Z][-+.a-zA-Z\d]*://[^/]*");
-  final relativeRootPattern = new RegExp(r"^/");
+  final separatorPattern = RegExp(r'/');
+  final needsSeparatorPattern = RegExp(r"(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$");
+  final rootPattern = RegExp(r"[a-zA-Z][-+.a-zA-Z\d]*://[^/]*");
+  final relativeRootPattern = RegExp(r"^/");
 
   bool containsSeparator(String path) => path.contains('/');
 
@@ -37,7 +36,7 @@ class UrlStyle extends InternalStyle {
     return path.endsWith("://") && rootLength(path) == path.length;
   }
 
-  int rootLength(String path, {bool withDrive: false}) {
+  int rootLength(String path, {bool withDrive = false}) {
     if (path.isEmpty) return 0;
     if (isSeparator(path.codeUnitAt(0))) return 1;
 
