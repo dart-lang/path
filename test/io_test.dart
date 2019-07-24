@@ -35,8 +35,30 @@ main() {
     }
   });
 
-  test('current', () {
-    expect(path.current, io.Directory.current.path);
+  group('current', () {
+    test('returns the current working directory', () {
+      expect(path.current, io.Directory.current.path);
+    });
+
+    test('uses the previous working directory if deleted', () {
+      var dir = io.Directory.current.path;
+      try {
+        var tempPath = path.normalize(path.absolute("temp_cwd"));
+        var temp = io.Directory(tempPath);
+        temp.createSync();
+        io.Directory.current = temp;
+
+        // Call "current" once so that it can be cached.
+        expect(path.normalize(path.absolute(path.current)), equals(tempPath));
+
+        temp.deleteSync();
+
+        // Even though the directory no longer exists, no exception is thrown.
+        expect(path.normalize(path.absolute(path.current)), equals(tempPath));
+      } finally {
+        io.Directory.current = dir;
+      }
+    });
   });
 
   test('registers changes to the working directory', () {

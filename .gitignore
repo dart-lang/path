@@ -2,8 +2,8 @@
 .buildlog
 .pub/
 .dart_tool/
+.idea/
 build/
-packages
 .packages
 
 # Or the files created by dart2js.
