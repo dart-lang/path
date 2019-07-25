@@ -1,3 +1,9 @@
+## 1.6.4
+
+* Fixed a number of lints that affect the package health score.
+
+* Added an example.
+
 ## 1.6.3
 
 * Don't throw a FileSystemException from `current` if the working directory has
