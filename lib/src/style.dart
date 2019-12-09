@@ -52,35 +52,36 @@ abstract class Style {
   /// A [Context] that uses this style.
   Context get context => Context(style: this);
 
-  @Deprecated("Most Style members will be removed in path 2.0.")
+  @Deprecated('Most Style members will be removed in path 2.0.')
   String get separator;
 
-  @Deprecated("Most Style members will be removed in path 2.0.")
+  @Deprecated('Most Style members will be removed in path 2.0.')
   Pattern get separatorPattern;
 
-  @Deprecated("Most Style members will be removed in path 2.0.")
+  @Deprecated('Most Style members will be removed in path 2.0.')
   Pattern get needsSeparatorPattern;
 
-  @Deprecated("Most Style members will be removed in path 2.0.")
+  @Deprecated('Most Style members will be removed in path 2.0.')
   Pattern get rootPattern;
 
-  @Deprecated("Most Style members will be removed in path 2.0.")
+  @Deprecated('Most Style members will be removed in path 2.0.')
   Pattern get relativeRootPattern;
 
-  @Deprecated("Most style members will be removed in path 2.0.")
+  @Deprecated('Most style members will be removed in path 2.0.')
   String getRoot(String path);
 
-  @Deprecated("Most style members will be removed in path 2.0.")
+  @Deprecated('Most style members will be removed in path 2.0.')
   String getRelativeRoot(String path);
 
-  @Deprecated("Most style members will be removed in path 2.0.")
+  @Deprecated('Most style members will be removed in path 2.0.')
   String pathFromUri(Uri uri);
 
-  @Deprecated("Most style members will be removed in path 2.0.")
+  @Deprecated('Most style members will be removed in path 2.0.')
   Uri relativePathToUri(String path);
 
-  @Deprecated("Most style members will be removed in path 2.0.")
+  @Deprecated('Most style members will be removed in path 2.0.')
   Uri absolutePathToUri(String path);
 
+  @override
   String toString() => name;
 }

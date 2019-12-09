@@ -15,27 +15,37 @@ const _asciiCaseBit = 0x20;
 class WindowsStyle extends InternalStyle {
   WindowsStyle();
 
+  @override
   final name = 'windows';
+  @override
   final separator = '\\';
   final separators = const ['/', '\\'];
 
   // Deprecated properties.
 
+  @override
   final separatorPattern = RegExp(r'[/\\]');
+  @override
   final needsSeparatorPattern = RegExp(r'[^/\\]$');
+  @override
   final rootPattern = RegExp(r'^(\\\\[^\\]+\\[^\\/]+|[a-zA-Z]:[/\\])');
-  final relativeRootPattern = RegExp(r"^[/\\](?![/\\])");
+  @override
+  final relativeRootPattern = RegExp(r'^[/\\](?![/\\])');
 
+  @override
   bool containsSeparator(String path) => path.contains('/');
 
+  @override
   bool isSeparator(int codeUnit) =>
       codeUnit == chars.slash || codeUnit == chars.backslash;
 
+  @override
   bool needsSeparator(String path) {
     if (path.isEmpty) return false;
     return !isSeparator(path.codeUnitAt(path.length - 1));
   }
 
+  @override
   int rootLength(String path, {bool withDrive = false}) {
     if (path.isEmpty) return 0;
     if (path.codeUnitAt(0) == chars.slash) return 1;
@@ -62,14 +72,17 @@ class WindowsStyle extends InternalStyle {
     return 3;
   }
 
+  @override
   bool isRootRelative(String path) => rootLength(path) == 1;
 
+  @override
   String getRelativeRoot(String path) {
     var length = rootLength(path);
     if (length == 1) return path[0];
     return null;
   }
 
+  @override
   String pathFromUri(Uri uri) {
     if (uri.scheme != '' && uri.scheme != 'file') {
       throw ArgumentError("Uri $uri must have scheme 'file:'.");
@@ -81,15 +94,16 @@ class WindowsStyle extends InternalStyle {
       // replaceFirst removes the extra initial slash. Otherwise, leave the
       // slash to match IE's interpretation of "/foo" as a root-relative path.
       if (path.length >= 3 && path.startsWith('/') && isDriveLetter(path, 1)) {
-        path = path.replaceFirst("/", "");
+        path = path.replaceFirst('/', '');
       }
     } else {
       // Network paths look like "file://hostname/path/to/file".
       path = '\\\\${uri.host}$path';
     }
-    return Uri.decodeComponent(path.replaceAll("/", "\\"));
+    return Uri.decodeComponent(path.replaceAll('/', '\\'));
   }
 
+  @override
   Uri absolutePathToUri(String path) {
     var parsed = ParsedPath.parse(path, this);
     if (parsed.root.startsWith(r'\\')) {
@@ -103,7 +117,7 @@ class WindowsStyle extends InternalStyle {
       if (parsed.hasTrailingSeparator) {
         // If the path has a trailing slash, add a single empty component so the
         // URI has a trailing slash as well.
-        parsed.parts.add("");
+        parsed.parts.add('');
       }
 
       return Uri(
@@ -116,18 +130,19 @@ class WindowsStyle extends InternalStyle {
       // "file:///C:/", with a trailing slash. We also add an empty component if
       // the URL otherwise has a trailing slash.
       if (parsed.parts.isEmpty || parsed.hasTrailingSeparator) {
-        parsed.parts.add("");
+        parsed.parts.add('');
       }
 
       // Get rid of the trailing "\" in "C:\" because the URI constructor will
       // add a separator on its own.
       parsed.parts
-          .insert(0, parsed.root.replaceAll("/", "").replaceAll("\\", ""));
+          .insert(0, parsed.root.replaceAll('/', '').replaceAll('\\', ''));
 
       return Uri(scheme: 'file', pathSegments: parsed.parts);
     }
   }
 
+  @override
   bool codeUnitsEqual(int codeUnit1, int codeUnit2) {
     if (codeUnit1 == codeUnit2) return true;
 
@@ -144,6 +159,7 @@ class WindowsStyle extends InternalStyle {
     return upperCase1 >= chars.lowerA && upperCase1 <= chars.lowerZ;
   }
 
+  @override
   bool pathsEqual(String path1, String path2) {
     if (identical(path1, path2)) return true;
     if (path1.length != path2.length) return false;
@@ -155,6 +171,7 @@ class WindowsStyle extends InternalStyle {
     return true;
   }
 
+  @override
   int canonicalizeCodeUnit(int codeUnit) {
     if (codeUnit == chars.slash) return chars.backslash;
     if (codeUnit < chars.upperA) return codeUnit;
@@ -162,5 +179,6 @@ class WindowsStyle extends InternalStyle {
     return codeUnit | _asciiCaseBit;
   }
 
+  @override
   String canonicalizePart(String part) => part.toLowerCase();
 }

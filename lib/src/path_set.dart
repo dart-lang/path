@@ -43,39 +43,57 @@ class PathSet extends IterableBase<String> implements Set<String> {
   // implement these, but we want to avoid adding dependencies from path because
   // it's so widely used that even brief version skew can be very painful.
 
+  @override
   Iterator<String> get iterator => _inner.iterator;
 
+  @override
   int get length => _inner.length;
 
+  @override
   bool add(String value) => _inner.add(value);
 
+  @override
   void addAll(Iterable<String> elements) => _inner.addAll(elements);
 
+  @override
   Set<T> cast<T>() => _inner.cast<T>();
 
+  @override
   void clear() => _inner.clear();
 
+  @override
   bool contains(Object other) => _inner.contains(other);
 
+  @override
   bool containsAll(Iterable<Object> other) => _inner.containsAll(other);
 
+  @override
   Set<String> difference(Set<Object> other) => _inner.difference(other);
 
+  @override
   Set<String> intersection(Set<Object> other) => _inner.intersection(other);
 
+  @override
   String lookup(Object element) => _inner.lookup(element);
 
+  @override
   bool remove(Object value) => _inner.remove(value);
 
+  @override
   void removeAll(Iterable<Object> elements) => _inner.removeAll(elements);
 
-  void removeWhere(bool test(String element)) => _inner.removeWhere(test);
+  @override
+  void removeWhere(bool Function(String) test) => _inner.removeWhere(test);
 
+  @override
   void retainAll(Iterable<Object> elements) => _inner.retainAll(elements);
 
-  void retainWhere(bool test(String element)) => _inner.retainWhere(test);
+  @override
+  void retainWhere(bool Function(String) test) => _inner.retainWhere(test);
 
+  @override
   Set<String> union(Set<String> other) => _inner.union(other);
 
+  @override
   Set<String> toSet() => _inner.toSet();
 }

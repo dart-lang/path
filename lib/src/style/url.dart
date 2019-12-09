@@ -10,21 +10,30 @@ import '../utils.dart';
 class UrlStyle extends InternalStyle {
   UrlStyle();
 
+  @override
   final name = 'url';
+  @override
   final separator = '/';
   final separators = const ['/'];
 
   // Deprecated properties.
 
+  @override
   final separatorPattern = RegExp(r'/');
-  final needsSeparatorPattern = RegExp(r"(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$");
-  final rootPattern = RegExp(r"[a-zA-Z][-+.a-zA-Z\d]*://[^/]*");
-  final relativeRootPattern = RegExp(r"^/");
+  @override
+  final needsSeparatorPattern = RegExp(r'(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$');
+  @override
+  final rootPattern = RegExp(r'[a-zA-Z][-+.a-zA-Z\d]*://[^/]*');
+  @override
+  final relativeRootPattern = RegExp(r'^/');
 
+  @override
   bool containsSeparator(String path) => path.contains('/');
 
+  @override
   bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
+  @override
   bool needsSeparator(String path) {
     if (path.isEmpty) return false;
 
@@ -33,9 +42,10 @@ class UrlStyle extends InternalStyle {
 
     // A URI that's just "scheme://" needs an extra separator, despite ending
     // with "/".
-    return path.endsWith("://") && rootLength(path) == path.length;
+    return path.endsWith('://') && rootLength(path) == path.length;
   }
 
+  @override
   int rootLength(String path, {bool withDrive = false}) {
     if (path.isEmpty) return 0;
     if (isSeparator(path.codeUnitAt(0))) return 1;
@@ -64,13 +74,18 @@ class UrlStyle extends InternalStyle {
     return 0;
   }
 
+  @override
   bool isRootRelative(String path) =>
       path.isNotEmpty && isSeparator(path.codeUnitAt(0));
 
+  @override
   String getRelativeRoot(String path) => isRootRelative(path) ? '/' : null;
 
+  @override
   String pathFromUri(Uri uri) => uri.toString();
 
+  @override
   Uri relativePathToUri(String path) => Uri.parse(path);
+  @override
   Uri absolutePathToUri(String path) => Uri.parse(path);
 }

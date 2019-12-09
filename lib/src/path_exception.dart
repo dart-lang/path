@@ -9,5 +9,6 @@ class PathException implements Exception {
 
   PathException(this.message);
 
-  String toString() => "PathException: $message";
+  @override
+  String toString() => 'PathException: $message';
 }

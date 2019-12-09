@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 
 import 'utils.dart';
 
-main() {
+void main() {
   var context = path.Context(
       style: path.Style.url, current: 'http://dartlang.org/root/path');
 

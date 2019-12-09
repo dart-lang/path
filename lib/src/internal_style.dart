@@ -14,6 +14,7 @@ abstract class InternalStyle extends Style {
   /// The default path separator for this style.
   ///
   /// On POSIX, this is `/`. On Windows, it's `\`.
+  @override
   String get separator;
 
   /// Returns whether [path] contains a separator.
@@ -41,6 +42,7 @@ abstract class InternalStyle extends Style {
 
   /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
   /// returns `null`.
+  @override
   String getRoot(String path) {
     var length = rootLength(path);
     if (length > 0) return path.substring(0, length);
@@ -53,9 +55,11 @@ abstract class InternalStyle extends Style {
   bool isRootRelative(String path);
 
   /// Returns the path represented by [uri] in this style.
+  @override
   String pathFromUri(Uri uri);
 
   /// Returns the URI that represents the relative path made of [parts].
+  @override
   Uri relativePathToUri(String path) {
     var segments = context.split(path);
 
@@ -66,6 +70,7 @@ abstract class InternalStyle extends Style {
   }
 
   /// Returns the URI that represents [path], which is assumed to be absolute.
+  @override
   Uri absolutePathToUri(String path);
 
   /// Returns whether [codeUnit1] and [codeUnit2] are considered equivalent for

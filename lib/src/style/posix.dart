@@ -10,33 +10,46 @@ import '../parsed_path.dart';
 class PosixStyle extends InternalStyle {
   PosixStyle();
 
+  @override
   final name = 'posix';
+  @override
   final separator = '/';
   final separators = const ['/'];
 
   // Deprecated properties.
 
+  @override
   final separatorPattern = RegExp(r'/');
+  @override
   final needsSeparatorPattern = RegExp(r'[^/]$');
+  @override
   final rootPattern = RegExp(r'^/');
+  @override
   final relativeRootPattern = null;
 
+  @override
   bool containsSeparator(String path) => path.contains('/');
 
+  @override
   bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
+  @override
   bool needsSeparator(String path) =>
       path.isNotEmpty && !isSeparator(path.codeUnitAt(path.length - 1));
 
+  @override
   int rootLength(String path, {bool withDrive = false}) {
     if (path.isNotEmpty && isSeparator(path.codeUnitAt(0))) return 1;
     return 0;
   }
 
+  @override
   bool isRootRelative(String path) => false;
 
+  @override
   String getRelativeRoot(String path) => null;
 
+  @override
   String pathFromUri(Uri uri) {
     if (uri.scheme == '' || uri.scheme == 'file') {
       return Uri.decodeComponent(uri.path);
@@ -44,17 +57,18 @@ class PosixStyle extends InternalStyle {
     throw ArgumentError("Uri $uri must have scheme 'file:'.");
   }
 
+  @override
   Uri absolutePathToUri(String path) {
     var parsed = ParsedPath.parse(path, this);
     if (parsed.parts.isEmpty) {
       // If the path is a bare root (e.g. "/"), [components] will
       // currently be empty. We add two empty components so the URL constructor
       // produces "file:///", with a trailing slash.
-      parsed.parts.addAll(["", ""]);
+      parsed.parts.addAll(['', '']);
     } else if (parsed.hasTrailingSeparator) {
       // If the path has a trailing slash, add a single empty component so the
       // URI has a trailing slash as well.
-      parsed.parts.add("");
+      parsed.parts.add('');
     }
 
     return Uri(scheme: 'file', pathSegments: parsed.parts);

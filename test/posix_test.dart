@@ -7,7 +7,7 @@ import 'package:path/path.dart' as path;
 
 import 'utils.dart';
 
-main() {
+void main() {
   var context = path.Context(style: path.Style.posix, current: '/root/path');
 
   test('separator', () {

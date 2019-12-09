@@ -41,8 +41,8 @@ void main(List<String> args) {
     var context = p.Context(style: style);
     var files = genericPaths.toList()..addAll(platformPaths[style]);
 
-    benchmark(String name, Function function) {
-      runBenchmark("${style.name}-$name", 100000, () {
+    void benchmark(String name, Function function) {
+      runBenchmark('${style.name}-$name', 100000, () {
         for (var file in files) {
           function(file);
         }
@@ -50,7 +50,7 @@ void main(List<String> args) {
     }
 
     void benchmarkPairs(String name, void Function(String, String) function) {
-      runBenchmark("${style.name}-$name", 1000, () {
+      runBenchmark('${style.name}-$name', 1000, () {
         for (var file1 in files) {
           for (var file2 in files) {
             function(file1, file2);
@@ -102,5 +102,5 @@ void runBenchmark(String name, int count, Function function) {
 
   var rate =
       (count / stopwatch.elapsedMicroseconds).toStringAsFixed(5).padLeft(9);
-  print("${name.padLeft(32)}: $rate iter/us (${stopwatch.elapsed})");
+  print('${name.padLeft(32)}: $rate iter/us (${stopwatch.elapsed})');
 }
