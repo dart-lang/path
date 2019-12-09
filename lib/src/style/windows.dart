@@ -159,6 +159,7 @@ class WindowsStyle extends InternalStyle {
     return upperCase1 >= chars.lowerA && upperCase1 <= chars.lowerZ;
   }
 
+  @override
   bool pathsEqual(String path1, String path2) {
     if (identical(path1, path2)) return true;
     if (path1.length != path2.length) return false;
@@ -170,6 +171,7 @@ class WindowsStyle extends InternalStyle {
     return true;
   }
 
+  @override
   int canonicalizeCodeUnit(int codeUnit) {
     if (codeUnit == chars.slash) return chars.backslash;
     if (codeUnit < chars.upperA) return codeUnit;
@@ -177,5 +179,6 @@ class WindowsStyle extends InternalStyle {
     return codeUnit | _asciiCaseBit;
   }
 
+  @override
   String canonicalizePart(String part) => part.toLowerCase();
 }
