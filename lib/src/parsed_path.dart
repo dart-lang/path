@@ -78,9 +78,9 @@ class ParsedPath {
       this.style, this.root, this.isRootRelative, this.parts, this.separators);
 
   String get basename {
-    var copy = this.clone();
+    var copy = clone();
     copy.removeTrailingSeparators();
-    if (copy.parts.isEmpty) return root == null ? '' : root;
+    if (copy.parts.isEmpty) return root ?? '';
     return copy.parts.last;
   }
 
@@ -148,6 +148,7 @@ class ParsedPath {
     removeTrailingSeparators();
   }
 
+  @override
   String toString() {
     var builder = StringBuffer();
     if (root != null) builder.write(root);

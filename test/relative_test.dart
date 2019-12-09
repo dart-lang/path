@@ -4,13 +4,13 @@
 //
 // Test "relative" on all styles of path.Context, on all platforms.
 
-import "package:test/test.dart";
-import "package:path/path.dart" as path;
+import 'package:test/test.dart';
+import 'package:path/path.dart' as path;
 
-import "utils.dart";
+import 'utils.dart';
 
 void main() {
-  test("test relative", () {
+  test('test relative', () {
     relativeTest(path.Context(style: path.Style.posix, current: '.'), '/');
     relativeTest(path.Context(style: path.Style.posix, current: '/'), '/');
     relativeTest(

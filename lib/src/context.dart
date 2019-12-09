@@ -30,15 +30,15 @@ class Context {
       if (style == null) {
         current = p.current;
       } else {
-        current = ".";
+        current = '.';
       }
     }
 
     if (style == null) {
       style = Style.platform;
     } else if (style is! InternalStyle) {
-      throw ArgumentError("Only styles defined by the path package are "
-          "allowed.");
+      throw ArgumentError('Only styles defined by the path package are '
+          'allowed.');
     }
 
     return Context._(style as InternalStyle, current);
@@ -59,7 +59,7 @@ class Context {
   final String _current;
 
   /// The current directory that relative paths are relative to.
-  String get current => _current != null ? _current : p.current;
+  String get current => _current ?? p.current;
 
   /// Gets the path separator for the context's [style]. On Mac and Linux,
   /// this is `/`. On Windows, it's `\`.
@@ -80,7 +80,7 @@ class Context {
       String part6,
       String part7]) {
     _validateArgList(
-        "absolute", [part1, part2, part3, part4, part5, part6, part7]);
+        'absolute', [part1, part2, part3, part4, part5, part6, part7]);
 
     // If there's a single absolute path, just return it. This is a lot faster
     // for the common case of `p.absolute(path)`.
@@ -124,10 +124,8 @@ class Context {
   String dirname(String path) {
     var parsed = _parse(path);
     parsed.removeTrailingSeparators();
-    if (parsed.parts.isEmpty) return parsed.root == null ? '.' : parsed.root;
-    if (parsed.parts.length == 1) {
-      return parsed.root == null ? '.' : parsed.root;
-    }
+    if (parsed.parts.isEmpty) return parsed.root ?? '.';
+    if (parsed.parts.length == 1) return parsed.root ?? '.';
     parsed.parts.removeLast();
     parsed.separators.removeLast();
     parsed.removeTrailingSeparators();
@@ -185,7 +183,7 @@ class Context {
   /// On POSIX systems, absolute paths start with a `/` (forward slash). On
   /// Windows, an absolute path starts with `\\`, or a drive letter followed by
   /// `:/` or `:\`.
-  bool isRelative(String path) => !this.isAbsolute(path);
+  bool isRelative(String path) => !isAbsolute(path);
 
   /// Returns `true` if [path] is a root-relative path and `false` if it's not.
   ///
@@ -228,7 +226,7 @@ class Context {
       part7,
       part8
     ];
-    _validateArgList("join", parts);
+    _validateArgList('join', parts);
     return joinAll(parts.where((part) => part != null));
   }
 
@@ -252,7 +250,7 @@ class Context {
     var isAbsoluteAndNotRootRelative = false;
 
     for (var part in parts.where((part) => part != '')) {
-      if (this.isRootRelative(part) && isAbsoluteAndNotRootRelative) {
+      if (isRootRelative(part) && isAbsoluteAndNotRootRelative) {
         // If the new part is root-relative, it preserves the previous root but
         // replaces the path after it.
         var parsed = _parse(part);
@@ -264,8 +262,8 @@ class Context {
         }
         buffer.clear();
         buffer.write(parsed.toString());
-      } else if (this.isAbsolute(part)) {
-        isAbsoluteAndNotRootRelative = !this.isRootRelative(part);
+      } else if (isAbsolute(part)) {
+        isAbsoluteAndNotRootRelative = !isRootRelative(part);
         // An absolute path discards everything before it.
         buffer.clear();
         buffer.write(part);
@@ -450,24 +448,24 @@ class Context {
   /// thrown.
   String relative(String path, {String from}) {
     // Avoid expensive computation if the path is already relative.
-    if (from == null && this.isRelative(path)) return this.normalize(path);
+    if (from == null && isRelative(path)) return normalize(path);
 
     from = from == null ? current : absolute(from);
 
     // We can't determine the path from a relative path to an absolute path.
-    if (this.isRelative(from) && this.isAbsolute(path)) {
-      return this.normalize(path);
+    if (isRelative(from) && isAbsolute(path)) {
+      return normalize(path);
     }
 
     // If the given path is relative, resolve it relative to the context's
     // current directory.
-    if (this.isRelative(path) || this.isRootRelative(path)) {
-      path = this.absolute(path);
+    if (isRelative(path) || isRootRelative(path)) {
+      path = absolute(path);
     }
 
     // If the path is still relative and `from` is absolute, we're unable to
     // find a path from `from` to `path`.
-    if (this.isRelative(path) && this.isAbsolute(from)) {
+    if (isRelative(path) && isAbsolute(from)) {
       throw PathException('Unable to find a path to "$path" from "$from".');
     }
 
@@ -585,7 +583,7 @@ class Context {
       return _PathRelation.different;
     }
 
-    if (!this.isRelative(relative)) return _PathRelation.different;
+    if (!isRelative(relative)) return _PathRelation.different;
     if (relative == '.') return _PathRelation.equal;
     if (relative == '..') return _PathRelation.different;
     return (relative.length >= 3 &&
@@ -1078,12 +1076,12 @@ void _validateArgList(String method, List<String> args) {
 
     // Show the arguments.
     var message = StringBuffer();
-    message.write("$method(");
+    message.write('$method(');
     message.write(args
         .take(numArgs)
-        .map((arg) => arg == null ? "null" : '"$arg"')
-        .join(", "));
-    message.write("): part ${i - 1} was null, but part $i was not.");
+        .map((arg) => arg == null ? 'null' : '"$arg"')
+        .join(', '));
+    message.write('): part ${i - 1} was null, but part $i was not.');
     throw ArgumentError(message.toString());
   }
 }
@@ -1095,23 +1093,24 @@ class _PathDirection {
   ///
   /// Note that this applies even if the path ends beneath its original root. It
   /// takes precendence over any other return values that may apple.
-  static const aboveRoot = _PathDirection("above root");
+  static const aboveRoot = _PathDirection('above root');
 
   /// The path contains enough ".." components that it ends at its original
   /// root.
-  static const atRoot = _PathDirection("at root");
+  static const atRoot = _PathDirection('at root');
 
   /// The path contains enough ".." components that at some point it reaches its
   /// original root, but it ends beneath that root.
-  static const reachesRoot = _PathDirection("reaches root");
+  static const reachesRoot = _PathDirection('reaches root');
 
   /// The path never reaches to or above its original root.
-  static const belowRoot = _PathDirection("below root");
+  static const belowRoot = _PathDirection('below root');
 
   final String name;
 
   const _PathDirection(this.name);
 
+  @override
   String toString() => name;
 }
 
@@ -1120,25 +1119,26 @@ class _PathRelation {
   /// The first path is a proper parent of the second.
   ///
   /// For example, `foo` is a proper parent of `foo/bar`, but not of `foo`.
-  static const within = _PathRelation("within");
+  static const within = _PathRelation('within');
 
   /// The two paths are equivalent.
   ///
   /// For example, `foo//bar` is equivalent to `foo/bar`.
-  static const equal = _PathRelation("equal");
+  static const equal = _PathRelation('equal');
 
   /// The first path is neither a parent of nor equal to the second.
-  static const different = _PathRelation("different");
+  static const different = _PathRelation('different');
 
   /// We couldn't quickly determine any information about the paths'
   /// relationship to each other.
   ///
   /// Only returned by [Context._isWithinOrEqualsFast].
-  static const inconclusive = _PathRelation("inconclusive");
+  static const inconclusive = _PathRelation('inconclusive');
 
   final String name;
 
   const _PathRelation(this.name);
 
+  @override
   String toString() => name;
 }

@@ -9,7 +9,7 @@ import 'dart:html';
 import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
-main() {
+void main() {
   group('new Context()', () {
     test('uses the window location if root and style are omitted', () {
       var context = path.Context();
@@ -19,7 +19,7 @@ main() {
 
     test('uses "." if root is omitted', () {
       var context = path.Context(style: path.Style.platform);
-      expect(context.current, ".");
+      expect(context.current, '.');
     });
 
     test('uses the host platform if style is omitted', () {

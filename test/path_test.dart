@@ -5,7 +5,7 @@
 import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
-main() {
+void main() {
   group('path.Style', () {
     test('name', () {
       expect(path.Style.posix.name, 'posix');
@@ -39,16 +39,16 @@ main() {
 
   test('posix is a default Context for the POSIX style', () {
     expect(path.posix.style, path.Style.posix);
-    expect(path.posix.current, ".");
+    expect(path.posix.current, '.');
   });
 
   test('windows is a default Context for the Windows style', () {
     expect(path.windows.style, path.Style.windows);
-    expect(path.windows.current, ".");
+    expect(path.windows.current, '.');
   });
 
   test('url is a default Context for the URL style', () {
     expect(path.url.style, path.Style.url);
-    expect(path.url.current, ".");
+    expect(path.url.current, '.');
   });
 }

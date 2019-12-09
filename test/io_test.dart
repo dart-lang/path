@@ -9,7 +9,7 @@ import 'dart:io' as io;
 import 'package:test/test.dart';
 import 'package:path/path.dart' as path;
 
-main() {
+void main() {
   group('new Context()', () {
     test('uses the current directory if root and style are omitted', () {
       var context = path.Context();
@@ -18,7 +18,7 @@ main() {
 
     test('uses "." if root is omitted', () {
       var context = path.Context(style: path.Style.platform);
-      expect(context.current, ".");
+      expect(context.current, '.');
     });
 
     test('uses the host platform if style is omitted', () {
@@ -43,7 +43,7 @@ main() {
     test('uses the previous working directory if deleted', () {
       var dir = io.Directory.current.path;
       try {
-        var tempPath = path.normalize(path.absolute("temp_cwd"));
+        var tempPath = path.normalize(path.absolute('temp_cwd'));
         var temp = io.Directory(tempPath);
         temp.createSync();
         io.Directory.current = temp;
