@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:async';
+
 /// A comprehensive, cross-platform path manipulation library.
 ///
 /// ## Installing ##
@@ -53,6 +55,14 @@ export 'src/path_map.dart';
 export 'src/path_set.dart';
 export 'src/style.dart';
 
+// class FSZone {
+
+//   factory FSZone()
+//   {
+
+//     Zone.current;
+
+//   }
 /// A default context for manipulating POSIX paths.
 final Context posix = Context(style: Style.posix);
 
@@ -81,51 +91,15 @@ Style get style => context.style;
 ///
 /// In the browser, this means the current URL, without the last file segment.
 String get current {
-  // If the current working directory gets deleted out from under the program,
-  // accessing it will throw an IO exception. In order to avoid transient
-  // errors, if we already have a cached working directory, catch the error and
-  // use that.
-  Uri uri;
-  try {
-    uri = Uri.base;
-  } on Exception {
-    if (_current != null) return _current;
-    rethrow;
-  }
 
-  // Converting the base URI to a file path is pretty slow, and the base URI
-  // rarely changes in practice, so we cache the result here.
-  if (uri == _currentUriBase) return _current;
-  _currentUriBase = uri;
-
-  if (Style.platform == Style.url) {
-    _current = uri.resolve('.').toString();
-    return _current;
-  } else {
-    var path = uri.toFilePath();
-    // Remove trailing '/' or '\' unless it is the only thing left
-    // (for instance the root on Linux).
-    var lastIndex = path.length - 1;
-    assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
-    _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
-    return _current;
-  }
+  return context.current;
 }
 
-/// The last value returned by [Uri.base].
-///
-/// This is used to cache the current working directory.
-Uri _currentUriBase;
-
-/// The last known value of the current working directory.
-///
-/// This is cached because [current] is called frequently but rarely actually
-/// changes.
-String _current;
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
 String get separator => context.separator;
+// zone}
 
 /// Creates a new path by appending the given path parts to [current].
 /// Equivalent to [join()] with [current] as the first argument. Example:
