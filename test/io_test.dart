@@ -43,9 +43,8 @@ void main() {
     test('uses the previous working directory if deleted', () {
       var dir = io.Directory.current.path;
       try {
-        var tempPath = path.normalize(path.absolute('temp_cwd'));
-        var temp = io.Directory(tempPath);
-        temp.createSync();
+        var temp = io.Directory.systemTemp.createTempSync('path_test');
+        var tempPath = temp.path;
         io.Directory.current = temp;
 
         // Call "current" once so that it can be cached.
