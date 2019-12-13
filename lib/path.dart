@@ -4,6 +4,8 @@
 
 import 'dart:async';
 
+import 'package:quiver/collection.dart';
+
 /// A comprehensive, cross-platform path manipulation library.
 ///
 /// ## Installing ##
@@ -55,14 +57,6 @@ export 'src/path_map.dart';
 export 'src/path_set.dart';
 export 'src/style.dart';
 
-// class FSZone {
-
-//   factory FSZone()
-//   {
-
-//     Zone.current;
-
-//   }
 /// A default context for manipulating POSIX paths.
 final Context posix = Context(style: Style.posix);
 
@@ -87,19 +81,79 @@ final Context context = createInternal();
 /// This is the style that all top-level path functions will use.
 Style get style => context.style;
 
+LruMap<Zone, _ZoneFrame> zoneMap = LruMap(maximumSize: 10);
+
 /// Gets the path to the current working directory.
 ///
 /// In the browser, this means the current URL, without the last file segment.
-String get current {
+///
+/// Handles the fact that with Zone Overrides that we can have multiple
+/// active filesystems that each have their own cwd.
 
-  return context.current;
+String get current {
+  var frame = zoneMap[Zone.current];
+  if (frame == null) {
+    frame = _ZoneFrame(Zone.current);
+    zoneMap[Zone.current] = frame;
+  }
+
+  _refresh(frame);
+
+  return frame._current;
 }
 
+void _refresh(_ZoneFrame zoneFrame) {
+  // If the current working directory gets deleted out from under the program,
+  // accessing it will throw an IO exception. In order to avoid transient
+  // errors, if we already have a cached working directory, catch the error and
+  // use that.
+  Uri uri;
+  try {
+    uri = Uri.base;
+  } on Exception {
+    if (zoneFrame._current != null) return;
+    rethrow;
+  }
+
+  // Converting the base URI to a file path is pretty slow, and the base URI
+  // rarely changes in practice, so we cache the result here.
+  if (uri == zoneFrame._currentUriBase) return;
+  zoneFrame._currentUriBase = uri;
+
+  if (Style.platform == Style.url) {
+    zoneFrame._current = uri.resolve('.').toString();
+    return;
+  } else {
+    var path = uri.toFilePath();
+    // Remove trailing '/' or '\' unless it is the only thing left
+    // (for instance the root on Linux).
+    var lastIndex = path.length - 1;
+    assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
+    zoneFrame._current = lastIndex == 0 ? path : path.substring(0, lastIndex);
+    return;
+  }
+}
+
+class _ZoneFrame {
+  _ZoneFrame(this._zone);
+
+  Zone _zone;
+
+  /// The last value returned by [Uri.base].
+  ///
+  /// This is used to cache the current working directory.
+  Uri _currentUriBase;
+
+  /// The last known value of the current working directory.
+  ///
+  /// This is cached because [current] is called frequently but rarely actually
+  /// changes.
+  String _current;
+}
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
 String get separator => context.separator;
-// zone}
 
 /// Creates a new path by appending the given path parts to [current].
 /// Equivalent to [join()] with [current] as the first argument. Example:
