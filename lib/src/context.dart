@@ -4,8 +4,7 @@
 
 import 'dart:math' as math;
 
-import 'package:file/file.dart' as fs;
-
+import '../path.dart' as p;
 import 'characters.dart' as chars;
 import 'internal_style.dart';
 import 'parsed_path.dart';
@@ -26,9 +25,11 @@ class Context {
   ///
   /// On the browser, [style] defaults to [Style.url] and [current] defaults to
   /// the current URL.
-  factory Context({Style style, String current, fs.FileSystem fs}) {
+  factory Context({Style style, String current}) {
     if (current == null) {
-      if (style != null) {
+      if (style == null) {
+        current = p.current;
+      } else {
         current = '.';
       }
     }
@@ -40,108 +41,25 @@ class Context {
           'allowed.');
     }
 
-    return Context._(style as InternalStyle, current, fs);
+    return Context._(style as InternalStyle, current);
   }
 
   /// Create a [Context] to be used internally within path.
   Context._internal()
       : style = Style.platform as InternalStyle,
-        _current = null,
-        _trackCWD = true,
-        _fs = null;
+        _current = null;
 
-  Context._(this.style, this._current, this._fs) {
-    if (_current == null) {
-      _trackCWD = true;
-      _current = _readCWD(_current);
-    } else {
-      _trackCWD = false;
-    }
-  }
-
-  /// The file system the context is running against.
-  fs.FileSystem _fs;
+  Context._(this.style, this._current);
 
   /// The style of path that this context works with.
   final InternalStyle style;
 
-  /// If true then _current was passed when the
-  /// Context was created and so we never update the
-  /// cwd to reflect the file systems.
-  /// I don't understand why you would want to do this but
-  /// thats the way it is.
-  bool _trackCWD;
-
-  /// The current directory given when Context was created.
-  /// If null when the [Context] was created, then _trackCWD will be true and we will
-  /// re-fetch the cwd if needed.
-  /// If non-null when [Context] was created, then [_trackCWD] will be false and
-  /// we won't track the CWD when it changes. (e.g. paimport 'package:file/file.dart' as fs;ths will always be
-  /// relative the the path passed when the [Context] was created.)
-  ///
-  /// When tracking we use this as a cach because [current] is called frequently but rarely actually
-  /// changes.
-  String _current;
-
-  /// The last value returned by [Uri.base].
-  ///
-  /// This is used to cache the current working directory.
-  Uri _currentUriBase;
+  /// The current directory given when Context was created. If null, current
+  /// directory is evaluated from 'p.current'.
+  final String _current;
 
   /// The current directory that relative paths are relative to.
-  String get current {
-    _current = _readCWD(_current);
-
-    return _current;
-  }
-
-  String _readCWD(String cachedCWD) {
-    String cwd;
-
-    // If the current working directory gets deleted out from under the program,
-    // accessing it will throw an IO exception. In order to avoid transient
-    // errors, if we already have a cached working directory, catch the error and
-    // use that.
-    Uri uri;
-    try {
-      uri = Uri.base;
-    } on Exception {
-      // working directory has been deleted. Use cached version.
-      if (cachedCWD != null) return cachedCWD;
-      rethrow;
-    }
-
-    // Converting the base URI to a file path is pretty slow, and the base URI
-    // rarely changes in practice, so we cache the result here.
-    if (uri == _currentUriBase) return cachedCWD;
-
-    // cache the uri
-    _currentUriBase = uri;
-
-    if (Style.platform == Style.url) {
-      // expensive call to get the filesystems CWD
-      if (_fs == null) {
-        cwd = uri.resolve('.').toString();
-      } else {
-        cwd = _fs.currentDirectory.path;
-      }
-      return cwd;
-    } else {
-      String path;
-
-      if (_fs == null) {
-        path = uri.toFilePath();
-      } else {
-        path = _fs.currentDirectory.path;
-      }
-      // Remove trailing '/' or '\' unless it is the only thing left
-      // (for instance the root on Linux).
-      var lastIndex = path.length - 1;
-      assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
-      cwd = lastIndex == 0 ? path : path.substring(0, lastIndex);
-      return cwd;
-    }
-  }
+  String get current => _current ?? p.current;
 
   /// Gets the path separator for the context's [style]. On Mac and Linux,
   /// this is `/`. On Windows, it's `\`.
@@ -236,7 +154,7 @@ class Context {
   ///     // Unix
   ///     context.rootPrefix('path/to/foo'); // -> ''
   ///     context.rootPrefix('/path/to/foo'); // -> '/'
-  ///'p.current'
+  ///
   ///     // Windows
   ///     context.rootPrefix(r'path\to\foo'); // -> ''
   ///     context.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
