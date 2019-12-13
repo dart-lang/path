@@ -93,7 +93,7 @@ LruMap<Zone, _ZoneFrame> zoneMap = LruMap(maximumSize: 10);
 String get current {
   var frame = zoneMap[Zone.current];
   if (frame == null) {
-    frame = _ZoneFrame(Zone.current);
+    frame = _ZoneFrame();
     zoneMap[Zone.current] = frame;
   }
 
@@ -135,10 +135,6 @@ void _refresh(_ZoneFrame zoneFrame) {
 }
 
 class _ZoneFrame {
-  _ZoneFrame(this._zone);
-
-  Zone _zone;
-
   /// The last value returned by [Uri.base].
   ///
   /// This is used to cache the current working directory.
