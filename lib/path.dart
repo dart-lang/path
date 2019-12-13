@@ -4,7 +4,7 @@
 
 import 'dart:async';
 
-import 'package:quiver/collection.dart';
+import 'package:path/src/lru_map.dart';
 
 /// A comprehensive, cross-platform path manipulation library.
 ///
