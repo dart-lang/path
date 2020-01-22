@@ -415,7 +415,7 @@ class Context {
   }
 
   /// Attempts to convert [path] to an equivalent relative path relative to
-  /// [root].
+  /// [current].
   ///
   ///     var context = new Context(current: '/root/path');
   ///     context.relative('/root/path/a/b.dart'); // -> 'a/b.dart'
@@ -442,9 +442,9 @@ class Context {
   ///     var context = new Context(r'some/relative/path');
   ///     context.relative(r'/absolute/path'); // -> '/absolute/path'
   ///
-  /// If [root] is relative, it may be impossible to determine a path from
-  /// [from] to [path]. For example, if [root] and [path] are "." and [from] is
-  /// "/", no path can be determined. In this case, a [PathException] will be
+  /// If [current] is relative, it may be impossible to determine a path from
+  /// [from] to [path]. For example, if [current] and [path] are "." and [from]
+  /// is "/", no path can be determined. In this case, a [PathException] will be
   /// thrown.
   String relative(String path, {String from}) {
     // Avoid expensive computation if the path is already relative.
