@@ -8,7 +8,7 @@ import 'package:path/path.dart' as path;
 import 'utils.dart';
 
 void main() {
-  var context =
+  final context =
       path.Context(style: path.Style.windows, current: r'C:\root\path');
 
   test('separator', () {
@@ -449,7 +449,7 @@ void main() {
     });
 
     group('from relative root', () {
-      var r = path.Context(style: path.Style.windows, current: r'foo\bar');
+      final r = path.Context(style: path.Style.windows, current: r'foo\bar');
 
       test('given absolute path', () {
         expect(r.relative(r'C:\'), equals(r'C:\'));
@@ -472,7 +472,7 @@ void main() {
     });
 
     group('from root-relative root', () {
-      var r = path.Context(style: path.Style.windows, current: r'\foo\bar');
+      final r = path.Context(style: path.Style.windows, current: r'\foo\bar');
 
       test('given absolute path', () {
         expect(r.relative(r'C:\'), equals(r'C:\'));
@@ -497,7 +497,7 @@ void main() {
     });
 
     test('from a root with extension', () {
-      var r = path.Context(style: path.Style.windows, current: r'C:\dir.ext');
+      final r = path.Context(style: path.Style.windows, current: r'C:\dir.ext');
       expect(r.relative(r'C:\dir.ext\file'), 'file');
     });
 
@@ -513,7 +513,7 @@ void main() {
     });
 
     test('with a root parameter and a relative root', () {
-      var r =
+      final r =
           path.Context(style: path.Style.windows, current: r'relative\root');
       expect(r.relative(r'C:\foo\bar\baz', from: r'C:\foo\bar'), equals('baz'));
       expect(() => r.relative('..', from: r'C:\foo\bar'), throwsPathException);
@@ -528,7 +528,7 @@ void main() {
     });
 
     test('from a . root', () {
-      var r = path.Context(style: path.Style.windows, current: '.');
+      final r = path.Context(style: path.Style.windows, current: '.');
       expect(r.relative(r'C:\foo\bar\baz'), equals(r'C:\foo\bar\baz'));
       expect(r.relative(r'foo\bar\baz'), equals(r'foo\bar\baz'));
       expect(r.relative(r'\foo\bar\baz'), equals(r'\foo\bar\baz'));
@@ -575,7 +575,7 @@ void main() {
     });
 
     test('from a relative root', () {
-      var r = path.Context(style: path.Style.windows, current: r'foo\bar');
+      final r = path.Context(style: path.Style.windows, current: r'foo\bar');
       expect(r.isWithin('.', r'a\b\c'), isTrue);
       expect(r.isWithin('.', r'..\a\b\c'), isFalse);
       expect(r.isWithin('.', r'..\..\a\foo\b\c'), isFalse);
@@ -627,7 +627,7 @@ void main() {
     });
 
     test('from a relative root', () {
-      var r = path.Context(style: path.Style.windows, current: r'foo\bar');
+      final r = path.Context(style: path.Style.windows, current: r'foo\bar');
       expectEquals(r, r'a\b', r'a\b');
       expectNotEquals(r, '.', r'foo\bar');
       expectNotEquals(r, '.', r'..\a\b');

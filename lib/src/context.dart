@@ -122,7 +122,7 @@ class Context {
   ///
   ///     context.dirname('path/to/'); // -> 'path'
   String dirname(String path) {
-    var parsed = _parse(path);
+    final parsed = _parse(path);
     parsed.removeTrailingSeparators();
     if (parsed.parts.isEmpty) return parsed.root ?? '.';
     if (parsed.parts.length == 1) return parsed.root ?? '.';
@@ -216,7 +216,7 @@ class Context {
       String part6,
       String part7,
       String part8]) {
-    var parts = <String>[
+    final parts = <String>[
       part1,
       part2,
       part3,
@@ -245,7 +245,7 @@ class Context {
   ///
   /// For a fixed number of parts, [join] is usually terser.
   String joinAll(Iterable<String> parts) {
-    var buffer = StringBuffer();
+    final buffer = StringBuffer();
     var needsSeparator = false;
     var isAbsoluteAndNotRootRelative = false;
 
@@ -253,8 +253,8 @@ class Context {
       if (isRootRelative(part) && isAbsoluteAndNotRootRelative) {
         // If the new part is root-relative, it preserves the previous root but
         // replaces the path after it.
-        var parsed = _parse(part);
-        var path = buffer.toString();
+        final parsed = _parse(part);
+        final path = buffer.toString();
         parsed.root =
             path.substring(0, style.rootLength(path, withDrive: true));
         if (style.needsSeparator(parsed.root)) {
@@ -304,7 +304,7 @@ class Context {
   ///     // Windows
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
   List<String> split(String path) {
-    var parsed = _parse(path);
+    final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
     parsed.parts = parsed.parts.where((part) => part.isNotEmpty).toList();
     if (parsed.root != null) parsed.parts.insert(0, parsed.root);
@@ -327,7 +327,7 @@ class Context {
     path = absolute(path);
     if (style != Style.windows && !_needsNormalization(path)) return path;
 
-    var parsed = _parse(path);
+    final parsed = _parse(path);
     parsed.normalize(canonicalize: true);
     return parsed.toString();
   }
@@ -343,7 +343,7 @@ class Context {
   String normalize(String path) {
     if (!_needsNormalization(path)) return path;
 
-    var parsed = _parse(path);
+    final parsed = _parse(path);
     parsed.normalize();
     return parsed.toString();
   }
@@ -351,14 +351,14 @@ class Context {
   /// Returns whether [path] needs to be normalized.
   bool _needsNormalization(String path) {
     var start = 0;
-    var codeUnits = path.codeUnits;
+    final codeUnits = path.codeUnits;
     int previousPrevious;
     int previous;
 
     // Skip past the root before we start looking for snippets that need
     // normalization. We want to normalize "//", but not when it's part of
     // "http://".
-    var root = style.rootLength(path);
+    final root = style.rootLength(path);
     if (root != 0) {
       start = root;
       previous = chars.slash;
@@ -373,7 +373,7 @@ class Context {
     }
 
     for (var i = start; i < codeUnits.length; i++) {
-      var codeUnit = codeUnits[i];
+      final codeUnit = codeUnits[i];
       if (style.isSeparator(codeUnit)) {
         // Forward slashes in Windows paths are normalized to backslashes.
         if (style == Style.windows && codeUnit == chars.slash) return true;
@@ -469,8 +469,8 @@ class Context {
       throw PathException('Unable to find a path to "$path" from "$from".');
     }
 
-    var fromParsed = _parse(from)..normalize();
-    var pathParsed = _parse(path)..normalize();
+    final fromParsed = _parse(from)..normalize();
+    final pathParsed = _parse(path)..normalize();
 
     if (fromParsed.parts.isNotEmpty && fromParsed.parts[0] == '.') {
       return pathParsed.toString();
@@ -552,8 +552,8 @@ class Context {
     // Make both paths the same level of relative. We're only able to do the
     // quick comparison if both paths are in the same format, and making a path
     // absolute is faster than making it relative.
-    var parentIsAbsolute = isAbsolute(parent);
-    var childIsAbsolute = isAbsolute(child);
+    final parentIsAbsolute = isAbsolute(parent);
+    final childIsAbsolute = isAbsolute(child);
     if (parentIsAbsolute && !childIsAbsolute) {
       child = absolute(child);
       if (style.isRootRelative(parent)) parent = absolute(parent);
@@ -561,8 +561,8 @@ class Context {
       parent = absolute(parent);
       if (style.isRootRelative(child)) child = absolute(child);
     } else if (childIsAbsolute && parentIsAbsolute) {
-      var childIsRootRelative = style.isRootRelative(child);
-      var parentIsRootRelative = style.isRootRelative(parent);
+      final childIsRootRelative = style.isRootRelative(child);
+      final parentIsRootRelative = style.isRootRelative(parent);
 
       if (childIsRootRelative && !parentIsRootRelative) {
         child = absolute(child);
@@ -571,7 +571,7 @@ class Context {
       }
     }
 
-    var result = _isWithinOrEqualsFast(parent, child);
+    final result = _isWithinOrEqualsFast(parent, child);
     if (result != _PathRelation.inconclusive) return result;
 
     String relative;
@@ -600,8 +600,8 @@ class Context {
     // a single dot easily enough.
     if (parent == '.') parent = '';
 
-    var parentRootLength = style.rootLength(parent);
-    var childRootLength = style.rootLength(child);
+    final parentRootLength = style.rootLength(parent);
+    final childRootLength = style.rootLength(child);
 
     // If the roots aren't the same length, we know both paths are absolute or
     // both are root-relative, and thus that the roots are meaningfully
@@ -616,8 +616,8 @@ class Context {
     //     isWithin("C:/bar", "D:/bar/baz") //=> false
     //     isWithin("http://example.com/", "http://example.org/bar") //=> false
     for (var i = 0; i < parentRootLength; i++) {
-      var parentCodeUnit = parent.codeUnitAt(i);
-      var childCodeUnit = child.codeUnitAt(i);
+      final parentCodeUnit = parent.codeUnitAt(i);
+      final childCodeUnit = child.codeUnitAt(i);
       if (!style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
         return _PathRelation.different;
       }
@@ -720,12 +720,12 @@ class Context {
       // As long as the remainders of the two paths don't have any unresolved
       // ".." components, we can be confident that [child] is not within
       // [parent].
-      var childDirection = _pathDirection(child, childIndex);
+      final childDirection = _pathDirection(child, childIndex);
       if (childDirection != _PathDirection.belowRoot) {
         return _PathRelation.inconclusive;
       }
 
-      var parentDirection = _pathDirection(parent, parentIndex);
+      final parentDirection = _pathDirection(parent, parentIndex);
       if (parentDirection != _PathDirection.belowRoot) {
         return _PathRelation.inconclusive;
       }
@@ -747,7 +747,7 @@ class Context {
         lastParentSeparator ??= math.max(0, parentRootLength - 1);
       }
 
-      var direction =
+      final direction =
           _pathDirection(parent, lastParentSeparator ?? parentRootLength - 1);
       if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
@@ -758,7 +758,7 @@ class Context {
     // We've reached the end of the parent path, which means it's time to make a
     // decision. Before we do, though, we'll check the rest of the child to see
     // what that tells us.
-    var direction = _pathDirection(child, childIndex);
+    final direction = _pathDirection(child, childIndex);
 
     // If there are no more components in the child, then it's the same as
     // the parent.
@@ -818,7 +818,7 @@ class Context {
       if (i == path.length) break;
 
       // Move through the path component to the next separator.
-      var start = i;
+      final start = i;
       while (i < path.length && !style.isSeparator(path.codeUnitAt(i))) {
         i++;
       }
@@ -865,10 +865,10 @@ class Context {
     // paths have the same hash code.
     path = absolute(path);
 
-    var result = _hashFast(path);
+    final result = _hashFast(path);
     if (result != null) return result;
 
-    var parsed = _parse(path);
+    final parsed = _parse(path);
     parsed.normalize();
     return _hashFast(parsed.toString());
   }
@@ -882,7 +882,7 @@ class Context {
     var beginning = true;
     var wasSeparator = true;
     for (var i = 0; i < path.length; i++) {
-      var codeUnit = style.canonicalizeCodeUnit(path.codeUnitAt(i));
+      final codeUnit = style.canonicalizeCodeUnit(path.codeUnitAt(i));
 
       // Take advantage of the fact that collisions are allowed to ignore
       // separators entirely. This lets us avoid worrying about cases like
@@ -902,7 +902,7 @@ class Context {
         // We've hit "/." at the end of the path, which we can ignore.
         if (i + 1 == path.length) break;
 
-        var next = path.codeUnitAt(i + 1);
+        final next = path.codeUnitAt(i + 1);
 
         // We can just ignore "/./", since they don't affect the semantics of
         // the path.
@@ -934,7 +934,7 @@ class Context {
   ///
   ///     context.withoutExtension('path/to/foo.dart'); // -> 'path/to/foo'
   String withoutExtension(String path) {
-    var parsed = _parse(path);
+    final parsed = _parse(path);
 
     for (var i = parsed.parts.length - 1; i >= 0; i--) {
       if (parsed.parts[i].isNotEmpty) {
@@ -1032,7 +1032,7 @@ class Context {
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {
-    var typedUri = _parseUri(uri);
+    final typedUri = _parseUri(uri);
     if (typedUri.scheme == 'file' && style == Style.url) {
       return typedUri.toString();
     } else if (typedUri.scheme != 'file' &&
@@ -1041,8 +1041,8 @@ class Context {
       return typedUri.toString();
     }
 
-    var path = normalize(fromUri(typedUri));
-    var rel = relative(path);
+    final path = normalize(fromUri(typedUri));
+    final rel = relative(path);
 
     // Only return a relative path if it's actually shorter than the absolute
     // path. This avoids ugly things like long "../" chains to get to the root
@@ -1075,7 +1075,7 @@ void _validateArgList(String method, List<String> args) {
     }
 
     // Show the arguments.
-    var message = StringBuffer();
+    final message = StringBuffer();
     message.write('$method(');
     message.write(args
         .take(numArgs)

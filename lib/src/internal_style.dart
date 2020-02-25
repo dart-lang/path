@@ -44,7 +44,7 @@ abstract class InternalStyle extends Style {
   /// returns `null`.
   @override
   String getRoot(String path) {
-    var length = rootLength(path);
+    final length = rootLength(path);
     if (length > 0) return path.substring(0, length);
     return isRootRelative(path) ? path[0] : null;
   }
@@ -61,7 +61,7 @@ abstract class InternalStyle extends Style {
   /// Returns the URI that represents the relative path made of [parts].
   @override
   Uri relativePathToUri(String path) {
-    var segments = context.split(path);
+    final segments = context.split(path);
 
     // Ensure that a trailing slash in the path produces a trailing slash in the
     // URL.

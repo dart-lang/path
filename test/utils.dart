@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 import 'package:path/path.dart' as p;
 
 /// A matcher for a closure that throws a [path.PathException].
-final throwsPathException = throwsA(TypeMatcher<p.PathException>());
+final throwsPathException = throwsA(const TypeMatcher<p.PathException>());
 
 void expectEquals(p.Context context, String path1, String path2) {
   expect(context.equals(path1, path2), isTrue,

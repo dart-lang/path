@@ -26,7 +26,7 @@ void main() {
 }
 
 void relativeTest(path.Context context, String prefix) {
-  var isRelative = (context.current == '.');
+  final isRelative = context.current == '.';
   // Cases where the arguments are absolute paths.
   void expectRelative(String result, String pathArg, String fromArg) {
     expect(context.relative(pathArg, from: fromArg), context.normalize(result));

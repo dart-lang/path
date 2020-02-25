@@ -100,16 +100,15 @@ String get current {
 
   if (Style.platform == Style.url) {
     _current = uri.resolve('.').toString();
-    return _current;
   } else {
-    var path = uri.toFilePath();
+    final path = uri.toFilePath();
     // Remove trailing '/' or '\' unless it is the only thing left
     // (for instance the root on Linux).
-    var lastIndex = path.length - 1;
+    final lastIndex = path.length - 1;
     assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
     _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
-    return _current;
   }
+  return _current;
 }
 
 /// The last value returned by [Uri.base].

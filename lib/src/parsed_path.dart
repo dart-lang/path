@@ -40,13 +40,13 @@ class ParsedPath {
 
   factory ParsedPath.parse(String path, InternalStyle style) {
     // Remove the root prefix, if any.
-    var root = style.getRoot(path);
-    var isRootRelative = style.isRootRelative(path);
+    final root = style.getRoot(path);
+    final isRootRelative = style.isRootRelative(path);
     if (root != null) path = path.substring(root.length);
 
     // Split the parts on path separators.
-    var parts = <String>[];
-    var separators = <String>[];
+    final parts = <String>[];
+    final separators = <String>[];
 
     var start = 0;
 
@@ -78,7 +78,7 @@ class ParsedPath {
       this.style, this.root, this.isRootRelative, this.parts, this.separators);
 
   String get basename {
-    var copy = clone();
+    final copy = clone();
     copy.removeTrailingSeparators();
     if (copy.parts.isEmpty) return root ?? '';
     return copy.parts.last;
@@ -100,7 +100,7 @@ class ParsedPath {
   void normalize({bool canonicalize = false}) {
     // Handle '.', '..', and empty parts.
     var leadingDoubles = 0;
-    var newParts = <String>[];
+    final newParts = <String>[];
     for (var part in parts) {
       if (part == '.' || part == '') {
         // Do nothing. Ignore it.
@@ -128,7 +128,7 @@ class ParsedPath {
     }
 
     // Canonicalize separators.
-    var newSeparators = List<String>.generate(
+    final newSeparators = List<String>.generate(
         newParts.length, (_) => style.separator,
         growable: true);
     newSeparators.insert(
@@ -150,7 +150,7 @@ class ParsedPath {
 
   @override
   String toString() {
-    var builder = StringBuffer();
+    final builder = StringBuffer();
     if (root != null) builder.write(root);
     for (var i = 0; i < parts.length; i++) {
       builder.write(separators[i]);
@@ -167,12 +167,12 @@ class ParsedPath {
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
   List<String> _splitExtension() {
-    var file = parts.lastWhere((p) => p != '', orElse: () => null);
+    final file = parts.lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];
 
-    var lastDot = file.lastIndexOf('.');
+    final lastDot = file.lastIndexOf('.');
 
     // If there is no dot, or it's the first character, like '.bashrc', it
     // doesn't count.

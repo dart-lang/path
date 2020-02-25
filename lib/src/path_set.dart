@@ -62,7 +62,7 @@ class PathSet extends IterableBase<String> implements Set<String> {
   void clear() => _inner.clear();
 
   @override
-  bool contains(Object other) => _inner.contains(other);
+  bool contains(Object element) => _inner.contains(element);
 
   @override
   bool containsAll(Iterable<Object> other) => _inner.containsAll(other);

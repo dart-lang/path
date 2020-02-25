@@ -38,8 +38,8 @@ void main(List<String> args) {
   arguments = args;
 
   for (var style in [p.Style.posix, p.Style.url, p.Style.windows]) {
-    var context = p.Context(style: style);
-    var files = genericPaths.toList()..addAll(platformPaths[style]);
+    final context = p.Context(style: style);
+    final files = genericPaths.toList()..addAll(platformPaths[style]);
 
     void benchmark(String name, Function function) {
       runBenchmark('${style.name}-$name', 100000, () {
@@ -95,12 +95,12 @@ void runBenchmark(String name, int count, Function function) {
     function();
   }
 
-  var stopwatch = Stopwatch()..start();
+  final stopwatch = Stopwatch()..start();
   for (var i = 0; i < count; i++) {
     function();
   }
 
-  var rate =
+  final rate =
       (count / stopwatch.elapsedMicroseconds).toStringAsFixed(5).padLeft(9);
   print('${name.padLeft(32)}: $rate iter/us (${stopwatch.elapsed})');
 }

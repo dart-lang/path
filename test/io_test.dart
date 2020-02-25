@@ -12,17 +12,17 @@ import 'package:path/path.dart' as path;
 void main() {
   group('new Context()', () {
     test('uses the current directory if root and style are omitted', () {
-      var context = path.Context();
+      final context = path.Context();
       expect(context.current, io.Directory.current.path);
     });
 
     test('uses "." if root is omitted', () {
-      var context = path.Context(style: path.Style.platform);
+      final context = path.Context(style: path.Style.platform);
       expect(context.current, '.');
     });
 
     test('uses the host platform if style is omitted', () {
-      var context = path.Context();
+      final context = path.Context();
       expect(context.style, path.Style.platform);
     });
   });
@@ -41,10 +41,10 @@ void main() {
     });
 
     test('uses the previous working directory if deleted', () {
-      var dir = io.Directory.current.path;
+      final dir = io.Directory.current.path;
       try {
-        var temp = io.Directory.systemTemp.createTempSync('path_test');
-        var tempPath = temp.path;
+        final temp = io.Directory.systemTemp.createTempSync('path_test');
+        final tempPath = temp.path;
         io.Directory.current = temp;
 
         // Call "current" once so that it can be cached.
@@ -61,7 +61,7 @@ void main() {
   });
 
   test('registers changes to the working directory', () {
-    var dir = io.Directory.current.path;
+    final dir = io.Directory.current.path;
     try {
       expect(path.absolute('foo/bar'), equals(path.join(dir, 'foo/bar')));
       expect(
@@ -81,7 +81,7 @@ void main() {
   // rather than just a custom context because we do some processing in
   // [path.current] that has clobbered the root in the past.
   test('absolute works on root working directory', () {
-    var dir = path.current;
+    final dir = path.current;
     try {
       io.Directory.current = path.rootPrefix(path.current);
 

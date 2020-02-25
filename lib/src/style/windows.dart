@@ -77,7 +77,7 @@ class WindowsStyle extends InternalStyle {
 
   @override
   String getRelativeRoot(String path) {
-    var length = rootLength(path);
+    final length = rootLength(path);
     if (length == 1) return path[0];
     return null;
   }
@@ -105,13 +105,13 @@ class WindowsStyle extends InternalStyle {
 
   @override
   Uri absolutePathToUri(String path) {
-    var parsed = ParsedPath.parse(path, this);
+    final parsed = ParsedPath.parse(path, this);
     if (parsed.root.startsWith(r'\\')) {
       // Network paths become "file://server/share/path/to/file".
 
       // The root is of the form "\\server\share". We want "server" to be the
       // URI host, and "share" to be the first element of the path.
-      var rootParts = parsed.root.split('\\').where((part) => part != '');
+      final rootParts = parsed.root.split('\\').where((part) => part != '');
       parsed.parts.insert(0, rootParts.last);
 
       if (parsed.hasTrailingSeparator) {
@@ -155,7 +155,7 @@ class WindowsStyle extends InternalStyle {
     if (codeUnit1 ^ codeUnit2 != _asciiCaseBit) return false;
 
     // Now we just need to verify that one of the code units is an ASCII letter.
-    var upperCase1 = codeUnit1 | _asciiCaseBit;
+    final upperCase1 = codeUnit1 | _asciiCaseBit;
     return upperCase1 >= chars.lowerA && upperCase1 <= chars.lowerZ;
   }
 
