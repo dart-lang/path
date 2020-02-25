@@ -9,7 +9,7 @@ functions, it will assume the current platform's path style and work with
 that. If you want to explicitly work with paths of a specific style, you can
 construct a [`p.Context`][Context] for that style.
 
-[Context]: https://www.dartdocs.org/documentation/path/latest/path/Context-class.html
+[Context]: https://pub.dev/documentation/path/latest/path/Context-class.html
 
 ## Using
 
