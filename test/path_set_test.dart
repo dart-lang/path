@@ -4,7 +4,7 @@
 
 import 'package:test/test.dart';
 
-import 'package:path/path.dart';
+import 'package:pathx/path.dart';
 
 void main() {
   group('considers equal', () {
