@@ -13,7 +13,7 @@ class ParsedPath {
   /// On POSIX systems, this will be `null` or "/". On Windows, it can be
   /// `null`, "//" for a UNC path, or something like "C:\" for paths with drive
   /// letters.
-  String root;
+  String? root;
 
   /// Whether this path is root-relative.
   ///
@@ -22,7 +22,7 @@ class ParsedPath {
 
   /// The path-separated parts of the path. All but the last will be
   /// directories.
-  List<String> parts;
+  List<String?> parts;
 
   /// The path separators preceding each part.
   ///
@@ -38,19 +38,19 @@ class ParsedPath {
   /// `true` if this is an absolute path.
   bool get isAbsolute => root != null;
 
-  factory ParsedPath.parse(String path, InternalStyle style) {
+  factory ParsedPath.parse(String? path, InternalStyle style) {
     // Remove the root prefix, if any.
     final root = style.getRoot(path);
     final isRootRelative = style.isRootRelative(path);
-    if (root != null) path = path.substring(root.length);
+    if (root != null) path = path!.substring(root.length);
 
     // Split the parts on path separators.
-    final parts = <String>[];
+    final parts = <String?>[];
     final separators = <String>[];
 
     var start = 0;
 
-    if (path.isNotEmpty && style.isSeparator(path.codeUnitAt(0))) {
+    if (path!.isNotEmpty && style.isSeparator(path.codeUnitAt(0))) {
       separators.add(path[0]);
       start = 1;
     } else {
@@ -77,7 +77,7 @@ class ParsedPath {
   ParsedPath._(
       this.style, this.root, this.isRootRelative, this.parts, this.separators);
 
-  String get basename {
+  String? get basename {
     final copy = clone();
     copy.removeTrailingSeparators();
     if (copy.parts.isEmpty) return root ?? '';
@@ -100,7 +100,7 @@ class ParsedPath {
   void normalize({bool canonicalize = false}) {
     // Handle '.', '..', and empty parts.
     var leadingDoubles = 0;
-    final newParts = <String>[];
+    final newParts = <String?>[];
     for (var part in parts) {
       if (part == '.' || part == '') {
         // Do nothing. Ignore it.
@@ -142,8 +142,8 @@ class ParsedPath {
 
     // Normalize the Windows root if needed.
     if (root != null && style == Style.windows) {
-      if (canonicalize) root = root.toLowerCase();
-      root = root.replaceAll('/', '\\');
+      if (canonicalize) root = root!.toLowerCase();
+      root = root!.replaceAll('/', '\\');
     }
     removeTrailingSeparators();
   }
@@ -151,10 +151,10 @@ class ParsedPath {
   @override
   String toString() {
     final builder = StringBuffer();
-    if (root != null) builder.write(root);
+    if (root != null) builder.write(root!);
     for (var i = 0; i < parts.length; i++) {
       builder.write(separators[i]);
-      builder.write(parts[i]);
+      builder.write(parts[i]!);
     }
     builder.write(separators.last);
 

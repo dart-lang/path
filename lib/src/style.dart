@@ -68,10 +68,10 @@ abstract class Style {
   Pattern get relativeRootPattern;
 
   @Deprecated('Most style members will be removed in path 2.0.')
-  String getRoot(String path);
+  String? getRoot(String path);
 
   @Deprecated('Most style members will be removed in path 2.0.')
-  String getRelativeRoot(String path);
+  String? getRelativeRoot(String path);
 
   @Deprecated('Most style members will be removed in path 2.0.')
   String pathFromUri(Uri uri);

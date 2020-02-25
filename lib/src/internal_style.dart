@@ -30,7 +30,7 @@ abstract class InternalStyle extends Style {
   /// separator between the root and the first component, even if the root
   /// already ends in a separator character. For example, to join "file://" and
   /// "usr", an additional "/" is needed (making "file:///usr").
-  bool needsSeparator(String path);
+  bool needsSeparator(String? path);
 
   /// Returns the number of characters of the root part.
   ///
@@ -38,21 +38,21 @@ abstract class InternalStyle extends Style {
   ///
   /// If [withDrive] is `true`, this should include the drive letter for `file:`
   /// URLs. Non-URL styles may ignore the parameter.
-  int rootLength(String path, {bool withDrive = false});
+  int rootLength(String? path, {bool withDrive = false});
 
   /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
   /// returns `null`.
   @override
-  String getRoot(String path) {
+  String? getRoot(String? path) {
     final length = rootLength(path);
-    if (length > 0) return path.substring(0, length);
-    return isRootRelative(path) ? path[0] : null;
+    if (length > 0) return path!.substring(0, length);
+    return isRootRelative(path) ? path![0] : null;
   }
 
   /// Returns whether [path] is root-relative.
   ///
   /// If [path] is relative or absolute and not root-relative, returns `false`.
-  bool isRootRelative(String path);
+  bool isRootRelative(String? path);
 
   /// Returns the path represented by [uri] in this style.
   @override
@@ -66,7 +66,7 @@ abstract class InternalStyle extends Style {
     // Ensure that a trailing slash in the path produces a trailing slash in the
     // URL.
     if (isSeparator(path.codeUnitAt(path.length - 1))) segments.add('');
-    return Uri(pathSegments: segments);
+    return Uri(pathSegments: segments as Iterable<String>);
   }
 
   /// Returns the URI that represents [path], which is assumed to be absolute.
@@ -81,9 +81,9 @@ abstract class InternalStyle extends Style {
   ///
   /// This only needs to handle character-by-character comparison; it can assume
   /// the paths are normalized and contain no `..` components.
-  bool pathsEqual(String path1, String path2) => path1 == path2;
+  bool pathsEqual(String? path1, String? path2) => path1 == path2;
 
   int canonicalizeCodeUnit(int codeUnit) => codeUnit;
 
-  String canonicalizePart(String part) => part;
+  String? canonicalizePart(String? part) => part;
 }

@@ -11,6 +11,6 @@ void main() {
 
   print('Separators');
   for (var entry in [p.posix, p.windows, p.url]) {
-    print('  ${entry.style.toString().padRight(7)}: ${entry.separator}');
+    print('  ${entry.style!.toString().padRight(7)}: ${entry.separator}');
   }
 }
