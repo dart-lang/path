@@ -114,13 +114,13 @@ String get current {
 /// The last value returned by [Uri.base].
 ///
 /// This is used to cache the current working directory.
-Uri _currentUriBase;
+late final Uri _currentUriBase;
 
 /// The last known value of the current working directory.
 ///
 /// This is cached because [current] is called frequently but rarely actually
 /// changes.
-String _current;
+late final String _current;
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
@@ -131,12 +131,12 @@ String get separator => context.separator;
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
 String absolute(String part1,
-        [String part2,
-        String part3,
-        String part4,
-        String part5,
-        String part6,
-        String part7]) =>
+        [String? part2,
+        String? part3,
+        String? part4,
+        String? part5,
+        String? part6,
+        String? part7]) =>
     context.absolute(part1, part2, part3, part4, part5, part6, part7);
 
 /// Gets the part of [path] after the last separator.
@@ -258,13 +258,13 @@ bool isRootRelative(String path) => context.isRootRelative(path);
 ///
 ///     p.join('path', '/to', 'foo'); // -> '/to/foo'
 String join(String part1,
-        [String part2,
-        String part3,
-        String part4,
-        String part5,
-        String part6,
-        String part7,
-        String part8]) =>
+        [String? part2,
+        String? part3,
+        String? part4,
+        String? part5,
+        String? part6,
+        String? part7,
+        String? part8]) =>
     context.join(part1, part2, part3, part4, part5, part6, part7, part8);
 
 /// Joins the given path parts into a single path using the current platform's
@@ -357,7 +357,7 @@ String normalize(String path) => context.normalize(path);
 ///     // URL
 ///     p.relative('http://dartlang.org', from: 'http://pub.dartlang.org');
 ///       // -> 'http://dartlang.org'
-String relative(String path, {String from}) =>
+String relative(String path, {String? from}) =>
     context.relative(path, from: from);
 
 /// Returns `true` if [child] is a path beneath `parent`, and `false` otherwise.

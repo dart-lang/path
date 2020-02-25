@@ -175,7 +175,6 @@ void main() {
 
     test('disallows intermediate nulls', () {
       expect(() => context.join('a', null, 'b'), throwsArgumentError);
-      expect(() => context.join(null, 'a'), throwsArgumentError);
     });
 
     test('join does not modify internal ., .., or trailing separators', () {

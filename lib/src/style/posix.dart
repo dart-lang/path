@@ -47,7 +47,7 @@ class PosixStyle extends InternalStyle {
   bool isRootRelative(String path) => false;
 
   @override
-  String getRelativeRoot(String path) => null;
+  String? getRelativeRoot(String path) => null;
 
   @override
   String pathFromUri(Uri uri) {

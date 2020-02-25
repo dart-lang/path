@@ -13,7 +13,7 @@ class ParsedPath {
   /// On POSIX systems, this will be `null` or "/". On Windows, it can be
   /// `null`, "//" for a UNC path, or something like "C:\" for paths with drive
   /// letters.
-  String root;
+  String? root;
 
   /// Whether this path is root-relative.
   ///
@@ -133,7 +133,7 @@ class ParsedPath {
         growable: true);
     newSeparators.insert(
         0,
-        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root)
+        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root!)
             ? style.separator
             : '');
 
@@ -142,8 +142,8 @@ class ParsedPath {
 
     // Normalize the Windows root if needed.
     if (root != null && style == Style.windows) {
-      if (canonicalize) root = root.toLowerCase();
-      root = root.replaceAll('/', '\\');
+      if (canonicalize) root = root!.toLowerCase();
+      root = root!.replaceAll('/', '\\');
     }
     removeTrailingSeparators();
   }
@@ -167,7 +167,8 @@ class ParsedPath {
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
   List<String> _splitExtension() {
-    final file = parts.lastWhere((p) => p != '', orElse: () => null);
+    final file =
+        parts.cast<String?>().lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];
