@@ -12,18 +12,18 @@ import 'package:path/path.dart' as path;
 void main() {
   group('new Context()', () {
     test('uses the window location if root and style are omitted', () {
-      var context = path.Context();
+      final context = path.Context();
       expect(context.current,
           Uri.parse(window.location.href).resolve('.').toString());
     });
 
     test('uses "." if root is omitted', () {
-      var context = path.Context(style: path.Style.platform);
+      final context = path.Context(style: path.Style.platform);
       expect(context.current, '.');
     });
 
     test('uses the host platform if style is omitted', () {
-      var context = path.Context();
+      final context = path.Context();
       expect(context.style, path.Style.platform);
     });
   });

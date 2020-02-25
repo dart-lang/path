@@ -9,7 +9,7 @@ import 'package:path/path.dart';
 void main() {
   group('considers equal', () {
     test('two identical paths', () {
-      var map = PathMap<int>();
+      final map = PathMap<int>();
       map[join('foo', 'bar')] = 1;
       map[join('foo', 'bar')] = 2;
       expect(map, hasLength(1));
@@ -17,7 +17,7 @@ void main() {
     });
 
     test('two logically equivalent paths', () {
-      var map = PathMap<int>();
+      final map = PathMap<int>();
       map['foo'] = 1;
       map[absolute('foo')] = 2;
       expect(map, hasLength(1));
@@ -26,7 +26,7 @@ void main() {
     });
 
     test('two nulls', () {
-      var map = PathMap<int>();
+      final map = PathMap<int>();
       map[null] = 1;
       map[null] = 2;
       expect(map, hasLength(1));
@@ -36,7 +36,7 @@ void main() {
 
   group('considers unequal', () {
     test('two distinct paths', () {
-      var map = PathMap<int>();
+      final map = PathMap<int>();
       map['foo'] = 1;
       map['bar'] = 2;
       expect(map, hasLength(2));
@@ -45,7 +45,7 @@ void main() {
     });
 
     test('a path and null', () {
-      var map = PathMap<int>();
+      final map = PathMap<int>();
       map['foo'] = 1;
       map[null] = 2;
       expect(map, hasLength(2));
@@ -55,7 +55,7 @@ void main() {
   });
 
   test('uses the custom context', () {
-    var map = PathMap<int>(context: windows);
+    final map = PathMap<int>(context: windows);
     map['FOO'] = 1;
     map['foo'] = 2;
     expect(map, hasLength(1));
@@ -64,14 +64,14 @@ void main() {
 
   group('.of()', () {
     test("copies the existing map's keys", () {
-      var map = PathMap.of({'foo': 1, 'bar': 2});
+      final map = PathMap.of({'foo': 1, 'bar': 2});
       expect(map, hasLength(2));
       expect(map, containsPair('foo', 1));
       expect(map, containsPair('bar', 2));
     });
 
     test('uses the second value in the case of duplicates', () {
-      var map = PathMap.of({'foo': 1, absolute('foo'): 2});
+      final map = PathMap.of({'foo': 1, absolute('foo'): 2});
       expect(map, hasLength(1));
       expect(map, containsPair('foo', 2));
       expect(map, containsPair(absolute('foo'), 2));

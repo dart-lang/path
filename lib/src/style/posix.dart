@@ -59,7 +59,7 @@ class PosixStyle extends InternalStyle {
 
   @override
   Uri absolutePathToUri(String path) {
-    var parsed = ParsedPath.parse(path, this);
+    final parsed = ParsedPath.parse(path, this);
     if (parsed.parts.isEmpty) {
       // If the path is a bare root (e.g. "/"), [components] will
       // currently be empty. We add two empty components so the URL constructor

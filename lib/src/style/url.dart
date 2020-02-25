@@ -51,7 +51,7 @@ class UrlStyle extends InternalStyle {
     if (isSeparator(path.codeUnitAt(0))) return 1;
 
     for (var i = 0; i < path.length; i++) {
-      var codeUnit = path.codeUnitAt(i);
+      final codeUnit = path.codeUnitAt(i);
       if (isSeparator(codeUnit)) return 0;
       if (codeUnit == chars.colon) {
         if (i == 0) return 0;
@@ -59,7 +59,7 @@ class UrlStyle extends InternalStyle {
         // The root part is up until the next '/', or the full path. Skip ':'
         // (and '//' if it exists) and search for '/' after that.
         if (path.startsWith('//', i + 1)) i += 3;
-        var index = path.indexOf('/', i);
+        final index = path.indexOf('/', i);
         if (index <= 0) return path.length;
 
         // file: URLs sometimes consider Windows drive letters part of the root.
