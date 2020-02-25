@@ -27,7 +27,7 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
       : _inner = _create(context)..addAll(other);
 
   /// Creates a set that uses [context] for equality and hashing.
-  static Set<String> _create(p.Context? context) {
+  static Set<String?> _create(p.Context? context) {
     context ??= p.context;
     return LinkedHashSet(
         equals: (path1, path2) {

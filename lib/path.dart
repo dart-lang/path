@@ -114,7 +114,7 @@ String get current {
 /// The last value returned by [Uri.base].
 ///
 /// This is used to cache the current working directory.
-late final Uri _currentUriBase;
+Uri? _currentUriBase;
 
 /// The last known value of the current working directory.
 ///
