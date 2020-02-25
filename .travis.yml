@@ -1,5 +1,10 @@
 language: dart
 
+os:
+  - linux
+  - windows
+  - osx
+
 dart:
   - 2.0.0
   - dev
