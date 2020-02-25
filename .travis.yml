@@ -9,6 +9,13 @@ dart_task:
 
 matrix:
   include:
+  # Run tests on mac and windows – but just dev SDKs, no browser
+  - dart: dev
+    dart_task: test
+    os: windows
+  - dart: dev
+    dart_task: test
+    os: osx
   # Only validate formatting using the dev release
   - dart: dev
     dart_task: dartfmt
