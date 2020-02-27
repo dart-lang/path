@@ -19,13 +19,13 @@ class UrlStyle extends InternalStyle {
   // Deprecated properties.
 
   @override
-  final Pattern separatorPattern = RegExp(r'/');
+  final separatorPattern = RegExp(r'/');
   @override
-  final Pattern needsSeparatorPattern = RegExp(r'(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$');
+  final needsSeparatorPattern = RegExp(r'(^[a-zA-Z][-+.a-zA-Z\d]*://|[^/])$');
   @override
-  final Pattern rootPattern = RegExp(r'[a-zA-Z][-+.a-zA-Z\d]*://[^/]*');
+  final rootPattern = RegExp(r'[a-zA-Z][-+.a-zA-Z\d]*://[^/]*');
   @override
-  final Pattern relativeRootPattern = RegExp(r'^/');
+  final relativeRootPattern = RegExp(r'^/');
 
   @override
   bool containsSeparator(String path) => path.contains('/');
@@ -34,8 +34,8 @@ class UrlStyle extends InternalStyle {
   bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
   @override
-  bool needsSeparator(String? path) {
-    if (path!.isEmpty) return false;
+  bool needsSeparator(String path) {
+    if (path.isEmpty) return false;
 
     // A URL that doesn't end in "/" always needs a separator.
     if (!isSeparator(path.codeUnitAt(path.length - 1))) return true;
@@ -46,8 +46,8 @@ class UrlStyle extends InternalStyle {
   }
 
   @override
-  int rootLength(String? path, {bool withDrive = false}) {
-    if (path!.isEmpty) return 0;
+  int rootLength(String path, {bool withDrive = false}) {
+    if (path.isEmpty) return 0;
     if (isSeparator(path.codeUnitAt(0))) return 1;
 
     for (var i = 0; i < path.length; i++) {
@@ -75,8 +75,8 @@ class UrlStyle extends InternalStyle {
   }
 
   @override
-  bool isRootRelative(String? path) =>
-      path!.isNotEmpty && isSeparator(path.codeUnitAt(0));
+  bool isRootRelative(String path) =>
+      path.isNotEmpty && isSeparator(path.codeUnitAt(0));
 
   @override
   String? getRelativeRoot(String path) => isRootRelative(path) ? '/' : null;

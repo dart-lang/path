@@ -65,7 +65,7 @@ abstract class Style {
   Pattern get rootPattern;
 
   @Deprecated('Most Style members will be removed in path 2.0.')
-  Pattern get relativeRootPattern;
+  Pattern? get relativeRootPattern;
 
   @Deprecated('Most style members will be removed in path 2.0.')
   String? getRoot(String path);

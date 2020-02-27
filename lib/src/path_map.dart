@@ -20,7 +20,7 @@ class PathMap<V> extends MapView<String?, V> {
   /// The [context] defaults to the current path context. If multiple keys in
   /// [other] represent the same logical path, the last key's value will be
   /// used.
-  PathMap.of(Map<String?, V> other, {p.Context? context})
+  PathMap.of(Map<String, V> other, {p.Context? context})
       : super(_create(context)..addAll(other));
 
   /// Creates a map that uses [context] for equality and hashing.
@@ -32,7 +32,7 @@ class PathMap<V> extends MapView<String?, V> {
           if (path2 == null) return false;
           return context!.equals(path1, path2);
         },
-        hashCode: (path) => path == null ? 0 : context!.hash(path)!,
+        hashCode: (path) => path == null ? 0 : context!.hash(path),
         isValidKey: (path) => path is String || path == null);
   }
 }

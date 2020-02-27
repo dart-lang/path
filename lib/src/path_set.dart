@@ -23,7 +23,7 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
   /// The [context] defaults to the current path context. If multiple elements
   /// in [other] represent the same logical path, the first value will be
   /// used.
-  PathSet.of(Iterable<String?> other, {p.Context? context})
+  PathSet.of(Iterable<String> other, {p.Context? context})
       : _inner = _create(context)..addAll(other);
 
   /// Creates a set that uses [context] for equality and hashing.
@@ -35,7 +35,7 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
           if (path2 == null) return false;
           return context!.equals(path1, path2);
         },
-        hashCode: (path) => path == null ? 0 : context!.hash(path)!,
+        hashCode: (path) => path == null ? 0 : context!.hash(path),
         isValidKey: (path) => path is String || path == null);
   }
 
@@ -62,31 +62,31 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
   void clear() => _inner.clear();
 
   @override
-  bool contains(Object element) => _inner.contains(element);
+  bool contains(Object? element) => _inner.contains(element);
 
   @override
-  bool containsAll(Iterable<Object> other) => _inner.containsAll(other);
+  bool containsAll(Iterable<Object?> other) => _inner.containsAll(other);
 
   @override
-  Set<String?> difference(Set<Object> other) => _inner.difference(other);
+  Set<String?> difference(Set<Object?> other) => _inner.difference(other);
 
   @override
-  Set<String?> intersection(Set<Object> other) => _inner.intersection(other);
+  Set<String?> intersection(Set<Object?> other) => _inner.intersection(other);
 
   @override
-  String? lookup(Object element) => _inner.lookup(element);
+  String? lookup(Object? element) => _inner.lookup(element);
 
   @override
-  bool remove(Object value) => _inner.remove(value);
+  bool remove(Object? value) => _inner.remove(value);
 
   @override
-  void removeAll(Iterable<Object> elements) => _inner.removeAll(elements);
+  void removeAll(Iterable<Object?> elements) => _inner.removeAll(elements);
 
   @override
   void removeWhere(bool Function(String?) test) => _inner.removeWhere(test);
 
   @override
-  void retainAll(Iterable<Object> elements) => _inner.retainAll(elements);
+  void retainAll(Iterable<Object?> elements) => _inner.retainAll(elements);
 
   @override
   void retainWhere(bool Function(String?) test) => _inner.retainWhere(test);

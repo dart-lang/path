@@ -22,7 +22,7 @@ class ParsedPath {
 
   /// The path-separated parts of the path. All but the last will be
   /// directories.
-  List<String?> parts;
+  List<String> parts;
 
   /// The path separators preceding each part.
   ///
@@ -38,19 +38,19 @@ class ParsedPath {
   /// `true` if this is an absolute path.
   bool get isAbsolute => root != null;
 
-  factory ParsedPath.parse(String? path, InternalStyle style) {
+  factory ParsedPath.parse(String path, InternalStyle style) {
     // Remove the root prefix, if any.
     final root = style.getRoot(path);
     final isRootRelative = style.isRootRelative(path);
-    if (root != null) path = path!.substring(root.length);
+    if (root != null) path = path.substring(root.length);
 
     // Split the parts on path separators.
-    final parts = <String?>[];
+    final parts = <String>[];
     final separators = <String>[];
 
     var start = 0;
 
-    if (path!.isNotEmpty && style.isSeparator(path.codeUnitAt(0))) {
+    if (path.isNotEmpty && style.isSeparator(path.codeUnitAt(0))) {
       separators.add(path[0]);
       start = 1;
     } else {
@@ -77,7 +77,7 @@ class ParsedPath {
   ParsedPath._(
       this.style, this.root, this.isRootRelative, this.parts, this.separators);
 
-  String? get basename {
+  String get basename {
     final copy = clone();
     copy.removeTrailingSeparators();
     if (copy.parts.isEmpty) return root ?? '';
@@ -100,7 +100,7 @@ class ParsedPath {
   void normalize({bool canonicalize = false}) {
     // Handle '.', '..', and empty parts.
     var leadingDoubles = 0;
-    final newParts = <String?>[];
+    final newParts = <String>[];
     for (var part in parts) {
       if (part == '.' || part == '') {
         // Do nothing. Ignore it.
@@ -133,7 +133,7 @@ class ParsedPath {
         growable: true);
     newSeparators.insert(
         0,
-        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root)
+        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root!)
             ? style.separator
             : '');
 
@@ -151,10 +151,10 @@ class ParsedPath {
   @override
   String toString() {
     final builder = StringBuffer();
-    if (root != null) builder.write(root!);
+    if (root != null) builder.write(root);
     for (var i = 0; i < parts.length; i++) {
       builder.write(separators[i]);
-      builder.write(parts[i]!);
+      builder.write(parts[i]);
     }
     builder.write(separators.last);
 
@@ -167,7 +167,8 @@ class ParsedPath {
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
   List<String> _splitExtension() {
-    final file = parts.lastWhere((p) => p != '', orElse: () => null);
+    final file =
+        parts.cast<String?>().lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];

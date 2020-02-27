@@ -47,12 +47,12 @@ void main() {
         io.Directory.current = temp;
 
         // Call "current" once so that it can be cached.
-        expect(path.normalize(path.absolute(path.current)!), equals(tempPath));
+        expect(path.normalize(path.absolute(path.current)), equals(tempPath));
 
         temp.deleteSync();
 
         // Even though the directory no longer exists, no exception is thrown.
-        expect(path.normalize(path.absolute(path.current)!), equals(tempPath));
+        expect(path.normalize(path.absolute(path.current)), equals(tempPath));
       } finally {
         io.Directory.current = dir;
       }
@@ -71,9 +71,9 @@ void main() {
           path.absolute('foo/bar'), equals(path.context.join(dir, 'foo/bar')));
 
       io.Directory.current = path.dirname(dir);
-      expect(path.normalize(path.absolute('foo/bar')!),
+      expect(path.normalize(path.absolute('foo/bar')),
           equals(path.normalize(path.join(dir, '../foo/bar'))));
-      expect(path.normalize(path.absolute('foo/bar')!),
+      expect(path.normalize(path.absolute('foo/bar')),
           equals(path.normalize(path.context.join(dir, '../foo/bar'))));
     } finally {
       io.Directory.current = dir;
@@ -86,15 +86,15 @@ void main() {
   test('absolute works on root working directory', () {
     final dir = path.current;
     try {
-      io.Directory.current = path.rootPrefix(path.current!);
+      io.Directory.current = path.rootPrefix(path.current);
 
       expect(path.relative(path.absolute('foo/bar'), from: path.current),
           path.relative(path.absolute('foo/bar')));
 
-      expect(path.normalize(path.absolute('foo/bar')!),
+      expect(path.normalize(path.absolute('foo/bar')),
           equals(path.normalize(path.join(path.current, '../foo/bar'))));
 
-      expect(path.normalize(path.absolute('foo/bar')!),
+      expect(path.normalize(path.absolute('foo/bar')),
           equals(path.normalize(path.join(path.current, '../foo/bar'))));
     } finally {
       io.Directory.current = dir;

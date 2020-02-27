@@ -24,13 +24,13 @@ class WindowsStyle extends InternalStyle {
   // Deprecated properties.
 
   @override
-  final Pattern separatorPattern = RegExp(r'[/\\]');
+  final separatorPattern = RegExp(r'[/\\]');
   @override
-  final Pattern needsSeparatorPattern = RegExp(r'[^/\\]$');
+  final needsSeparatorPattern = RegExp(r'[^/\\]$');
   @override
-  final Pattern rootPattern = RegExp(r'^(\\\\[^\\]+\\[^\\/]+|[a-zA-Z]:[/\\])');
+  final rootPattern = RegExp(r'^(\\\\[^\\]+\\[^\\/]+|[a-zA-Z]:[/\\])');
   @override
-  final Pattern relativeRootPattern = RegExp(r'^[/\\](?![/\\])');
+  final relativeRootPattern = RegExp(r'^[/\\](?![/\\])');
 
   @override
   bool containsSeparator(String path) => path.contains('/');
@@ -40,14 +40,14 @@ class WindowsStyle extends InternalStyle {
       codeUnit == chars.slash || codeUnit == chars.backslash;
 
   @override
-  bool needsSeparator(String? path) {
-    if (path!.isEmpty) return false;
+  bool needsSeparator(String path) {
+    if (path.isEmpty) return false;
     return !isSeparator(path.codeUnitAt(path.length - 1));
   }
 
   @override
-  int rootLength(String? path, {bool withDrive = false}) {
-    if (path!.isEmpty) return 0;
+  int rootLength(String path, {bool withDrive = false}) {
+    if (path.isEmpty) return 0;
     if (path.codeUnitAt(0) == chars.slash) return 1;
     if (path.codeUnitAt(0) == chars.backslash) {
       if (path.length < 2 || path.codeUnitAt(1) != chars.backslash) return 1;
@@ -73,7 +73,7 @@ class WindowsStyle extends InternalStyle {
   }
 
   @override
-  bool isRootRelative(String? path) => rootLength(path) == 1;
+  bool isRootRelative(String path) => rootLength(path) == 1;
 
   @override
   String? getRelativeRoot(String path) {
@@ -111,7 +111,7 @@ class WindowsStyle extends InternalStyle {
 
       // The root is of the form "\\server\share". We want "server" to be the
       // URI host, and "share" to be the first element of the path.
-      final Iterable<String> rootParts = parsed.root!.split('\\').where((part) => part != '');
+      final rootParts = parsed.root!.split('\\').where((part) => part != '');
       parsed.parts.insert(0, rootParts.last);
 
       if (parsed.hasTrailingSeparator) {
@@ -121,7 +121,7 @@ class WindowsStyle extends InternalStyle {
       }
 
       return Uri(
-          scheme: 'file', host: rootParts.first, pathSegments: parsed.parts as Iterable<String>);
+          scheme: 'file', host: rootParts.first, pathSegments: parsed.parts);
     } else {
       // Drive-letter paths become "file:///C:/path/to/file".
 
@@ -138,7 +138,7 @@ class WindowsStyle extends InternalStyle {
       parsed.parts
           .insert(0, parsed.root!.replaceAll('/', '').replaceAll('\\', ''));
 
-      return Uri(scheme: 'file', pathSegments: parsed.parts as Iterable<String>);
+      return Uri(scheme: 'file', pathSegments: parsed.parts);
     }
   }
 
@@ -160,8 +160,8 @@ class WindowsStyle extends InternalStyle {
   }
 
   @override
-  bool pathsEqual(String? path1, String? path2) {
-    if (identical(path1!, path2!)) return true;
+  bool pathsEqual(String path1, String path2) {
+    if (identical(path1, path2)) return true;
     if (path1.length != path2.length) return false;
     for (var i = 0; i < path1.length; i++) {
       if (!codeUnitsEqual(path1.codeUnitAt(i), path2.codeUnitAt(i))) {
@@ -180,5 +180,5 @@ class WindowsStyle extends InternalStyle {
   }
 
   @override
-  String canonicalizePart(String? part) => part!.toLowerCase();
+  String canonicalizePart(String part) => part.toLowerCase();
 }

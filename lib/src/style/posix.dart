@@ -19,13 +19,13 @@ class PosixStyle extends InternalStyle {
   // Deprecated properties.
 
   @override
-  final Pattern separatorPattern = RegExp(r'/');
+  final separatorPattern = RegExp(r'/');
   @override
-  final Pattern needsSeparatorPattern = RegExp(r'[^/]$');
+  final needsSeparatorPattern = RegExp(r'[^/]$');
   @override
-  final Pattern rootPattern = RegExp(r'^/');
+  final rootPattern = RegExp(r'^/');
   @override
-  final Pattern? relativeRootPattern = null;
+  final relativeRootPattern = null;
 
   @override
   bool containsSeparator(String path) => path.contains('/');
@@ -34,17 +34,17 @@ class PosixStyle extends InternalStyle {
   bool isSeparator(int codeUnit) => codeUnit == chars.slash;
 
   @override
-  bool needsSeparator(String? path) =>
-      path!.isNotEmpty && !isSeparator(path.codeUnitAt(path.length - 1));
+  bool needsSeparator(String path) =>
+      path.isNotEmpty && !isSeparator(path.codeUnitAt(path.length - 1));
 
   @override
-  int rootLength(String? path, {bool withDrive = false}) {
-    if (path!.isNotEmpty && isSeparator(path.codeUnitAt(0))) return 1;
+  int rootLength(String path, {bool withDrive = false}) {
+    if (path.isNotEmpty && isSeparator(path.codeUnitAt(0))) return 1;
     return 0;
   }
 
   @override
-  bool isRootRelative(String? path) => false;
+  bool isRootRelative(String path) => false;
 
   @override
   String? getRelativeRoot(String path) => null;
@@ -71,6 +71,6 @@ class PosixStyle extends InternalStyle {
       parsed.parts.add('');
     }
 
-    return Uri(scheme: 'file', pathSegments: parsed.parts as Iterable<String>);
+    return Uri(scheme: 'file', pathSegments: parsed.parts);
   }
 }

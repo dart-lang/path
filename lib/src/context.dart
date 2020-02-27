@@ -41,7 +41,7 @@ class Context {
           'allowed.');
     }
 
-    return Context._(style as InternalStyle?, current);
+    return Context._(style as InternalStyle, current);
   }
 
   /// Create a [Context] to be used internally within path.
@@ -52,18 +52,18 @@ class Context {
   Context._(this.style, this._current);
 
   /// The style of path that this context works with.
-  final InternalStyle? style;
+  final InternalStyle style;
 
   /// The current directory given when Context was created. If null, current
   /// directory is evaluated from 'p.current'.
   final String? _current;
 
   /// The current directory that relative paths are relative to.
-  String? get current => _current ?? p.current;
+  String get current => _current ?? p.current;
 
   /// Gets the path separator for the context's [style]. On Mac and Linux,
   /// this is `/`. On Windows, it's `\`.
-  String get separator => style!.separator;
+  String get separator => style.separator;
 
   /// Creates a new path by appending the given path parts to [current].
   /// Equivalent to [join()] with [current] as the first argument. Example:
@@ -72,7 +72,7 @@ class Context {
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
   /// If [current] isn't absolute, this won't return an absolute path.
-  String? absolute(String? part1,
+  String absolute(String part1,
       [String? part2,
       String? part3,
       String? part4,
@@ -100,7 +100,7 @@ class Context {
   /// Trailing separators are ignored.
   ///
   ///     context.basename('path/to/'); // -> 'to'
-  String? basename(String path) => _parse(path).basename;
+  String basename(String path) => _parse(path).basename;
 
   /// Gets the part of [path] after the last separator on the context's
   /// platform, and without any trailing file extension.
@@ -163,7 +163,7 @@ class Context {
   ///     context.rootPrefix('path/to/foo'); // -> ''
   ///     context.rootPrefix('http://dartlang.org/path/to/foo');
   ///       // -> 'http://dartlang.org'
-  String rootPrefix(String path) => path.substring(0, style!.rootLength(path));
+  String rootPrefix(String path) => path.substring(0, style.rootLength(path));
 
   /// Returns `true` if [path] is an absolute path and `false` if it is a
   /// relative path.
@@ -177,13 +177,13 @@ class Context {
   /// relative to the root of the current URL. Since root-relative paths are
   /// still absolute in every other sense, [isAbsolute] will return true for
   /// them. They can be detected using [isRootRelative].
-  bool isAbsolute(String? path) => style!.rootLength(path) > 0;
+  bool isAbsolute(String path) => style.rootLength(path) > 0;
 
   /// Returns `true` if [path] is a relative path and `false` if it is absolute.
   /// On POSIX systems, absolute paths start with a `/` (forward slash). On
   /// Windows, an absolute path starts with `\\`, or a drive letter followed by
   /// `:/` or `:\`.
-  bool isRelative(String? path) => !isAbsolute(path);
+  bool isRelative(String path) => !isAbsolute(path);
 
   /// Returns `true` if [path] is a root-relative path and `false` if it's not.
   ///
@@ -193,7 +193,7 @@ class Context {
   /// them. They can be detected using [isRootRelative].
   ///
   /// No POSIX and Windows paths are root-relative.
-  bool isRootRelative(String? path) => style!.isRootRelative(path);
+  bool isRootRelative(String path) => style.isRootRelative(path);
 
   /// Joins the given path parts into a single path. Example:
   ///
@@ -208,7 +208,7 @@ class Context {
   ///
   ///     context.join('path', '/to', 'foo'); // -> '/to/foo'
   ///
-  String join(String? part1,
+  String join(String part1,
       [String? part2,
       String? part3,
       String? part4,
@@ -227,7 +227,7 @@ class Context {
       part8
     ];
     _validateArgList('join', parts);
-    return joinAll(parts.where((part) => part != null));
+    return joinAll(parts.whereType<String>());
   }
 
   /// Joins the given path parts into a single path. Example:
@@ -244,7 +244,7 @@ class Context {
   ///     context.joinAll(['path', '/to', 'foo']); // -> '/to/foo'
   ///
   /// For a fixed number of parts, [join] is usually terser.
-  String joinAll(Iterable<String?> parts) {
+  String joinAll(Iterable<String> parts) {
     final buffer = StringBuffer();
     var needsSeparator = false;
     var isAbsoluteAndNotRootRelative = false;
@@ -256,9 +256,9 @@ class Context {
         final parsed = _parse(part);
         final path = buffer.toString();
         parsed.root =
-            path.substring(0, style!.rootLength(path, withDrive: true));
-        if (style!.needsSeparator(parsed.root)) {
-          parsed.separators[0] = style!.separator;
+            path.substring(0, style.rootLength(path, withDrive: true));
+        if (style.needsSeparator(parsed.root!)) {
+          parsed.separators[0] = style.separator;
         }
         buffer.clear();
         buffer.write(parsed.toString());
@@ -266,9 +266,9 @@ class Context {
         isAbsoluteAndNotRootRelative = !isRootRelative(part);
         // An absolute path discards everything before it.
         buffer.clear();
-        buffer.write(part!);
+        buffer.write(part);
       } else {
-        if (part!.isNotEmpty && style!.containsSeparator(part[0])) {
+        if (part.isNotEmpty && style.containsSeparator(part[0])) {
           // The part starts with a separator, so we don't need to add one.
         } else if (needsSeparator) {
           buffer.write(separator);
@@ -279,7 +279,7 @@ class Context {
 
       // Unless this part ends with a separator, we'll need to add one before
       // the next part.
-      needsSeparator = style!.needsSeparator(part);
+      needsSeparator = style.needsSeparator(part);
     }
 
     return buffer.toString();
@@ -303,11 +303,11 @@ class Context {
   ///
   ///     // Windows
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
-  List<String?> split(String path) {
+  List<String> split(String path) {
     final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
-    parsed.parts = parsed.parts.where((part) => part!.isNotEmpty).toList();
-    if (parsed.root != null) parsed.parts.insert(0, parsed.root);
+    parsed.parts = parsed.parts.where((part) => part.isNotEmpty).toList();
+    if (parsed.root != null) parsed.parts.insert(0, parsed.root!);
     return parsed.parts;
   }
 
@@ -323,9 +323,9 @@ class Context {
   /// If you want a map that uses path keys, it's probably more efficient to
   /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
   /// key.
-  String? canonicalize(String? path) {
+  String canonicalize(String path) {
     path = absolute(path);
-    if (style != Style.windows && !_needsNormalization(path!)) return path;
+    if (style != Style.windows && !_needsNormalization(path)) return path;
 
     final parsed = _parse(path);
     parsed.normalize(canonicalize: true);
@@ -358,7 +358,7 @@ class Context {
     // Skip past the root before we start looking for snippets that need
     // normalization. We want to normalize "//", but not when it's part of
     // "http://".
-    final root = style!.rootLength(path);
+    final root = style.rootLength(path);
     if (root != 0) {
       start = root;
       previous = chars.slash;
@@ -374,12 +374,12 @@ class Context {
 
     for (var i = start; i < codeUnits.length; i++) {
       final codeUnit = codeUnits[i];
-      if (style!.isSeparator(codeUnit)) {
+      if (style.isSeparator(codeUnit)) {
         // Forward slashes in Windows paths are normalized to backslashes.
         if (style == Style.windows && codeUnit == chars.slash) return true;
 
         // Multiple separators are normalized to single separators.
-        if (previous != null && style!.isSeparator(previous)) return true;
+        if (previous != null && style.isSeparator(previous)) return true;
 
         // Single dots and double dots are normalized to directory traversals.
         //
@@ -388,7 +388,7 @@ class Context {
         if (previous == chars.period &&
             (previousPrevious == null ||
                 previousPrevious == chars.period ||
-                style!.isSeparator(previousPrevious))) {
+                style.isSeparator(previousPrevious))) {
           return true;
         }
       }
@@ -401,12 +401,12 @@ class Context {
     if (previous == null) return true;
 
     // Trailing separators are removed.
-    if (style!.isSeparator(previous)) return true;
+    if (style.isSeparator(previous)) return true;
 
     // Single dots and double dots are normalized to directory traversals.
     if (previous == chars.period &&
         (previousPrevious == null ||
-            style!.isSeparator(previousPrevious) ||
+            style.isSeparator(previousPrevious) ||
             previousPrevious == chars.period)) {
       return true;
     }
@@ -446,15 +446,15 @@ class Context {
   /// [from] to [path]. For example, if [current] and [path] are "." and [from]
   /// is "/", no path can be determined. In this case, a [PathException] will be
   /// thrown.
-  String relative(String? path, {String? from}) {
+  String relative(String path, {String? from}) {
     // Avoid expensive computation if the path is already relative.
-    if (from == null && isRelative(path)) return normalize(path!);
+    if (from == null && isRelative(path)) return normalize(path);
 
     from = from == null ? current : absolute(from);
 
     // We can't determine the path from a relative path to an absolute path.
     if (isRelative(from) && isAbsolute(path)) {
-      return normalize(path!);
+      return normalize(path);
     }
 
     // If the given path is relative, resolve it relative to the context's
@@ -482,14 +482,14 @@ class Context {
     // calculation of relative paths, even if a path has not been normalized.
     if (fromParsed.root != pathParsed.root &&
         ((fromParsed.root == null || pathParsed.root == null) ||
-            !style!.pathsEqual(fromParsed.root, pathParsed.root))) {
+            !style.pathsEqual(fromParsed.root!, pathParsed.root!))) {
       return pathParsed.toString();
     }
 
     // Strip off their common prefix.
     while (fromParsed.parts.isNotEmpty &&
         pathParsed.parts.isNotEmpty &&
-        style!.pathsEqual(fromParsed.parts[0], pathParsed.parts[0])) {
+        style.pathsEqual(fromParsed.parts[0], pathParsed.parts[0])) {
       fromParsed.parts.removeAt(0);
       fromParsed.separators.removeAt(1);
       pathParsed.parts.removeAt(0);
@@ -505,7 +505,7 @@ class Context {
     pathParsed.parts.insertAll(0, List.filled(fromParsed.parts.length, '..'));
     pathParsed.separators[0] = '';
     pathParsed.separators
-        .insertAll(1, List.filled(fromParsed.parts.length, style!.separator));
+        .insertAll(1, List.filled(fromParsed.parts.length, style.separator));
 
     // Corner case: the paths completely collapsed.
     if (pathParsed.parts.isEmpty) return '.';
@@ -548,7 +548,7 @@ class Context {
   /// to one another.
   ///
   /// This never returns [_PathRelation.inconclusive].
-  _PathRelation _isWithinOrEquals(String? parent, String? child) {
+  _PathRelation _isWithinOrEquals(String parent, String child) {
     // Make both paths the same level of relative. We're only able to do the
     // quick comparison if both paths are in the same format, and making a path
     // absolute is faster than making it relative.
@@ -556,13 +556,13 @@ class Context {
     final childIsAbsolute = isAbsolute(child);
     if (parentIsAbsolute && !childIsAbsolute) {
       child = absolute(child);
-      if (style!.isRootRelative(parent)) parent = absolute(parent);
+      if (style.isRootRelative(parent)) parent = absolute(parent);
     } else if (childIsAbsolute && !parentIsAbsolute) {
       parent = absolute(parent);
-      if (style!.isRootRelative(child)) child = absolute(child);
+      if (style.isRootRelative(child)) child = absolute(child);
     } else if (childIsAbsolute && parentIsAbsolute) {
-      final childIsRootRelative = style!.isRootRelative(child);
-      final parentIsRootRelative = style!.isRootRelative(parent);
+      final childIsRootRelative = style.isRootRelative(child);
+      final parentIsRootRelative = style.isRootRelative(parent);
 
       if (childIsRootRelative && !parentIsRootRelative) {
         child = absolute(child);
@@ -588,20 +588,20 @@ class Context {
     if (relative == '..') return _PathRelation.different;
     return (relative.length >= 3 &&
             relative.startsWith('..') &&
-            style!.isSeparator(relative.codeUnitAt(2)))
+            style.isSeparator(relative.codeUnitAt(2)))
         ? _PathRelation.different
         : _PathRelation.within;
   }
 
   /// An optimized implementation of [_isWithinOrEquals] that doesn't handle a
   /// few complex cases.
-  _PathRelation _isWithinOrEqualsFast(String? parent, String? child) {
+  _PathRelation _isWithinOrEqualsFast(String parent, String child) {
     // Normally we just bail when we see "." path components, but we can handle
     // a single dot easily enough.
     if (parent == '.') parent = '';
 
-    final parentRootLength = style!.rootLength(parent);
-    final childRootLength = style!.rootLength(child);
+    final parentRootLength = style.rootLength(parent);
+    final childRootLength = style.rootLength(child);
 
     // If the roots aren't the same length, we know both paths are absolute or
     // both are root-relative, and thus that the roots are meaningfully
@@ -616,9 +616,9 @@ class Context {
     //     isWithin("C:/bar", "D:/bar/baz") //=> false
     //     isWithin("http://example.com/", "http://example.org/bar") //=> false
     for (var i = 0; i < parentRootLength; i++) {
-      final parentCodeUnit = parent!.codeUnitAt(i);
-      final childCodeUnit = child!.codeUnitAt(i);
-      if (!style!.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
+      final parentCodeUnit = parent.codeUnitAt(i);
+      final childCodeUnit = child.codeUnitAt(i);
+      if (!style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
         return _PathRelation.different;
       }
     }
@@ -634,11 +634,11 @@ class Context {
     // Iterate through both paths as long as they're semantically identical.
     var parentIndex = parentRootLength;
     var childIndex = childRootLength;
-    while (parentIndex < parent!.length && childIndex < child!.length) {
+    while (parentIndex < parent.length && childIndex < child.length) {
       var parentCodeUnit = parent.codeUnitAt(parentIndex);
       var childCodeUnit = child.codeUnitAt(childIndex);
-      if (style!.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
-        if (style!.isSeparator(parentCodeUnit)) {
+      if (style.codeUnitsEqual(parentCodeUnit, childCodeUnit)) {
+        if (style.isSeparator(parentCodeUnit)) {
           lastParentSeparator = parentIndex;
         }
 
@@ -649,13 +649,13 @@ class Context {
       }
 
       // Ignore multiple separators in a row.
-      if (style!.isSeparator(parentCodeUnit) &&
-          style!.isSeparator(lastCodeUnit)) {
+      if (style.isSeparator(parentCodeUnit) &&
+          style.isSeparator(lastCodeUnit)) {
         lastParentSeparator = parentIndex;
         parentIndex++;
         continue;
-      } else if (style!.isSeparator(childCodeUnit) &&
-          style!.isSeparator(lastCodeUnit)) {
+      } else if (style.isSeparator(childCodeUnit) &&
+          style.isSeparator(lastCodeUnit)) {
         childIndex++;
         continue;
       }
@@ -666,7 +666,7 @@ class Context {
       //
       //     isWithin("foo/./bar", "foo/bar/baz") //=> true
       //     isWithin("foo/bar/../baz", "foo/bar/.foo") //=> false
-      if (parentCodeUnit == chars.period && style!.isSeparator(lastCodeUnit)) {
+      if (parentCodeUnit == chars.period && style.isSeparator(lastCodeUnit)) {
         parentIndex++;
 
         // We've hit "/." at the end of the parent path, which we can ignore,
@@ -675,7 +675,7 @@ class Context {
         parentCodeUnit = parent.codeUnitAt(parentIndex);
 
         // We've hit "/./", which we can ignore.
-        if (style!.isSeparator(parentCodeUnit)) {
+        if (style.isSeparator(parentCodeUnit)) {
           lastParentSeparator = parentIndex;
           parentIndex++;
           continue;
@@ -686,7 +686,7 @@ class Context {
         if (parentCodeUnit == chars.period) {
           parentIndex++;
           if (parentIndex == parent.length ||
-              style!.isSeparator(parent.codeUnitAt(parentIndex))) {
+              style.isSeparator(parent.codeUnitAt(parentIndex))) {
             return _PathRelation.inconclusive;
           }
         }
@@ -697,12 +697,12 @@ class Context {
 
       // This is the same logic as above, but for the child path instead of the
       // parent.
-      if (childCodeUnit == chars.period && style!.isSeparator(lastCodeUnit)) {
+      if (childCodeUnit == chars.period && style.isSeparator(lastCodeUnit)) {
         childIndex++;
         if (childIndex == child.length) break;
         childCodeUnit = child.codeUnitAt(childIndex);
 
-        if (style!.isSeparator(childCodeUnit)) {
+        if (style.isSeparator(childCodeUnit)) {
           childIndex++;
           continue;
         }
@@ -710,7 +710,7 @@ class Context {
         if (childCodeUnit == chars.period) {
           childIndex++;
           if (childIndex == child.length ||
-              style!.isSeparator(child.codeUnitAt(childIndex))) {
+              style.isSeparator(child.codeUnitAt(childIndex))) {
             return _PathRelation.inconclusive;
           }
         }
@@ -739,9 +739,9 @@ class Context {
     //
     //     isWithin("foo/bar/baz", "foo/bar") //=> false
     //     isWithin("foo/bar/baz/../..", "foo/bar") //=> true
-    if (childIndex == child!.length) {
+    if (childIndex == child.length) {
       if (parentIndex == parent.length ||
-          style!.isSeparator(parent.codeUnitAt(parentIndex))) {
+          style.isSeparator(parent.codeUnitAt(parentIndex))) {
         lastParentSeparator = parentIndex;
       } else {
         lastParentSeparator ??= math.max(0, parentRootLength - 1);
@@ -785,8 +785,8 @@ class Context {
     //     isWithin("foo/bar", "foo/bar/baz") //=> true
     //     isWithin("foo/bar/", "foo/bar/baz") //=> true
     //     isWithin("foo/bar", "foo/barbaz") //=> false
-    return (style!.isSeparator(child.codeUnitAt(childIndex)) ||
-            style!.isSeparator(lastCodeUnit))
+    return (style.isSeparator(child.codeUnitAt(childIndex)) ||
+            style.isSeparator(lastCodeUnit))
         ? _PathRelation.within
         : _PathRelation.different;
   }
@@ -810,7 +810,7 @@ class Context {
     var i = index;
     while (i < path.length) {
       // Ignore initial separators or doubled separators.
-      while (i < path.length && style!.isSeparator(path.codeUnitAt(i))) {
+      while (i < path.length && style.isSeparator(path.codeUnitAt(i))) {
         i++;
       }
 
@@ -819,7 +819,7 @@ class Context {
 
       // Move through the path component to the next separator.
       final start = i;
-      while (i < path.length && !style!.isSeparator(path.codeUnitAt(i))) {
+      while (i < path.length && !style.isSeparator(path.codeUnitAt(i))) {
         i++;
       }
 
@@ -860,17 +860,17 @@ class Context {
   ///
   /// Note that the same path may have different hash codes in different
   /// [Context]s.
-  int? hash(String? path) {
+  int hash(String path) {
     // Make [path] absolute to ensure that equivalent relative and absolute
     // paths have the same hash code.
     path = absolute(path);
 
-    final result = _hashFast(path!);
+    final result = _hashFast(path);
     if (result != null) return result;
 
     final parsed = _parse(path);
     parsed.normalize();
-    return _hashFast(parsed.toString());
+    return _hashFast(parsed.toString())!;
   }
 
   /// An optimized implementation of [hash] that doesn't handle internal `..`
@@ -882,12 +882,12 @@ class Context {
     var beginning = true;
     var wasSeparator = true;
     for (var i = 0; i < path.length; i++) {
-      final codeUnit = style!.canonicalizeCodeUnit(path.codeUnitAt(i));
+      final codeUnit = style.canonicalizeCodeUnit(path.codeUnitAt(i));
 
       // Take advantage of the fact that collisions are allowed to ignore
       // separators entirely. This lets us avoid worrying about cases like
       // multiple trailing slashes.
-      if (style!.isSeparator(codeUnit)) {
+      if (style.isSeparator(codeUnit)) {
         wasSeparator = true;
         continue;
       }
@@ -906,7 +906,7 @@ class Context {
 
         // We can just ignore "/./", since they don't affect the semantics of
         // the path.
-        if (style!.isSeparator(next)) continue;
+        if (style.isSeparator(next)) continue;
 
         // If the path ends with "/.." or contains "/../", we need to
         // canonicalize it before we can hash it. We make an exception for ".."s
@@ -915,7 +915,7 @@ class Context {
         if (!beginning &&
             next == chars.period &&
             (i + 2 == path.length ||
-                style!.isSeparator(path.codeUnitAt(i + 2)))) {
+                style.isSeparator(path.codeUnitAt(i + 2)))) {
           return null;
         }
       }
@@ -937,7 +937,7 @@ class Context {
     final parsed = _parse(path);
 
     for (var i = parsed.parts.length - 1; i >= 0; i--) {
-      if (parsed.parts[i]!.isNotEmpty) {
+      if (parsed.parts[i].isNotEmpty) {
         parsed.parts[i] = parsed.basenameWithoutExtension;
         break;
       }
@@ -980,7 +980,7 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(uri) => style!.pathFromUri(_parseUri(uri));
+  String fromUri(uri) => style.pathFromUri(_parseUri(uri));
 
   /// Returns the URI that represents [path].
   ///
@@ -1000,9 +1000,9 @@ class Context {
   ///       // -> Uri.parse('http://dartlang.org/path/to/foo')
   Uri toUri(String path) {
     if (isRelative(path)) {
-      return style!.relativePathToUri(path);
+      return style.relativePathToUri(path);
     } else {
-      return style!.absolutePathToUri(join(current, path));
+      return style.absolutePathToUri(join(current, path));
     }
   }
 
@@ -1050,7 +1050,7 @@ class Context {
     return split(rel).length > split(path).length ? path : rel;
   }
 
-  ParsedPath _parse(String? path) => ParsedPath.parse(path, style!);
+  ParsedPath _parse(String path) => ParsedPath.parse(path, style);
 }
 
 /// Parses argument if it's a [String] or returns it intact if it's a [Uri].

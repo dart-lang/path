@@ -75,12 +75,12 @@ final Context context = createInternal();
 /// Returns the [Style] of the current context.
 ///
 /// This is the style that all top-level path functions will use.
-Style? get style => context.style;
+Style get style => context.style;
 
 /// Gets the path to the current working directory.
 ///
 /// In the browser, this means the current URL, without the last file segment.
-String? get current {
+String get current {
   // If the current working directory gets deleted out from under the program,
   // accessing it will throw an IO exception. In order to avoid transient
   // errors, if we already have a cached working directory, catch the error and
@@ -120,7 +120,7 @@ Uri? _currentUriBase;
 ///
 /// This is cached because [current] is called frequently but rarely actually
 /// changes.
-String? _current;
+late final String _current;
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
@@ -130,7 +130,7 @@ String get separator => context.separator;
 /// Equivalent to [join()] with [current] as the first argument. Example:
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
-String? absolute(String? part1,
+String absolute(String part1,
         [String? part2,
         String? part3,
         String? part4,
@@ -147,7 +147,7 @@ String? absolute(String? part1,
 /// Trailing separators are ignored.
 ///
 ///     p.basename('path/to/'); // -> 'to'
-String? basename(String path) => context.basename(path);
+String basename(String path) => context.basename(path);
 
 /// Gets the part of [path] after the last separator, and without any trailing
 /// file extension.
@@ -257,7 +257,7 @@ bool isRootRelative(String path) => context.isRootRelative(path);
 /// If a part is an absolute path, then anything before that will be ignored:
 ///
 ///     p.join('path', '/to', 'foo'); // -> '/to/foo'
-String join(String? part1,
+String join(String part1,
         [String? part2,
         String? part3,
         String? part4,
@@ -305,7 +305,7 @@ String joinAll(Iterable<String> parts) => context.joinAll(parts);
 ///     // Browser
 ///     p.split('http://dartlang.org/path/to/foo');
 ///       // -> ['http://dartlang.org', 'path', 'to', 'foo']
-List<String?> split(String path) => context.split(path);
+List<String> split(String path) => context.split(path);
 
 /// Canonicalizes [path].
 ///
@@ -319,7 +319,7 @@ List<String?> split(String path) => context.split(path);
 /// If you want a map that uses path keys, it's probably more efficient to
 /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
 /// key.
-String? canonicalize(String path) => context.canonicalize(path);
+String canonicalize(String path) => context.canonicalize(path);
 
 /// Normalizes [path], simplifying it by handling `..`, and `.`, and
 /// removing redundant path separators whenever possible.
@@ -357,7 +357,7 @@ String normalize(String path) => context.normalize(path);
 ///     // URL
 ///     p.relative('http://dartlang.org', from: 'http://pub.dartlang.org');
 ///       // -> 'http://dartlang.org'
-String relative(String? path, {String? from}) =>
+String relative(String path, {String? from}) =>
     context.relative(path, from: from);
 
 /// Returns `true` if [child] is a path beneath `parent`, and `false` otherwise.
@@ -379,7 +379,7 @@ bool equals(String path1, String path2) => context.equals(path1, path2);
 ///
 /// Note that the same path may have different hash codes on different platforms
 /// or with different [current] directories.
-int? hash(String path) => context.hash(path);
+int hash(String path) => context.hash(path);
 
 /// Removes a trailing extension from the last part of [path].
 ///
