@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-import 'package:path/path.dart' as p;
+import 'package:pathx/path.dart' as p;
 
 /// Some hopefully real-world representative platform-independent paths.
 const genericPaths = [
@@ -39,8 +39,7 @@ void main(List<String> args) {
 
   for (var style in [p.Style.posix, p.Style.url, p.Style.windows]) {
     final context = p.Context(style: style);
-    final files = genericPaths.toList()
-      ..addAll(platformPaths[style] as List<String>);
+    final files = [...genericPaths, ...platformPaths[style]];
 
     void benchmark(String name, Function function) {
       runBenchmark('${style.name}-$name', 100000, () {
