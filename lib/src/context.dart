@@ -145,7 +145,17 @@ class Context {
   ///
   ///     context.extension('~/.bashrc');    // -> ''
   ///     context.extension('~/.notes.txt'); // -> '.txt'
-  String extension(String path) => _parse(path).extension;
+  ///
+  /// Takes an optional parameter `level` which makes possible to return
+  /// multiple extensions having `level` number of dots. If `level` exceeds the
+  /// number of dots, the full extension is returned.
+  ///
+  ///     context.extension('foo.bar.dart.js', 2);   // -> '.dart.js
+  ///     context.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
+  ///     context.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
+  ///     context.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
+  String extension(String path, [int level = 1]) =>
+      _parse(path).extension(level);
 
   // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
   /// Returns the root of [path] if it's absolute, or an empty string if it's

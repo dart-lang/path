@@ -33,7 +33,7 @@ class ParsedPath {
 
   /// The file extension of the last non-empty part, or "" if it doesn't have
   /// one.
-  String get extension => _splitExtension()[1];
+  String extension([int level]) => _splitExtension(level)[1];
 
   /// `true` if this is an absolute path.
   bool get isAbsolute => root != null;
@@ -161,18 +161,40 @@ class ParsedPath {
     return builder.toString();
   }
 
+  /// Returns k-th last index of the `character` in the `path`.
+  ///
+  /// If `k` exceeds the count of `character`s in `path`, the left most index
+  /// of the `character` is returned.
+  int _kthLastIndexOf(String path, String character, int k) {
+    var count = 0, leftMostIndexedCharacter = 0;
+    for (var index = path.length - 1; index >= 0; --index) {
+      if (path[index] == character) {
+        leftMostIndexedCharacter = index;
+        ++count;
+        if (count == k) {
+          return index;
+        }
+      }
+    }
+    return leftMostIndexedCharacter;
+  }
+
   /// Splits the last non-empty part of the path into a `[basename, extension`]
   /// pair.
   ///
+  /// Takes an optional parameter `level` which makes possible to return
+  /// multiple extensions having `level` number of dots. If `level` exceeds the
+  /// number of dots, the path is splitted into the left most dot.
+  ///
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
-  List<String> _splitExtension() {
+  List<String> _splitExtension([int level = 1]) {
     final file = parts.lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];
 
-    final lastDot = file.lastIndexOf('.');
+    final lastDot = _kthLastIndexOf(file, '.', level);
 
     // If there is no dot, or it's the first character, like '.bashrc', it
     // doesn't count.

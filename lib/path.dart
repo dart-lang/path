@@ -194,7 +194,17 @@ String dirname(String path) => context.dirname(path);
 ///
 ///     p.extension('~/.bashrc');    // -> ''
 ///     p.extension('~/.notes.txt'); // -> '.txt'
-String extension(String path) => context.extension(path);
+///
+/// Takes an optional parameter `level` which makes possible to return
+/// multiple extensions having `level` number of dots. If `level` exceeds the
+/// number of dots, the full extension is returned.
+///
+///     context.extension('foo.bar.dart.js', 2);   // -> '.dart.js
+///     context.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
+///     context.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
+///     context.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
+String extension(String path, [int level = 1]) =>
+    context.extension(path, level);
 
 // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
 /// Returns the root of [path], if it's absolute, or the empty string if it's
