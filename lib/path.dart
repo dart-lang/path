@@ -89,13 +89,13 @@ String get current {
   try {
     uri = Uri.base;
   } on Exception {
-    if (_current != null) return _current;
+    if (_current != null) return _current!;
     rethrow;
   }
 
   // Converting the base URI to a file path is pretty slow, and the base URI
   // rarely changes in practice, so we cache the result here.
-  if (uri == _currentUriBase) return _current;
+  if (uri == _currentUriBase) return _current!;
   _currentUriBase = uri;
 
   if (Style.platform == Style.url) {
@@ -108,7 +108,7 @@ String get current {
     assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
     _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
   }
-  return _current;
+  return _current!;
 }
 
 /// The last value returned by [Uri.base].
@@ -120,7 +120,7 @@ Uri? _currentUriBase;
 ///
 /// This is cached because [current] is called frequently but rarely actually
 /// changes.
-late final String _current;
+String? _current;
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
