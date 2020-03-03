@@ -1,3 +1,7 @@
+## 1.6.5
+
+* Add support for multiple extension in `context.extension()`.
+
 ## 1.6.4
 
 * Fixed a number of lints that affect the package health score.
