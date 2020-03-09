@@ -7,7 +7,7 @@
 import 'dart:html';
 
 import 'package:test/test.dart';
-import 'package:pathx/path.dart' as path;
+import 'package:path/path.dart' as path;
 
 void main() {
   group('new Context()', () {

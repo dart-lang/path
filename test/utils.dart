@@ -3,7 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:test/test.dart';
-import 'package:pathx/path.dart' as p;
+import 'package:path/path.dart' as p;
 
 /// A matcher for a closure that throws a [path.PathException].
 final throwsPathException = throwsA(const TypeMatcher<p.PathException>());

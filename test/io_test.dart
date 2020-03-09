@@ -5,7 +5,7 @@
 @TestOn('vm')
 import 'dart:io' as io;
 
-import 'package:pathx/path.dart' as path;
+import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {

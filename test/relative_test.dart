@@ -4,7 +4,7 @@
 //
 // Test "relative" on all styles of path.Context, on all platforms.
 
-import 'package:pathx/path.dart' as path;
+import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 import 'utils.dart';
