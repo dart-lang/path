@@ -197,12 +197,14 @@ String dirname(String path) => context.dirname(path);
 ///
 /// Takes an optional parameter `level` which makes possible to return
 /// multiple extensions having `level` number of dots. If `level` exceeds the
-/// number of dots, the full extension is returned.
+/// number of dots, the full extension is returned. If `level` equals 0, an
+/// empty string is returned as the extension.
 ///
-///     context.extension('foo.bar.dart.js', 2);   // -> '.dart.js
-///     context.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
-///     context.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
-///     context.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
+///     p.extension('foo.bar.dart.js', 2);   // -> '.dart.js
+///     p.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
+///     p.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
+///     p.extension('foo.bar.dart.js', 0);   // -> ''
+///     p.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
 String extension(String path, [int level = 1]) =>
     context.extension(path, level);
 
