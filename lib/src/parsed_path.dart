@@ -184,15 +184,21 @@ class ParsedPath {
   ///
   /// Takes an optional parameter `level` which makes possible to return
   /// multiple extensions having `level` number of dots. If `level` exceeds the
-  /// number of dots, the path is splitted into the left most dot.
+  /// number of dots, the path is splitted into the left most dot. If the value
+  /// of `level` is 0, the `basename` becomes the original path and `extension`
+  /// becomes an empty string.
   ///
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
   List<String> _splitExtension([int level = 1]) {
+    ArgumentError.checkNotNull(level, 'level');
+    RangeError.checkNotNegative(level, 'level');
+
     final file = parts.lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];
+    if (level == 0) return [file, ''];
 
     final lastDot = _kthLastIndexOf(file, '.', level);
 

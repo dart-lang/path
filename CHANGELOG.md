@@ -1,4 +1,4 @@
-## 1.6.5
+## 1.7.0
 
 * Add support for multiple extension in `context.extension()`.
 
