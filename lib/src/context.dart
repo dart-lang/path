@@ -158,7 +158,6 @@ class Context {
   String extension(String path, [int level = 1]) =>
       _parse(path).extension(level);
 
-  // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
   /// Returns the root of [path] if it's absolute, or an empty string if it's
   /// relative.
   ///
@@ -169,6 +168,7 @@ class Context {
   ///     // Windows
   ///     context.rootPrefix(r'path\to\foo'); // -> ''
   ///     context.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
+  ///     context.rootPrefix(r'\\server\share\a\b'); // -> r'\\server\share'
   ///
   ///     // URL
   ///     context.rootPrefix('path/to/foo'); // -> ''
@@ -296,7 +296,6 @@ class Context {
     return buffer.toString();
   }
 
-  // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
   /// Splits [path] into its components using the current platform's
   /// [separator]. Example:
   ///
@@ -314,6 +313,8 @@ class Context {
   ///
   ///     // Windows
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
+  ///     context.split(r'\\server\share\path\to\foo');
+  ///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
   List<String> split(String path) {
     final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
