@@ -179,13 +179,13 @@ class ParsedPath {
     return leftMostIndexedCharacter;
   }
 
-  /// Splits the last non-empty part of the path into a `[basename, extension`]
+  /// Splits the last non-empty part of the path into a `[basename, extension]`
   /// pair.
   ///
   /// Takes an optional parameter `level` which makes possible to return
   /// multiple extensions having `level` number of dots. If `level` exceeds the
-  /// number of dots, the path is splitted into the left most dot. The value of
-  ///  `level` must be greater than 0, else `RangeError` is thrown.
+  /// number of dots, the path is split at the first most dot. The value of
+  /// `level` must be greater than 0, else `RangeError` is thrown.
   ///
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
