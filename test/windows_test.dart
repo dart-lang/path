@@ -29,6 +29,15 @@ void main() {
     expect(context.extension(r'a.b/c'), r'');
     expect(context.extension(r'foo.dart\'), '.dart');
     expect(context.extension(r'foo.dart\\'), '.dart');
+    expect(context.extension('a.b/..', 2), '');
+    expect(context.extension('foo.bar.dart.js', 2), '.dart.js');
+    expect(context.extension(r'foo.bar.dart.js', 3), '.bar.dart.js');
+    expect(context.extension(r'foo.bar.dart.js', 10), '.bar.dart.js');
+    expect(context.extension('a.b/c.d', 2), '.d');
+    expect(() => context.extension(r'foo.bar.dart.js', 0), throwsRangeError);
+    expect(() => context.extension(r'foo.bar.dart.js', -1), throwsRangeError);
+    expect(
+        () => context.extension(r'foo.bar.dart.js', null), throwsArgumentError);
   });
 
   test('rootPrefix', () {
