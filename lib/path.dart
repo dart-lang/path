@@ -207,7 +207,6 @@ String dirname(String path) => context.dirname(path);
 String extension(String path, [int level = 1]) =>
     context.extension(path, level);
 
-// TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
 /// Returns the root of [path], if it's absolute, or the empty string if it's
 /// relative.
 ///
@@ -218,6 +217,7 @@ String extension(String path, [int level = 1]) =>
 ///     // Windows
 ///     p.rootPrefix(r'path\to\foo'); // -> ''
 ///     p.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
+///     p.rootPrefix(r'\\server\share\a\b'); // -> r'\\server\share'
 ///
 ///     // URL
 ///     p.rootPrefix('path/to/foo'); // -> ''
@@ -295,7 +295,6 @@ String join(String part1,
 /// For a fixed number of parts, [join] is usually terser.
 String joinAll(Iterable<String> parts) => context.joinAll(parts);
 
-// TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
 /// Splits [path] into its components using the current platform's [separator].
 ///
 ///     p.split('path/to/foo'); // -> ['path', 'to', 'foo']
@@ -312,6 +311,8 @@ String joinAll(Iterable<String> parts) => context.joinAll(parts);
 ///
 ///     // Windows
 ///     p.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
+///     p.split(r'\\server\share\path\to\foo');
+///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
 ///
 ///     // Browser
 ///     p.split('http://dartlang.org/path/to/foo');
