@@ -99,7 +99,5 @@ void main() {
     } finally {
       io.Directory.current = dir;
     }
-  },
-      //TODO(kevmoo): figure out why this is failing on windows and fix!
-      skip: io.Platform.isWindows ? 'Untriaged failure on Windows' : null);
+  });
 }
