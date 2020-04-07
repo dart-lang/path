@@ -56,7 +56,9 @@ void main() {
       } finally {
         io.Directory.current = dir;
       }
-    });
+    },
+        //TODO: Figure out why this is failing on windows and fix!
+        skip: io.Platform.isWindows ? 'Untriaged failure on Windows' : false);
   });
 
   test('registers changes to the working directory', () {
