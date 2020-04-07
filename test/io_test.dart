@@ -43,7 +43,7 @@ void main() {
       final dir = io.Directory.current.path;
       try {
         final temp = io.Directory.systemTemp.createTempSync('path_test');
-        final tempPath = temp.path;
+        final tempPath = temp.resolveSymbolicLinksSync();
         io.Directory.current = temp;
 
         // Call "current" once so that it can be cached.
@@ -56,11 +56,7 @@ void main() {
       } finally {
         io.Directory.current = dir;
       }
-    },
-        //TODO(kevmoo): figure out why this is failing on windows/mac and fix!
-        skip: (io.Platform.isWindows || io.Platform.isMacOS)
-            ? 'Untriaged failure on Mac and Windows'
-            : null);
+    });
   });
 
   test('registers changes to the working directory', () {
