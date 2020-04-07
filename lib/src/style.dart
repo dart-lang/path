@@ -22,7 +22,7 @@ abstract class Style {
   /// manipulate URL paths in the browser.
   ///
   /// URLs use "/" (forward slash) as separators. Absolute paths either start
-  /// with a protocol and optional hostname (e.g. `http://dartlang.org`,
+  /// with a protocol and optional hostname (e.g. `https://dart.dev`,
   /// `file://`) or with "/".
   static final Style url = UrlStyle();
 

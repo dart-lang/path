@@ -36,7 +36,7 @@ underlying platform that the program is running on, you can create a
 [Context] and give it an explicit [Style]:
 
 ```dart
-var context = new p.Context(style: Style.windows);
+var context = p.Context(style: Style.windows);
 context.join('directory', 'file.txt');
 ```
 
