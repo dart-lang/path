@@ -68,7 +68,7 @@ class Context {
   /// Creates a new path by appending the given path parts to [current].
   /// Equivalent to [join()] with [current] as the first argument. Example:
   ///
-  ///     var context = new Context(current: '/root');
+  ///     var context = Context(current: '/root');
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
   /// If [current] isn't absolute, this won't return an absolute path.
@@ -172,8 +172,8 @@ class Context {
   ///
   ///     // URL
   ///     context.rootPrefix('path/to/foo'); // -> ''
-  ///     context.rootPrefix('http://dartlang.org/path/to/foo');
-  ///       // -> 'http://dartlang.org'
+  ///     context.rootPrefix('https://dart.dev/path/to/foo');
+  ///       // -> 'https://dart.dev'
   String rootPrefix(String path) => path.substring(0, style.rootLength(path));
 
   /// Returns `true` if [path] is an absolute path and `false` if it is a
@@ -182,7 +182,7 @@ class Context {
   /// On POSIX systems, absolute paths start with a `/` (forward slash). On
   /// Windows, an absolute path starts with `\\`, or a drive letter followed by
   /// `:/` or `:\`. For URLs, absolute paths either start with a protocol and
-  /// optional hostname (e.g. `http://dartlang.org`, `file://`) or with a `/`.
+  /// optional hostname (e.g. `https://dart.dev`, `file://`) or with a `/`.
   ///
   /// URLs that start with `/` are known as "root-relative", since they're
   /// relative to the root of the current URL. Since root-relative paths are
@@ -315,6 +315,10 @@ class Context {
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
   ///     context.split(r'\\server\share\path\to\foo');
   ///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
+  ///
+  ///     // Browser
+  ///     context.split('https://dart.dev/path/to/foo');
+  ///       // -> ['https://dart.dev', 'path', 'to', 'foo']
   List<String> split(String path) {
     final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
@@ -429,7 +433,7 @@ class Context {
   /// Attempts to convert [path] to an equivalent relative path relative to
   /// [current].
   ///
-  ///     var context = new Context(current: '/root/path');
+  ///     var context = Context(current: '/root/path');
   ///     context.relative('/root/path/a/b.dart'); // -> 'a/b.dart'
   ///     context.relative('/root/other.dart'); // -> '../other.dart'
   ///
@@ -451,7 +455,7 @@ class Context {
   /// This will also return an absolute path if an absolute [path] is passed to
   /// a context with a relative path for [current].
   ///
-  ///     var context = new Context(r'some/relative/path');
+  ///     var context = Context(r'some/relative/path');
   ///     context.relative(r'/absolute/path'); // -> '/absolute/path'
   ///
   /// If [current] is relative, it may be impossible to determine a path from
@@ -986,8 +990,8 @@ class Context {
   ///       // -> r'C:\path\to\foo'
   ///
   ///     // URL
-  ///     context.fromUri('http://dartlang.org/path/to/foo')
-  ///       // -> 'http://dartlang.org/path/to/foo'
+  ///     context.fromUri('https://dart.dev/path/to/foo')
+  ///       // -> 'https://dart.dev/path/to/foo'
   ///
   /// If [uri] is relative, a relative path will be returned.
   ///
@@ -1008,8 +1012,8 @@ class Context {
   ///       // -> Uri.parse('file:///C:/path/to/foo')
   ///
   ///     // URL
-  ///     context.toUri('http://dartlang.org/path/to/foo')
-  ///       // -> Uri.parse('http://dartlang.org/path/to/foo')
+  ///     context.toUri('https://dart.dev/path/to/foo')
+  ///       // -> Uri.parse('https://dart.dev/path/to/foo')
   Uri toUri(String path) {
     if (isRelative(path)) {
       return style.relativePathToUri(path);
@@ -1029,18 +1033,18 @@ class Context {
   /// or path-formatted.
   ///
   ///     // POSIX
-  ///     var context = new Context(current: '/root/path');
+  ///     var context = Context(current: '/root/path');
   ///     context.prettyUri('file:///root/path/a/b.dart'); // -> 'a/b.dart'
-  ///     context.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+  ///     context.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
   ///
   ///     // Windows
-  ///     var context = new Context(current: r'C:\root\path');
+  ///     var context = Context(current: r'C:\root\path');
   ///     context.prettyUri('file:///C:/root/path/a/b.dart'); // -> r'a\b.dart'
-  ///     context.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+  ///     context.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
   ///
   ///     // URL
-  ///     var context = new Context(current: 'http://dartlang.org/root/path');
-  ///     context.prettyUri('http://dartlang.org/root/path/a/b.dart');
+  ///     var context = Context(current: 'https://dart.dev/root/path');
+  ///     context.prettyUri('https://dart.dev/root/path/a/b.dart');
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {
