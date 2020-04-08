@@ -121,7 +121,7 @@
 ## 1.2.2
 
 * Remove the documentation link from the pubspec so this is linked to
-  pub.dartlang.org by default.
+  pub.dev by default.
 
 # 1.2.1
 
