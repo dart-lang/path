@@ -748,7 +748,7 @@ class Context {
       }
 
       final direction =
-          _pathDirection(parent, lastParentSeparator ?? parentRootLength - 1);
+          _pathDirection(parent, lastParentSeparator);
       if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
           ? _PathRelation.inconclusive
