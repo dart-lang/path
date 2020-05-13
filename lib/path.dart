@@ -109,10 +109,13 @@ String _current;
 /// and `/` on other platforms (including the browser).
 String get separator => context.separator;
 
-/// Creates a new path by appending the given path parts to [current].
+/// Returns a new path with the given path parts appended to [current].
+///
 /// Equivalent to [join()] with [current] as the first argument. Example:
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
+///
+/// Does not [normalize] or [cananicalize] paths.
 String absolute(String part1,
         [String part2,
         String part3,
