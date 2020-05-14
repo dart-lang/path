@@ -65,13 +65,15 @@ class Context {
   /// this is `/`. On Windows, it's `\`.
   String get separator => style.separator;
 
-  /// Creates a new path by appending the given path parts to [current].
+  /// Returns a new path with the given path parts appended to [current].
+  ///
   /// Equivalent to [join()] with [current] as the first argument. Example:
   ///
   ///     var context = Context(current: '/root');
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
-  /// If [current] isn't absolute, this won't return an absolute path.
+  /// If [current] isn't absolute, this won't return an absolute path. Does not
+  /// [normalize] or [cananicalize] paths.
   String absolute(String part1,
       [String part2,
       String part3,
