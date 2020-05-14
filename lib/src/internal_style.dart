@@ -58,7 +58,7 @@ abstract class InternalStyle extends Style {
   @override
   String pathFromUri(Uri uri);
 
-  /// Returns the URI that represents the relative path made of [parts].
+  /// Returns the URI that represents a relative path.
   @override
   Uri relativePathToUri(String path) {
     final segments = context.split(path);

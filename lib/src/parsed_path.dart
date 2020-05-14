@@ -17,7 +17,7 @@ class ParsedPath {
 
   /// Whether this path is root-relative.
   ///
-  /// See [Context.isRootRelative].
+  /// See `Context.isRootRelative`.
   bool isRootRelative;
 
   /// The path-separated parts of the path. All but the last will be

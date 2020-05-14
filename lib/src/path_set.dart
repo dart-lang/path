@@ -6,7 +6,7 @@ import 'dart:collection';
 
 import '../path.dart' as p;
 
-/// A set containing paths, compared using [equals] and [hash].
+/// A set containing paths, compared using [p.equals] and [p.hash].
 class PathSet extends IterableBase<String> implements Set<String> {
   /// The set to which we forward implementation methods.
   final Set<String> _inner;

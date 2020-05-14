@@ -315,7 +315,7 @@ List<String> split(String path) => context.split(path);
 /// Note that this does not resolve symlinks.
 ///
 /// If you want a map that uses path keys, it's probably more efficient to
-/// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
+/// pass [equals] and [hash] to [new HashMap()] than it is to canonicalize every
 /// key.
 String canonicalize(String path) => context.canonicalize(path);
 
@@ -324,7 +324,7 @@ String canonicalize(String path) => context.canonicalize(path);
 ///
 /// Note that this is *not* guaranteed to return the same result for two
 /// equivalent input paths. For that, see [canonicalize]. Or, if you're using
-/// paths as map keys, pass [equals] and [hash] to [new HashMap].
+/// paths as map keys, pass [equals] and [hash] to [new HashMap()].
 ///
 ///     p.normalize('path/./to/..//file.text'); // -> 'path/file.txt'
 String normalize(String path) => context.normalize(path);
