@@ -115,7 +115,7 @@ String get separator => context.separator;
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
 ///
-/// Does not [normalize] or [cananicalize] paths.
+/// Does not [normalize] or [canonicalize] paths.
 String absolute(String part1,
         [String part2,
         String part3,

@@ -73,7 +73,7 @@ class Context {
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
   /// If [current] isn't absolute, this won't return an absolute path. Does not
-  /// [normalize] or [cananicalize] paths.
+  /// [normalize] or [canonicalize] paths.
   String absolute(String part1,
       [String part2,
       String part3,
@@ -339,7 +339,8 @@ class Context {
   /// Note that this does not resolve symlinks.
   ///
   /// If you want a map that uses path keys, it's probably more efficient to
-  /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
+  /// pass [equals] and [hash] to [new HashMap()] than it is to canonicalize
+  /// every
   /// key.
   String canonicalize(String path) {
     path = absolute(path);
@@ -355,7 +356,7 @@ class Context {
   ///
   /// Note that this is *not* guaranteed to return the same result for two
   /// equivalent input paths. For that, see [canonicalize]. Or, if you're using
-  /// paths as map keys, pass [equals] and [hash] to [new HashMap].
+  /// paths as map keys, pass [equals] and [hash] to [new HashMap()].
   ///
   ///     context.normalize('path/./to/..//file.text'); // -> 'path/file.txt'
   String normalize(String path) {
