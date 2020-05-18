@@ -33,7 +33,7 @@ class ParsedPath {
 
   /// The file extension of the last non-empty part, or "" if it doesn't have
   /// one.
-  String extension([int level]) => _splitExtension(level)[1];
+  String extension([int level = 1]) => _splitExtension(level)[1];
 
   /// `true` if this is an absolute path.
   bool get isAbsolute => root != null;

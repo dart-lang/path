@@ -32,8 +32,6 @@ void main() {
     expect(context.extension('a.b/c.d', 2), '.d');
     expect(() => context.extension(r'foo.bar.dart.js', 0), throwsRangeError);
     expect(() => context.extension(r'foo.bar.dart.js', -1), throwsRangeError);
-    expect(
-        () => context.extension(r'foo.bar.dart.js', null), throwsArgumentError);
   });
 
   test('rootPrefix', () {
