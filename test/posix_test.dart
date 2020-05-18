@@ -26,6 +26,14 @@ void main() {
     expect(context.extension(r'a.b\c'), r'.b\c');
     expect(context.extension('foo.dart/'), '.dart');
     expect(context.extension('foo.dart//'), '.dart');
+    expect(context.extension('foo.bar.dart.js', 2), '.dart.js');
+    expect(context.extension(r'foo.bar.dart.js', 3), '.bar.dart.js');
+    expect(context.extension(r'foo.bar.dart.js', 10), '.bar.dart.js');
+    expect(context.extension('a.b/c.d', 2), '.d');
+    expect(() => context.extension(r'foo.bar.dart.js', 0), throwsRangeError);
+    expect(() => context.extension(r'foo.bar.dart.js', -1), throwsRangeError);
+    expect(
+        () => context.extension(r'foo.bar.dart.js', null), throwsArgumentError);
   });
 
   test('rootPrefix', () {
@@ -288,8 +296,8 @@ void main() {
     test('does not walk before root on absolute paths', () {
       expect(context.normalize('..'), '..');
       expect(context.normalize('../'), '..');
-      expect(context.normalize('http://dartlang.org/..'), 'http:');
-      expect(context.normalize('http://dartlang.org/../../a'), 'a');
+      expect(context.normalize('https://dart.dev/..'), 'https:');
+      expect(context.normalize('https://dart.dev/../../a'), 'a');
       expect(context.normalize('file:///..'), '.');
       expect(context.normalize('file:///../../a'), '../a');
       expect(context.normalize('/..'), '/');
@@ -563,7 +571,7 @@ void main() {
           '/path/to/foo#bar');
       expect(context.fromUri(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
           r'_{_}_`_^_ _"_%_');
-      expect(() => context.fromUri(Uri.parse('http://dartlang.org')),
+      expect(() => context.fromUri(Uri.parse('https://dart.dev')),
           throwsArgumentError);
     });
 
@@ -595,8 +603,7 @@ void main() {
     });
 
     test('with an http: URI', () {
-      expect(context.prettyUri('http://dartlang.org/a/b'),
-          'http://dartlang.org/a/b');
+      expect(context.prettyUri('https://dart.dev/a/b'), 'https://dart.dev/a/b');
     });
 
     test('with a relative URI', () {

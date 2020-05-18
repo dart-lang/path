@@ -16,15 +16,13 @@ abstract class Style {
   /// Windows paths use `\` (backslash) as separators. Absolute paths start with
   /// a drive letter followed by a colon (example, `C:`) or two backslashes
   /// (`\\`) for UNC paths.
-  // TODO(rnystrom): The UNC root prefix should include the drive name too, not
-  // just the `\\`.
   static final Style windows = WindowsStyle();
 
   /// URLs aren't filesystem paths, but they're supported to make it easier to
   /// manipulate URL paths in the browser.
   ///
   /// URLs use "/" (forward slash) as separators. Absolute paths either start
-  /// with a protocol and optional hostname (e.g. `http://dartlang.org`,
+  /// with a protocol and optional hostname (e.g. `https://dart.dev`,
   /// `file://`) or with "/".
   static final Style url = UrlStyle();
 

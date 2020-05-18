@@ -1,3 +1,9 @@
+## 1.7.1-dev
+
+## 1.7.0
+
+* Add support for multiple extension in `context.extension()`.
+
 ## 1.6.4
 
 * Fixed a number of lints that affect the package health score.
@@ -117,7 +123,7 @@
 ## 1.2.2
 
 * Remove the documentation link from the pubspec so this is linked to
-  pub.dartlang.org by default.
+  pub.dev by default.
 
 # 1.2.1
 

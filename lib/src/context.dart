@@ -65,13 +65,15 @@ class Context {
   /// this is `/`. On Windows, it's `\`.
   String get separator => style.separator;
 
-  /// Creates a new path by appending the given path parts to [current].
+  /// Returns a new path with the given path parts appended to [current].
+  ///
   /// Equivalent to [join()] with [current] as the first argument. Example:
   ///
-  ///     var context = new Context(current: '/root');
+  ///     var context = Context(current: '/root');
   ///     context.absolute('path', 'to', 'foo'); // -> '/root/path/to/foo'
   ///
-  /// If [current] isn't absolute, this won't return an absolute path.
+  /// If [current] isn't absolute, this won't return an absolute path. Does not
+  /// [normalize] or [canonicalize] paths.
   String absolute(String part1,
       [String? part2,
       String? part3,
@@ -145,9 +147,19 @@ class Context {
   ///
   ///     context.extension('~/.bashrc');    // -> ''
   ///     context.extension('~/.notes.txt'); // -> '.txt'
-  String extension(String path) => _parse(path).extension;
+  ///
+  /// Takes an optional parameter `level` which makes possible to return
+  /// multiple extensions having `level` number of dots. If `level` exceeds the
+  /// number of dots, the full extension is returned. The value of `level` must
+  /// be greater than 0, else `RangeError` is thrown.
+  ///
+  ///     context.extension('foo.bar.dart.js', 2);   // -> '.dart.js
+  ///     context.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
+  ///     context.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
+  ///     context.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
+  String extension(String path, [int level = 1]) =>
+      _parse(path).extension(level);
 
-  // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
   /// Returns the root of [path] if it's absolute, or an empty string if it's
   /// relative.
   ///
@@ -158,11 +170,12 @@ class Context {
   ///     // Windows
   ///     context.rootPrefix(r'path\to\foo'); // -> ''
   ///     context.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
+  ///     context.rootPrefix(r'\\server\share\a\b'); // -> r'\\server\share'
   ///
   ///     // URL
   ///     context.rootPrefix('path/to/foo'); // -> ''
-  ///     context.rootPrefix('http://dartlang.org/path/to/foo');
-  ///       // -> 'http://dartlang.org'
+  ///     context.rootPrefix('https://dart.dev/path/to/foo');
+  ///       // -> 'https://dart.dev'
   String rootPrefix(String path) => path.substring(0, style.rootLength(path));
 
   /// Returns `true` if [path] is an absolute path and `false` if it is a
@@ -171,7 +184,7 @@ class Context {
   /// On POSIX systems, absolute paths start with a `/` (forward slash). On
   /// Windows, an absolute path starts with `\\`, or a drive letter followed by
   /// `:/` or `:\`. For URLs, absolute paths either start with a protocol and
-  /// optional hostname (e.g. `http://dartlang.org`, `file://`) or with a `/`.
+  /// optional hostname (e.g. `https://dart.dev`, `file://`) or with a `/`.
   ///
   /// URLs that start with `/` are known as "root-relative", since they're
   /// relative to the root of the current URL. Since root-relative paths are
@@ -285,7 +298,6 @@ class Context {
     return buffer.toString();
   }
 
-  // TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
   /// Splits [path] into its components using the current platform's
   /// [separator]. Example:
   ///
@@ -303,6 +315,12 @@ class Context {
   ///
   ///     // Windows
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
+  ///     context.split(r'\\server\share\path\to\foo');
+  ///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
+  ///
+  ///     // Browser
+  ///     context.split('https://dart.dev/path/to/foo');
+  ///       // -> ['https://dart.dev', 'path', 'to', 'foo']
   List<String> split(String path) {
     final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
@@ -320,9 +338,9 @@ class Context {
   ///
   /// Note that this does not resolve symlinks.
   ///
-  /// If you want a map that uses path keys, it's probably more efficient to
-  /// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
-  /// key.
+  /// If you want a map that uses path keys, it's probably more efficient to use
+  /// a Map with [equals] and [hash] specified as the callbacks to use for keys
+  /// than it is to canonicalize every key.
   String canonicalize(String path) {
     path = absolute(path);
     if (style != Style.windows && !_needsNormalization(path)) return path;
@@ -337,7 +355,7 @@ class Context {
   ///
   /// Note that this is *not* guaranteed to return the same result for two
   /// equivalent input paths. For that, see [canonicalize]. Or, if you're using
-  /// paths as map keys, pass [equals] and [hash] to [new HashMap].
+  /// paths as map keys use [equals] and [hash] as the key callbacks.
   ///
   ///     context.normalize('path/./to/..//file.text'); // -> 'path/file.txt'
   String normalize(String path) {
@@ -417,7 +435,7 @@ class Context {
   /// Attempts to convert [path] to an equivalent relative path relative to
   /// [current].
   ///
-  ///     var context = new Context(current: '/root/path');
+  ///     var context = Context(current: '/root/path');
   ///     context.relative('/root/path/a/b.dart'); // -> 'a/b.dart'
   ///     context.relative('/root/other.dart'); // -> '../other.dart'
   ///
@@ -439,7 +457,7 @@ class Context {
   /// This will also return an absolute path if an absolute [path] is passed to
   /// a context with a relative path for [current].
   ///
-  ///     var context = new Context(r'some/relative/path');
+  ///     var context = Context(r'some/relative/path');
   ///     context.relative(r'/absolute/path'); // -> '/absolute/path'
   ///
   /// If [current] is relative, it may be impossible to determine a path from
@@ -974,8 +992,8 @@ class Context {
   ///       // -> r'C:\path\to\foo'
   ///
   ///     // URL
-  ///     context.fromUri('http://dartlang.org/path/to/foo')
-  ///       // -> 'http://dartlang.org/path/to/foo'
+  ///     context.fromUri('https://dart.dev/path/to/foo')
+  ///       // -> 'https://dart.dev/path/to/foo'
   ///
   /// If [uri] is relative, a relative path will be returned.
   ///
@@ -996,8 +1014,8 @@ class Context {
   ///       // -> Uri.parse('file:///C:/path/to/foo')
   ///
   ///     // URL
-  ///     context.toUri('http://dartlang.org/path/to/foo')
-  ///       // -> Uri.parse('http://dartlang.org/path/to/foo')
+  ///     context.toUri('https://dart.dev/path/to/foo')
+  ///       // -> Uri.parse('https://dart.dev/path/to/foo')
   Uri toUri(String path) {
     if (isRelative(path)) {
       return style.relativePathToUri(path);
@@ -1017,18 +1035,18 @@ class Context {
   /// or path-formatted.
   ///
   ///     // POSIX
-  ///     var context = new Context(current: '/root/path');
+  ///     var context = Context(current: '/root/path');
   ///     context.prettyUri('file:///root/path/a/b.dart'); // -> 'a/b.dart'
-  ///     context.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+  ///     context.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
   ///
   ///     // Windows
-  ///     var context = new Context(current: r'C:\root\path');
+  ///     var context = Context(current: r'C:\root\path');
   ///     context.prettyUri('file:///C:/root/path/a/b.dart'); // -> r'a\b.dart'
-  ///     context.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+  ///     context.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
   ///
   ///     // URL
-  ///     var context = new Context(current: 'http://dartlang.org/root/path');
-  ///     context.prettyUri('http://dartlang.org/root/path/a/b.dart');
+  ///     var context = Context(current: 'https://dart.dev/root/path');
+  ///     context.prettyUri('https://dart.dev/root/path/a/b.dart');
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
   String prettyUri(uri) {

@@ -4,23 +4,6 @@
 
 /// A comprehensive, cross-platform path manipulation library.
 ///
-/// ## Installing ##
-///
-/// Use [pub][] to install this package. Add the following to your
-/// `pubspec.yaml` file.
-///
-///     dependencies:
-///       path: any
-///
-/// Then run `pub install`.
-///
-/// For more information, see the [path package on pub.dartlang.org][pkg].
-///
-/// [pub]: http://pub.dartlang.org
-/// [pkg]: http://pub.dartlang.org/packages/path
-///
-/// ## Usage ##
-///
 /// The path library was designed to be imported with a prefix, though you don't
 /// have to if you don't want to:
 ///
@@ -30,7 +13,7 @@
 /// These manipulate path strings based on your current working directory and
 /// the path style (POSIX, Windows, or URLs) of the host platform. For example:
 ///
-///     p.join("directory", "file.txt");
+///     p.join('directory', 'file.txt');
 ///
 /// This calls the top-level [join] function to join "directory" and "file.txt"
 /// using the current platform's directory separator.
@@ -39,8 +22,8 @@
 /// underlying platform that the program is running on, you can create a
 /// [Context] and give it an explicit [Style]:
 ///
-///     var context = new p.Context(style: Style.windows);
-///     context.join("directory", "file.txt");
+///     var context = p.Context(style: Style.windows);
+///     context.join('directory', 'file.txt');
 ///
 /// This will join "directory" and "file.txt" using the Windows path separator,
 /// even when the program is run on a POSIX machine.
@@ -126,10 +109,13 @@ String? _current;
 /// and `/` on other platforms (including the browser).
 String get separator => context.separator;
 
-/// Creates a new path by appending the given path parts to [current].
+/// Returns a new path with the given path parts appended to [current].
+///
 /// Equivalent to [join()] with [current] as the first argument. Example:
 ///
 ///     p.absolute('path', 'to/foo'); // -> '/your/current/dir/path/to/foo'
+///
+/// Does not [normalize] or [canonicalize] paths.
 String absolute(String part1,
         [String? part2,
         String? part3,
@@ -194,9 +180,19 @@ String dirname(String path) => context.dirname(path);
 ///
 ///     p.extension('~/.bashrc');    // -> ''
 ///     p.extension('~/.notes.txt'); // -> '.txt'
-String extension(String path) => context.extension(path);
+///
+/// Takes an optional parameter `level` which makes possible to return
+/// multiple extensions having `level` number of dots. If `level` exceeds the
+/// number of dots, the full extension is returned. The value of `level` must
+/// be greater than 0, else `RangeError` is thrown.
+///
+///     p.extension('foo.bar.dart.js', 2);   // -> '.dart.js
+///     p.extension('foo.bar.dart.js', 3);   // -> '.bar.dart.js'
+///     p.extension('foo.bar.dart.js', 10);  // -> '.bar.dart.js'
+///     p.extension('path/to/foo.bar.dart.js', 2);  // -> '.dart.js'
+String extension(String path, [int level = 1]) =>
+    context.extension(path, level);
 
-// TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
 /// Returns the root of [path], if it's absolute, or the empty string if it's
 /// relative.
 ///
@@ -207,11 +203,12 @@ String extension(String path) => context.extension(path);
 ///     // Windows
 ///     p.rootPrefix(r'path\to\foo'); // -> ''
 ///     p.rootPrefix(r'C:\path\to\foo'); // -> r'C:\'
+///     p.rootPrefix(r'\\server\share\a\b'); // -> r'\\server\share'
 ///
 ///     // URL
 ///     p.rootPrefix('path/to/foo'); // -> ''
-///     p.rootPrefix('http://dartlang.org/path/to/foo');
-///       // -> 'http://dartlang.org'
+///     p.rootPrefix('https://dart.dev/path/to/foo');
+///       // -> 'https://dart.dev'
 String rootPrefix(String path) => context.rootPrefix(path);
 
 /// Returns `true` if [path] is an absolute path and `false` if it is a
@@ -220,7 +217,7 @@ String rootPrefix(String path) => context.rootPrefix(path);
 /// On POSIX systems, absolute paths start with a `/` (forward slash). On
 /// Windows, an absolute path starts with `\\`, or a drive letter followed by
 /// `:/` or `:\`. For URLs, absolute paths either start with a protocol and
-/// optional hostname (e.g. `http://dartlang.org`, `file://`) or with a `/`.
+/// optional hostname (e.g. `https://dart.dev`, `file://`) or with a `/`.
 ///
 /// URLs that start with `/` are known as "root-relative", since they're
 /// relative to the root of the current URL. Since root-relative paths are still
@@ -284,7 +281,6 @@ String join(String part1,
 /// For a fixed number of parts, [join] is usually terser.
 String joinAll(Iterable<String> parts) => context.joinAll(parts);
 
-// TODO(nweiz): add a UNC example for Windows once issue 7323 is fixed.
 /// Splits [path] into its components using the current platform's [separator].
 ///
 ///     p.split('path/to/foo'); // -> ['path', 'to', 'foo']
@@ -301,10 +297,12 @@ String joinAll(Iterable<String> parts) => context.joinAll(parts);
 ///
 ///     // Windows
 ///     p.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
+///     p.split(r'\\server\share\path\to\foo');
+///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
 ///
 ///     // Browser
-///     p.split('http://dartlang.org/path/to/foo');
-///       // -> ['http://dartlang.org', 'path', 'to', 'foo']
+///     p.split('https://dart.dev/path/to/foo');
+///       // -> ['https://dart.dev', 'path', 'to', 'foo']
 List<String> split(String path) => context.split(path);
 
 /// Canonicalizes [path].
@@ -316,9 +314,9 @@ List<String> split(String path) => context.split(path);
 ///
 /// Note that this does not resolve symlinks.
 ///
-/// If you want a map that uses path keys, it's probably more efficient to
-/// pass [equals] and [hash] to [new HashMap] than it is to canonicalize every
-/// key.
+/// If you want a map that uses path keys, it's probably more efficient to use a
+/// Map with [equals] and [hash] specified as the callbacks to use for keys than
+/// it is to canonicalize every key.
 String canonicalize(String path) => context.canonicalize(path);
 
 /// Normalizes [path], simplifying it by handling `..`, and `.`, and
@@ -326,7 +324,7 @@ String canonicalize(String path) => context.canonicalize(path);
 ///
 /// Note that this is *not* guaranteed to return the same result for two
 /// equivalent input paths. For that, see [canonicalize]. Or, if you're using
-/// paths as map keys, pass [equals] and [hash] to [new HashMap].
+/// paths as map keys use [equals] and [hash] as the key callbacks.
 ///
 ///     p.normalize('path/./to/..//file.text'); // -> 'path/file.txt'
 String normalize(String path) => context.normalize(path);
@@ -355,8 +353,8 @@ String normalize(String path) => context.normalize(path);
 ///     p.relative(r'D:\other', from: r'C:\home'); // -> 'D:\other'
 ///
 ///     // URL
-///     p.relative('http://dartlang.org', from: 'http://pub.dartlang.org');
-///       // -> 'http://dartlang.org'
+///     p.relative('https://dart.dev', from: 'https://pub.dev');
+///       // -> 'https://dart.dev'
 String relative(String path, {String? from}) =>
     context.relative(path, from: from);
 
@@ -410,8 +408,8 @@ String setExtension(String path, String extension) =>
 ///     p.fromUri('file:///C:/path/to/foo') // -> r'C:\path\to\foo'
 ///
 ///     // URL
-///     p.fromUri('http://dartlang.org/path/to/foo')
-///       // -> 'http://dartlang.org/path/to/foo'
+///     p.fromUri('https://dart.dev/path/to/foo')
+///       // -> 'https://dart.dev/path/to/foo'
 ///
 /// If [uri] is relative, a relative path will be returned.
 ///
@@ -432,8 +430,8 @@ String fromUri(uri) => context.fromUri(uri);
 ///       // -> Uri.parse('file:///C:/path/to/foo')
 ///
 ///     // URL
-///     p.toUri('http://dartlang.org/path/to/foo')
-///       // -> Uri.parse('http://dartlang.org/path/to/foo')
+///     p.toUri('https://dart.dev/path/to/foo')
+///       // -> Uri.parse('https://dart.dev/path/to/foo')
 ///
 /// If [path] is relative, a relative URI will be returned.
 ///
@@ -451,13 +449,13 @@ Uri toUri(String path) => context.toUri(path);
 ///
 ///     // POSIX at "/root/path"
 ///     p.prettyUri('file:///root/path/a/b.dart'); // -> 'a/b.dart'
-///     p.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+///     p.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
 ///
 ///     // Windows at "C:\root\path"
 ///     p.prettyUri('file:///C:/root/path/a/b.dart'); // -> r'a\b.dart'
-///     p.prettyUri('http://dartlang.org/'); // -> 'http://dartlang.org'
+///     p.prettyUri('https://dart.dev/'); // -> 'https://dart.dev'
 ///
-///     // URL at "http://dartlang.org/root/path"
-///     p.prettyUri('http://dartlang.org/root/path/a/b.dart'); // -> r'a/b.dart'
+///     // URL at "https://dart.dev/root/path"
+///     p.prettyUri('https://dart.dev/root/path/a/b.dart'); // -> r'a/b.dart'
 ///     p.prettyUri('file:///root/path'); // -> 'file:///root/path'
 String prettyUri(uri) => context.prettyUri(uri);
