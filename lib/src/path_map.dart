@@ -6,7 +6,7 @@ import 'dart:collection';
 
 import '../path.dart' as p;
 
-/// A map whose keys are paths, compared using [equals] and [hash].
+/// A map whose keys are paths, compared using [p.equals] and [p.hash].
 class PathMap<V> extends MapView<String, V> {
   /// Creates an empty [PathMap] whose keys are compared using `context.equals`
   /// and `context.hash`.
