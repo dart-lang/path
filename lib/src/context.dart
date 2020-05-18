@@ -765,8 +765,7 @@ class Context {
         lastParentSeparator ??= math.max(0, parentRootLength - 1);
       }
 
-      final direction =
-          _pathDirection(parent, lastParentSeparator);
+      final direction = _pathDirection(parent, lastParentSeparator);
       if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
           ? _PathRelation.inconclusive
