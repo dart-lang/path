@@ -17,7 +17,7 @@ jobs:
     os: windows
   - dart: dev
     dart_task: test
-    os: macos
+    os: osx
   - dart_task: dartfmt
   - dart_task:
       dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
