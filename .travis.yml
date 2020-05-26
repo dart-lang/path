@@ -4,17 +4,16 @@ dart:
   - dev
 
 env:
-  DART_VM_OPTIONS: --enable_experiment=non-nullable
+  DART_VM_OPTIONS: --enable-experiment=non-nullable
 
 dart_task:
   - test: --platform vm,chrome
 
 jobs:
   include:
-  - dart_task: test
-    os: windows
-  - dart_task: test
-    os: osx
+  - dart: dev
+    dart_task: test
+    os: [linux, windows, osx]
   - dart_task: dartfmt
   - dart_task:
       dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
