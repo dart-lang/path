@@ -9,8 +9,7 @@ env:
 jobs:
   include:
   - dart: dev
-    dart_task:
-      test: -p vm,chrome
+    dart_task: test
     os: linux
   - dart: dev
     dart_task: test
@@ -21,6 +20,11 @@ jobs:
   - dart_task: dartfmt
   - dart_task:
       dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
+  allow_failures:
+  - dart: dev
+    dart_task:
+      test: -p chrome
+    os: linux
 
 # Only building master means that we don't run two builds for each pull request.
 # Temporarily adding `null_safety`
