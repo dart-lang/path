@@ -17,7 +17,7 @@ jobs:
     os: osx
   - dart_task: dartfmt
   - dart_task:
-      dartanalyzer: --enable_experiment=non-nullable --fatal-infos --fatal-warnings .
+      dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
 
 # Only building master means that we don't run two builds for each pull request.
 # Temporarily adding `null_safety`
