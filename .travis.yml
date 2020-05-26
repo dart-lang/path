@@ -1,7 +1,6 @@
 language: dart
 
 dart:
-  - 2.0.0
   - dev
 
 dart_task:
@@ -27,8 +26,9 @@ matrix:
       dartanalyzer: --fatal-warnings .
 
 # Only building master means that we don't run two builds for each pull request.
+# Temporarily adding `null_safety`
 branches:
-  only: [master]
+  only: [master, null_safety]
 
 cache:
  directories:
