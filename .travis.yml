@@ -3,6 +3,9 @@ language: dart
 dart:
   - dev
 
+env:
+  DART_VM_OPTIONS: --enable_experiment=non-nullable
+
 dart_task:
   - test: --platform vm,chrome
 
@@ -21,9 +24,6 @@ matrix:
   - dart: dev
     dart_task:
       dartanalyzer: --fatal-infos --fatal-warnings .
-  - dart: 2.0.0
-    dart_task:
-      dartanalyzer: --fatal-warnings .
 
 # Only building master means that we don't run two builds for each pull request.
 # Temporarily adding `null_safety`
