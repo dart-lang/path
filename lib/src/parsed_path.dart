@@ -128,16 +128,14 @@ class ParsedPath {
     }
 
     // Canonicalize separators.
-    final newSeparators =
-        List<String>.generate(newParts.length, (_) => style.separator);
-    newSeparators.insert(
-        0,
-        isAbsolute && newParts.isNotEmpty && style.needsSeparator(root)
-            ? style.separator
-            : '');
-
     parts = newParts;
-    separators = newSeparators;
+    separators = [
+      if (isAbsolute && newParts.isNotEmpty && style.needsSeparator(root))
+        style.separator
+      else
+        '',
+      for (var i = 0; i < newParts.length; i++) style.separator
+    ];
 
     // Normalize the Windows root if needed.
     if (root != null && style == Style.windows) {
