@@ -128,9 +128,8 @@ class ParsedPath {
     }
 
     // Canonicalize separators.
-    final newSeparators = List<String>.generate(
-        newParts.length, (_) => style.separator,
-        growable: true);
+    final newSeparators =
+        List<String>.generate(newParts.length, (_) => style.separator);
     newSeparators.insert(
         0,
         isAbsolute && newParts.isNotEmpty && style.needsSeparator(root!)

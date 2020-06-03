@@ -12,7 +12,6 @@ linter:
     - avoid_catching_errors
     - avoid_function_literals_in_foreach_calls
     - avoid_private_typedef_functions
-    - avoid_redundant_argument_values
     - avoid_renaming_method_parameters
     - avoid_returning_null_for_void
     - avoid_unused_constructor_parameters
