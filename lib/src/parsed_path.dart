@@ -129,13 +129,11 @@ class ParsedPath {
 
     // Canonicalize separators.
     parts = newParts;
-    separators = [
-      if (isAbsolute && newParts.isNotEmpty && style.needsSeparator(root))
-        style.separator
-      else
-        '',
-      for (var i = 0; i < newParts.length; i++) style.separator
-    ];
+    separators =
+        List.filled(newParts.length + 1, style.separator, growable: true);
+    if (!isAbsolute || newParts.isEmpty || !style.needsSeparator(root)) {
+      separators[0] = '';
+    }
 
     // Normalize the Windows root if needed.
     if (root != null && style == Style.windows) {
