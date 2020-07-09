@@ -1,4 +1,6 @@
-## 1.7.1-dev
+## 1.8.0-nullsafety
+
+* Migrate to null safety.
 
 ## 1.7.0
 

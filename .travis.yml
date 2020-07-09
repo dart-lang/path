@@ -3,31 +3,22 @@ language: dart
 dart:
   - dev
 
-env:
-  DART_VM_OPTIONS: --enable-experiment=non-nullable
-
 jobs:
   include:
   - dart: dev
-    dart_task: test
+    script: pub run --enable-experiment=non-nullable test
     os: linux
   - dart: dev
-    dart_task: test
+    script: pub run --enable-experiment=non-nullable test
     os: windows
   - dart: dev
-    dart_task: test
+    script: pub run --enable-experiment=non-nullable test
     os: osx
   - dart_task: dartfmt
   - dart_task:
       dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
   - dart: dev
-    dart_task:
-      test: -p chrome
-    os: linux
-  allow_failures:
-  - dart: dev
-    dart_task:
-      test: -p chrome
+    script: pub run --enable-experiment=non-nullable test -p chrome
     os: linux
 
 # Only building master means that we don't run two builds for each pull request.
