@@ -25,7 +25,7 @@ class Context {
   ///
   /// On the browser, [style] defaults to [Style.url] and [current] defaults to
   /// the current URL.
-  factory Context({Style style, String current}) {
+  factory Context({Style? style, String? current}) {
     if (current == null) {
       if (style == null) {
         current = p.current;
@@ -56,7 +56,7 @@ class Context {
 
   /// The current directory given when Context was created. If null, current
   /// directory is evaluated from 'p.current'.
-  final String _current;
+  final String? _current;
 
   /// The current directory that relative paths are relative to.
   String get current => _current ?? p.current;
@@ -75,12 +75,12 @@ class Context {
   /// If [current] isn't absolute, this won't return an absolute path. Does not
   /// [normalize] or [canonicalize] paths.
   String absolute(String part1,
-      [String part2,
-      String part3,
-      String part4,
-      String part5,
-      String part6,
-      String part7]) {
+      [String? part2,
+      String? part3,
+      String? part4,
+      String? part5,
+      String? part6,
+      String? part7]) {
     _validateArgList(
         'absolute', [part1, part2, part3, part4, part5, part6, part7]);
 
@@ -222,14 +222,14 @@ class Context {
   ///     context.join('path', '/to', 'foo'); // -> '/to/foo'
   ///
   String join(String part1,
-      [String part2,
-      String part3,
-      String part4,
-      String part5,
-      String part6,
-      String part7,
-      String part8]) {
-    final parts = <String>[
+      [String? part2,
+      String? part3,
+      String? part4,
+      String? part5,
+      String? part6,
+      String? part7,
+      String? part8]) {
+    final parts = <String?>[
       part1,
       part2,
       part3,
@@ -240,7 +240,7 @@ class Context {
       part8
     ];
     _validateArgList('join', parts);
-    return joinAll(parts.where((part) => part != null));
+    return joinAll(parts.whereType<String>());
   }
 
   /// Joins the given path parts into a single path. Example:
@@ -270,7 +270,7 @@ class Context {
         final path = buffer.toString();
         parsed.root =
             path.substring(0, style.rootLength(path, withDrive: true));
-        if (style.needsSeparator(parsed.root)) {
+        if (style.needsSeparator(parsed.root!)) {
           parsed.separators[0] = style.separator;
         }
         buffer.clear();
@@ -325,7 +325,7 @@ class Context {
     final parsed = _parse(path);
     // Filter out empty parts that exist due to multiple separators in a row.
     parsed.parts = parsed.parts.where((part) => part.isNotEmpty).toList();
-    if (parsed.root != null) parsed.parts.insert(0, parsed.root);
+    if (parsed.root != null) parsed.parts.insert(0, parsed.root!);
     return parsed.parts;
   }
 
@@ -370,8 +370,8 @@ class Context {
   bool _needsNormalization(String path) {
     var start = 0;
     final codeUnits = path.codeUnits;
-    int previousPrevious;
-    int previous;
+    int? previousPrevious;
+    int? previous;
 
     // Skip past the root before we start looking for snippets that need
     // normalization. We want to normalize "//", but not when it's part of
@@ -464,7 +464,7 @@ class Context {
   /// [from] to [path]. For example, if [current] and [path] are "." and [from]
   /// is "/", no path can be determined. In this case, a [PathException] will be
   /// thrown.
-  String relative(String path, {String from}) {
+  String relative(String path, {String? from}) {
     // Avoid expensive computation if the path is already relative.
     if (from == null && isRelative(path)) return normalize(path);
 
@@ -500,7 +500,7 @@ class Context {
     // calculation of relative paths, even if a path has not been normalized.
     if (fromParsed.root != pathParsed.root &&
         ((fromParsed.root == null || pathParsed.root == null) ||
-            !style.pathsEqual(fromParsed.root, pathParsed.root))) {
+            !style.pathsEqual(fromParsed.root!, pathParsed.root!))) {
       return pathParsed.toString();
     }
 
@@ -647,7 +647,7 @@ class Context {
     var lastCodeUnit = chars.slash;
 
     /// The index of the last separator in [parent].
-    int lastParentSeparator;
+    int? lastParentSeparator;
 
     // Iterate through both paths as long as they're semantically identical.
     var parentIndex = parentRootLength;
@@ -765,8 +765,7 @@ class Context {
         lastParentSeparator ??= math.max(0, parentRootLength - 1);
       }
 
-      final direction =
-          _pathDirection(parent, lastParentSeparator ?? parentRootLength - 1);
+      final direction = _pathDirection(parent, lastParentSeparator);
       if (direction == _PathDirection.atRoot) return _PathRelation.equal;
       return direction == _PathDirection.aboveRoot
           ? _PathRelation.inconclusive
@@ -888,14 +887,14 @@ class Context {
 
     final parsed = _parse(path);
     parsed.normalize();
-    return _hashFast(parsed.toString());
+    return _hashFast(parsed.toString())!;
   }
 
   /// An optimized implementation of [hash] that doesn't handle internal `..`
   /// components.
   ///
   /// This will handle `..` components that appear at the beginning of the path.
-  int _hashFast(String path) {
+  int? _hashFast(String path) {
     var hash = 4603;
     var beginning = true;
     var wasSeparator = true;
@@ -1082,7 +1081,7 @@ Uri _parseUri(uri) {
 
 /// Validates that there are no non-null arguments following a null one and
 /// throws an appropriate [ArgumentError] on failure.
-void _validateArgList(String method, List<String> args) {
+void _validateArgList(String method, List<String?> args) {
   for (var i = 1; i < args.length; i++) {
     // Ignore nulls hanging off the end.
     if (args[i] == null || args[i - 1] != null) continue;

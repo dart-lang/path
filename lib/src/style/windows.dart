@@ -76,7 +76,7 @@ class WindowsStyle extends InternalStyle {
   bool isRootRelative(String path) => rootLength(path) == 1;
 
   @override
-  String getRelativeRoot(String path) {
+  String? getRelativeRoot(String path) {
     final length = rootLength(path);
     if (length == 1) return path[0];
     return null;
@@ -106,12 +106,12 @@ class WindowsStyle extends InternalStyle {
   @override
   Uri absolutePathToUri(String path) {
     final parsed = ParsedPath.parse(path, this);
-    if (parsed.root.startsWith(r'\\')) {
+    if (parsed.root!.startsWith(r'\\')) {
       // Network paths become "file://server/share/path/to/file".
 
       // The root is of the form "\\server\share". We want "server" to be the
       // URI host, and "share" to be the first element of the path.
-      final rootParts = parsed.root.split('\\').where((part) => part != '');
+      final rootParts = parsed.root!.split('\\').where((part) => part != '');
       parsed.parts.insert(0, rootParts.last);
 
       if (parsed.hasTrailingSeparator) {
@@ -136,7 +136,7 @@ class WindowsStyle extends InternalStyle {
       // Get rid of the trailing "\" in "C:\" because the URI constructor will
       // add a separator on its own.
       parsed.parts
-          .insert(0, parsed.root.replaceAll('/', '').replaceAll('\\', ''));
+          .insert(0, parsed.root!.replaceAll('/', '').replaceAll('\\', ''));
 
       return Uri(scheme: 'file', pathSegments: parsed.parts);
     }

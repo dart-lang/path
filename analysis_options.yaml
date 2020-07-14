@@ -4,6 +4,9 @@ analyzer:
   strong-mode:
     implicit-casts: false
 
+  enable-experiment:
+    - non-nullable
+
 linter:
   rules:
     - avoid_catching_errors

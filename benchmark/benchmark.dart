@@ -32,14 +32,14 @@ final platformPaths = {
 };
 
 /// The command line arguments passed to this script.
-List<String> arguments;
+late final List<String> arguments;
 
 void main(List<String> args) {
   arguments = args;
 
   for (var style in [p.Style.posix, p.Style.url, p.Style.windows]) {
     final context = p.Context(style: style);
-    final files = genericPaths.toList()..addAll(platformPaths[style]);
+    final files = <String>[...genericPaths, ...platformPaths[style]!];
 
     void benchmark(String name, Function function) {
       runBenchmark('${style.name}-$name', 100000, () {

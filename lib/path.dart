@@ -72,13 +72,13 @@ String get current {
   try {
     uri = Uri.base;
   } on Exception {
-    if (_current != null) return _current;
+    if (_current != null) return _current!;
     rethrow;
   }
 
   // Converting the base URI to a file path is pretty slow, and the base URI
   // rarely changes in practice, so we cache the result here.
-  if (uri == _currentUriBase) return _current;
+  if (uri == _currentUriBase) return _current!;
   _currentUriBase = uri;
 
   if (Style.platform == Style.url) {
@@ -91,19 +91,19 @@ String get current {
     assert(path[lastIndex] == '/' || path[lastIndex] == '\\');
     _current = lastIndex == 0 ? path : path.substring(0, lastIndex);
   }
-  return _current;
+  return _current!;
 }
 
 /// The last value returned by [Uri.base].
 ///
 /// This is used to cache the current working directory.
-Uri _currentUriBase;
+Uri? _currentUriBase;
 
 /// The last known value of the current working directory.
 ///
 /// This is cached because [current] is called frequently but rarely actually
 /// changes.
-String _current;
+String? _current;
 
 /// Gets the path separator for the current platform. This is `\` on Windows
 /// and `/` on other platforms (including the browser).
@@ -117,12 +117,12 @@ String get separator => context.separator;
 ///
 /// Does not [normalize] or [canonicalize] paths.
 String absolute(String part1,
-        [String part2,
-        String part3,
-        String part4,
-        String part5,
-        String part6,
-        String part7]) =>
+        [String? part2,
+        String? part3,
+        String? part4,
+        String? part5,
+        String? part6,
+        String? part7]) =>
     context.absolute(part1, part2, part3, part4, part5, part6, part7);
 
 /// Gets the part of [path] after the last separator.
@@ -255,13 +255,13 @@ bool isRootRelative(String path) => context.isRootRelative(path);
 ///
 ///     p.join('path', '/to', 'foo'); // -> '/to/foo'
 String join(String part1,
-        [String part2,
-        String part3,
-        String part4,
-        String part5,
-        String part6,
-        String part7,
-        String part8]) =>
+        [String? part2,
+        String? part3,
+        String? part4,
+        String? part5,
+        String? part6,
+        String? part7,
+        String? part8]) =>
     context.join(part1, part2, part3, part4, part5, part6, part7, part8);
 
 /// Joins the given path parts into a single path using the current platform's
@@ -355,7 +355,7 @@ String normalize(String path) => context.normalize(path);
 ///     // URL
 ///     p.relative('https://dart.dev', from: 'https://pub.dev');
 ///       // -> 'https://dart.dev'
-String relative(String path, {String from}) =>
+String relative(String path, {String? from}) =>
     context.relative(path, from: from);
 
 /// Returns `true` if [child] is a path beneath `parent`, and `false` otherwise.

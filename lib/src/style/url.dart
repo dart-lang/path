@@ -79,7 +79,7 @@ class UrlStyle extends InternalStyle {
       path.isNotEmpty && isSeparator(path.codeUnitAt(0));
 
   @override
-  String getRelativeRoot(String path) => isRootRelative(path) ? '/' : null;
+  String? getRelativeRoot(String path) => isRootRelative(path) ? '/' : null;
 
   @override
   String pathFromUri(Uri uri) => uri.toString();

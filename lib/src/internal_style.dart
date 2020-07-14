@@ -43,7 +43,7 @@ abstract class InternalStyle extends Style {
   /// Gets the root prefix of [path] if path is absolute. If [path] is relative,
   /// returns `null`.
   @override
-  String getRoot(String path) {
+  String? getRoot(String path) {
     final length = rootLength(path);
     if (length > 0) return path.substring(0, length);
     return isRootRelative(path) ? path[0] : null;

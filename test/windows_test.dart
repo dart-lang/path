@@ -36,8 +36,6 @@ void main() {
     expect(context.extension('a.b/c.d', 2), '.d');
     expect(() => context.extension(r'foo.bar.dart.js', 0), throwsRangeError);
     expect(() => context.extension(r'foo.bar.dart.js', -1), throwsRangeError);
-    expect(
-        () => context.extension(r'foo.bar.dart.js', null), throwsArgumentError);
   });
 
   test('rootPrefix', () {
@@ -248,7 +246,6 @@ void main() {
 
     test('disallows intermediate nulls', () {
       expect(() => context.join('a', null, 'b'), throwsArgumentError);
-      expect(() => context.join(null, 'a'), throwsArgumentError);
     });
 
     test('join does not modify internal ., .., or trailing separators', () {

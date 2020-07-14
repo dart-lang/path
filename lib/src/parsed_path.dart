@@ -13,7 +13,7 @@ class ParsedPath {
   /// On POSIX systems, this will be `null` or "/". On Windows, it can be
   /// `null`, "//" for a UNC path, or something like "C:\" for paths with drive
   /// letters.
-  String root;
+  String? root;
 
   /// Whether this path is root-relative.
   ///
@@ -33,7 +33,7 @@ class ParsedPath {
 
   /// The file extension of the last non-empty part, or "" if it doesn't have
   /// one.
-  String extension([int level]) => _splitExtension(level)[1];
+  String extension([int level = 1]) => _splitExtension(level)[1];
 
   /// `true` if this is an absolute path.
   bool get isAbsolute => root != null;
@@ -131,14 +131,14 @@ class ParsedPath {
     parts = newParts;
     separators =
         List.filled(newParts.length + 1, style.separator, growable: true);
-    if (!isAbsolute || newParts.isEmpty || !style.needsSeparator(root)) {
+    if (!isAbsolute || newParts.isEmpty || !style.needsSeparator(root!)) {
       separators[0] = '';
     }
 
     // Normalize the Windows root if needed.
     if (root != null && style == Style.windows) {
-      if (canonicalize) root = root.toLowerCase();
-      root = root.replaceAll('/', '\\');
+      if (canonicalize) root = root!.toLowerCase();
+      root = root!.replaceAll('/', '\\');
     }
     removeTrailingSeparators();
   }
@@ -185,13 +185,13 @@ class ParsedPath {
   /// Returns a two-element list. The first is the name of the file without any
   /// extension. The second is the extension or "" if it has none.
   List<String> _splitExtension([int level = 1]) {
-    if (level == null) throw ArgumentError.notNull('level');
     if (level <= 0) {
       throw RangeError.value(
           level, 'level', "level's value must be greater than 0");
     }
 
-    final file = parts.lastWhere((p) => p != '', orElse: () => null);
+    final file =
+        parts.cast<String?>().lastWhere((p) => p != '', orElse: () => null);
 
     if (file == null) return ['', ''];
     if (file == '..') return ['..', ''];

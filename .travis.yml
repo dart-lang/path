@@ -1,34 +1,30 @@
 language: dart
 
 dart:
-  - 2.0.0
   - dev
 
-dart_task:
-  - test: --platform vm,chrome
-
-matrix:
+jobs:
   include:
-  # Run tests on mac and windows – but just dev SDKs, no browser
   - dart: dev
-    dart_task: test
+    script: pub run --enable-experiment=non-nullable test
+    os: linux
+  - dart: dev
+    script: pub run --enable-experiment=non-nullable test
     os: windows
   - dart: dev
-    dart_task: test
+    script: pub run --enable-experiment=non-nullable test
     os: osx
-  # Only validate formatting using the dev release
+  - dart_task: dartfmt
+  - dart_task:
+      dartanalyzer: --enable-experiment=non-nullable --fatal-infos --fatal-warnings .
   - dart: dev
-    dart_task: dartfmt
-  - dart: dev
-    dart_task:
-      dartanalyzer: --fatal-infos --fatal-warnings .
-  - dart: 2.0.0
-    dart_task:
-      dartanalyzer: --fatal-warnings .
+    script: pub run --enable-experiment=non-nullable test -p chrome
+    os: linux
 
 # Only building master means that we don't run two builds for each pull request.
+# Temporarily adding `null_safety`
 branches:
-  only: [master]
+  only: [master, null_safety]
 
 cache:
  directories:
