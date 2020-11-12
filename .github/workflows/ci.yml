@@ -9,7 +9,7 @@ on:
     - cron: '0 0 * * 0'
 
 jobs:
-  analyze_and_format:
+  analyze_format:
     runs-on: ubuntu-latest
     steps:
     - uses: cedx/setup-dart@v2
@@ -21,7 +21,17 @@ jobs:
 
     - run: dart format --output=none --set-exit-if-changed .
     - run: dart analyze --fatal-warnings --fatal-infos .
-  test:
+  test_web:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: cedx/setup-dart@v2
+      with:
+        release-channel: dev
+    - uses: actions/checkout@v2
+
+    - run: pub get
+    - run: dart test -p chrome
+  test_vm:
     strategy:
       matrix:
        os: [macos-latest, windows-latest, ubuntu-latest]
@@ -33,4 +43,4 @@ jobs:
     - uses: actions/checkout@v2
 
     - run: pub get
-    - run: dart test -p vm,chrome
+    - run: dart test -p vm
