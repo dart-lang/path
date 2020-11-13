@@ -20,7 +20,7 @@ jobs:
     - run: pub get
 
     - run: dart format --output=none --set-exit-if-changed .
-    - run: dart analyze --fatal-warnings --fatal-infos .
+    - run: dart analyze --fatal-infos .
   test_web:
     runs-on: ubuntu-latest
     steps:
