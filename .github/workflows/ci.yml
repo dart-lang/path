@@ -15,6 +15,7 @@ jobs:
     - uses: cedx/setup-dart@v2
       with:
         release-channel: dev
+    - run: dart --version
     - uses: actions/checkout@v2
 
     - run: pub get
@@ -27,10 +28,11 @@ jobs:
     - uses: cedx/setup-dart@v2
       with:
         release-channel: dev
+    - run: dart --version
     - uses: actions/checkout@v2
 
     - run: pub get
-    - run: dart test -p chrome
+    - run: pub run test -p chrome
   test_vm:
     strategy:
       matrix:
@@ -40,7 +42,8 @@ jobs:
     - uses: cedx/setup-dart@v2
       with:
         release-channel: dev
+    - run: dart --version
     - uses: actions/checkout@v2
 
     - run: pub get
-    - run: dart test -p vm
+    - run: pub run test -p vm
