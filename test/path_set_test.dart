@@ -24,14 +24,6 @@ void main() {
       expect(set, contains('foo'));
       expect(set, contains(absolute('foo')));
     });
-
-    test('two nulls', () {
-      final set = PathSet();
-      expect(set.add(null), isTrue);
-      expect(set.add(null), isFalse);
-      expect(set, hasLength(1));
-      expect(set, contains(null));
-    });
   });
 
   group('considers unequal', () {
@@ -42,15 +34,6 @@ void main() {
       expect(set, hasLength(2));
       expect(set, contains('foo'));
       expect(set, contains('bar'));
-    });
-
-    test('a path and null', () {
-      final set = PathSet();
-      expect(set.add('foo'), isTrue);
-      expect(set.add(null), isTrue);
-      expect(set, hasLength(2));
-      expect(set, contains('foo'));
-      expect(set, contains(null));
     });
   });
 

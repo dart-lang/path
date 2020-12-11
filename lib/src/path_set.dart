@@ -7,9 +7,9 @@ import 'dart:collection';
 import '../path.dart' as p;
 
 /// A set containing paths, compared using [p.equals] and [p.hash].
-class PathSet extends IterableBase<String?> implements Set<String?> {
+class PathSet extends IterableBase<String> implements Set<String> {
   /// The set to which we forward implementation methods.
-  final Set<String?> _inner;
+  final Set<String> _inner;
 
   /// Creates an empty [PathSet] whose contents are compared using
   /// `context.equals` and `context.hash`.
@@ -27,16 +27,12 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
       : _inner = _create(context)..addAll(other);
 
   /// Creates a set that uses [context] for equality and hashing.
-  static Set<String?> _create(p.Context? context) {
+  static Set<String> _create(p.Context? context) {
     context ??= p.context;
     return LinkedHashSet(
-        equals: (path1, path2) {
-          if (path1 == null) return path2 == null;
-          if (path2 == null) return false;
-          return context!.equals(path1, path2);
-        },
-        hashCode: (path) => path == null ? 0 : context!.hash(path),
-        isValidKey: (path) => path is String || path == null);
+        equals: (path1, path2) => context!.equals(path1, path2),
+        hashCode: (path) => context!.hash(path),
+        isValidKey: (path) => path is String);
   }
 
   // Normally we'd use DelegatingSetView from the collection package to
@@ -44,16 +40,16 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
   // it's so widely used that even brief version skew can be very painful.
 
   @override
-  Iterator<String?> get iterator => _inner.iterator;
+  Iterator<String> get iterator => _inner.iterator;
 
   @override
   int get length => _inner.length;
 
   @override
-  bool add(String? value) => _inner.add(value);
+  bool add(String value) => _inner.add(value);
 
   @override
-  void addAll(Iterable<String?> elements) => _inner.addAll(elements);
+  void addAll(Iterable<String> elements) => _inner.addAll(elements);
 
   @override
   Set<T> cast<T>() => _inner.cast<T>();
@@ -68,10 +64,10 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
   bool containsAll(Iterable<Object?> other) => _inner.containsAll(other);
 
   @override
-  Set<String?> difference(Set<Object?> other) => _inner.difference(other);
+  Set<String> difference(Set<Object?> other) => _inner.difference(other);
 
   @override
-  Set<String?> intersection(Set<Object?> other) => _inner.intersection(other);
+  Set<String> intersection(Set<Object?> other) => _inner.intersection(other);
 
   @override
   String? lookup(Object? element) => _inner.lookup(element);
@@ -83,17 +79,17 @@ class PathSet extends IterableBase<String?> implements Set<String?> {
   void removeAll(Iterable<Object?> elements) => _inner.removeAll(elements);
 
   @override
-  void removeWhere(bool Function(String?) test) => _inner.removeWhere(test);
+  void removeWhere(bool Function(String) test) => _inner.removeWhere(test);
 
   @override
   void retainAll(Iterable<Object?> elements) => _inner.retainAll(elements);
 
   @override
-  void retainWhere(bool Function(String?) test) => _inner.retainWhere(test);
+  void retainWhere(bool Function(String) test) => _inner.retainWhere(test);
 
   @override
-  Set<String?> union(Set<String?> other) => _inner.union(other);
+  Set<String> union(Set<String> other) => _inner.union(other);
 
   @override
-  Set<String?> toSet() => _inner.toSet();
+  Set<String> toSet() => _inner.toSet();
 }
