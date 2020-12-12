@@ -24,14 +24,6 @@ void main() {
       expect(map, containsPair('foo', 2));
       expect(map, containsPair(absolute('foo'), 2));
     });
-
-    test('two nulls', () {
-      final map = PathMap<int>();
-      map[null] = 1;
-      map[null] = 2;
-      expect(map, hasLength(1));
-      expect(map, containsPair(null, 2));
-    });
   });
 
   group('considers unequal', () {
@@ -42,15 +34,6 @@ void main() {
       expect(map, hasLength(2));
       expect(map, containsPair('foo', 1));
       expect(map, containsPair('bar', 2));
-    });
-
-    test('a path and null', () {
-      final map = PathMap<int>();
-      map['foo'] = 1;
-      map[null] = 2;
-      expect(map, hasLength(2));
-      expect(map, containsPair('foo', 1));
-      expect(map, containsPair(null, 2));
     });
   });
 

@@ -2,6 +2,8 @@
 
 * Make `PathSet` a `Set<String>` rather than a `Set<String?>`.
 
+* Make `PathMap` a `Map<String, V>` rather than a `Map<String?, V>`.
+
 ## 1.8.0-nullsafety.3
 
 * Update SDK constraints to `>=2.12.0-0 <3.0.0` based on beta release

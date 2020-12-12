@@ -7,7 +7,7 @@ import 'dart:collection';
 import '../path.dart' as p;
 
 /// A map whose keys are paths, compared using [p.equals] and [p.hash].
-class PathMap<V> extends MapView<String?, V> {
+class PathMap<V> extends MapView<String, V> {
   /// Creates an empty [PathMap] whose keys are compared using `context.equals`
   /// and `context.hash`.
   ///
@@ -24,15 +24,11 @@ class PathMap<V> extends MapView<String?, V> {
       : super(_create(context)..addAll(other));
 
   /// Creates a map that uses [context] for equality and hashing.
-  static Map<String?, V> _create<V>(p.Context? context) {
+  static Map<String, V> _create<V>(p.Context? context) {
     context ??= p.context;
     return LinkedHashMap(
-        equals: (path1, path2) {
-          if (path1 == null) return path2 == null;
-          if (path2 == null) return false;
-          return context!.equals(path1, path2);
-        },
-        hashCode: (path) => path == null ? 0 : context!.hash(path),
-        isValidKey: (path) => path is String || path == null);
+        equals: (path1, path2) => context!.equals(path1, path2),
+        hashCode: (path) => context!.hash(path),
+        isValidKey: (path) => path is String);
   }
 }
