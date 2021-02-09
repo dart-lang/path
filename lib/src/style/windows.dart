@@ -13,8 +13,6 @@ const _asciiCaseBit = 0x20;
 
 /// The style for Windows paths.
 class WindowsStyle extends InternalStyle {
-  WindowsStyle();
-
   @override
   final name = 'windows';
   @override
