@@ -8,8 +8,6 @@ import '../utils.dart';
 
 /// The style for URL paths.
 class UrlStyle extends InternalStyle {
-  UrlStyle();
-
   @override
   final name = 'url';
   @override

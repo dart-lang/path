@@ -8,8 +8,6 @@ import '../parsed_path.dart';
 
 /// The style for POSIX paths.
 class PosixStyle extends InternalStyle {
-  PosixStyle();
-
   @override
   final name = 'posix';
   @override
