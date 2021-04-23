@@ -1,49 +1,52 @@
 name: ci
 
 on:
+  # Run on PRs and pushes to the default branch.
   push:
     branches: [ master ]
   pull_request:
+    branches: [ master ]
   schedule:
-    # “At 00:00 (UTC) on Sunday.”
-    - cron: '0 0 * * 0'
+    - cron: "0 0 * * 0"
+
+env:
+  PUB_ENVIRONMENT: bot.github
 
 jobs:
-  analyze_format:
+  # Check code formatting and static analysis on a single OS (linux)
+  # against Dart dev and stable.
+  analyze:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sdk: [dev]
     steps:
-    - uses: cedx/setup-dart@v2
-      with:
-        release-channel: dev
-    - run: dart --version
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.0
+        with:
+          sdk: ${{ matrix.sdk }}
+      - id: install
+        name: Install dependencies
+        run: dart pub get
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed .
+        if: always() && steps.install.outcome == 'success'
+      - name: Analyze code
+        run: dart analyze --fatal-infos
+        if: always() && steps.install.outcome == 'success'
 
-    - run: pub get
-
-    - run: dart format --output=none --set-exit-if-changed .
-    - run: dart analyze --fatal-infos .
-  test_web:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: cedx/setup-dart@v2
-      with:
-        release-channel: dev
-    - run: dart --version
-    - uses: actions/checkout@v2
-
-    - run: pub get
-    - run: pub run test -p chrome
-  test_vm:
+  test:
+    needs: analyze
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-       os: [macos-latest, windows-latest, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
+        os: [ubuntu-latest]
+        sdk: [2.12.0, dev]
     steps:
-    - uses: cedx/setup-dart@v2
-      with:
-        release-channel: dev
-    - run: dart --version
-    - uses: actions/checkout@v2
-
-    - run: pub get
-    - run: pub run test -p vm
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.0
+        with:
+          sdk: ${{ matrix.sdk }}
+      - run: dart pub get
+      - run: dart test --platform vm,chrome
