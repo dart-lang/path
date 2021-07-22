@@ -22,7 +22,7 @@ void main() {
     expect(context.extension('a/..'), '');
     expect(context.extension('foo.dart'), '.dart');
     expect(context.extension('foo.dart.js'), '.js');
-    expect(context.extension('foo bar\gule fisk.dart.js'), '.js');
+    expect(context.extension('foo bargule fisk.dart.js'), '.js');
     expect(context.extension(r'a.b\c'), '');
     expect(context.extension('a.b/c.d'), '.d');
     expect(context.extension(r'~\.bashrc'), '');

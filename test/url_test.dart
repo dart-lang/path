@@ -419,8 +419,8 @@ void main() {
       expect(context.normalize('a/./../b'), 'b');
       expect(context.normalize('a/b/c/../../d/e/..'), 'a/d');
       expect(context.normalize('a/b/../../../../c'), '../../c');
-      expect(context.normalize('z/a/b/../../..\../c'), 'z/..\../c');
-      expect(context.normalize('a/b\c/../d'), 'a/d');
+      expect(context.normalize('z/a/b/../../..../c'), 'z/..../c');
+      expect(context.normalize('a/bc/../d'), 'a/d');
     });
 
     test('does not walk before root on absolute paths', () {
