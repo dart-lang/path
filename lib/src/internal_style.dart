@@ -61,6 +61,7 @@ abstract class InternalStyle extends Style {
   /// Returns the URI that represents a relative path.
   @override
   Uri relativePathToUri(String path) {
+    if (path.isEmpty) return Uri();
     final segments = context.split(path);
 
     // Ensure that a trailing slash in the path produces a trailing slash in the

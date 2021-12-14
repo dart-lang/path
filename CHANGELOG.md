@@ -1,4 +1,6 @@
-## 1.8.1-dev
+## 1.8.1
+
+* Don't crash when an empty string is passed to `toUri()`.
 
 ## 1.8.0
 

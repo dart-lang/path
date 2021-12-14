@@ -759,6 +759,7 @@ void main() {
         Uri.parse('file:///C:/_%7B_%7D_%60_%5E_%20_%22_%25_'));
     expect(context.toUri(r'_{_}_`_^_ _"_%_'),
         Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_'));
+    expect(context.toUri(''), Uri.parse(''));
   });
 
   group('prettyUri', () {
