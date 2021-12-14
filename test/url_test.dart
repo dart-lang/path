@@ -871,6 +871,7 @@ void main() {
         Uri.parse('http://foo.com/_%7B_%7D_%60_%5E_%20_%22_%25_'));
     expect(context.toUri(r'_%7B_%7D_%60_%5E_%20_%22_%25_'),
         Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_'));
+    expect(context.toUri(''), Uri.parse(''));
   });
 
   group('prettyUri', () {
