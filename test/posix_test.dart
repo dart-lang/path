@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
@@ -123,6 +125,8 @@ void main() {
     expect(context.isAbsolute('C:/a'), false);
     expect(context.isAbsolute(r'C:\a'), false);
     expect(context.isAbsolute(r'\\a'), false);
+    expect(context.isAbsolute('~/a'), false);
+    expect(context.isAbsolute('~user/a'), false);
   });
 
   test('isRelative', () {
@@ -139,6 +143,8 @@ void main() {
     expect(context.isRelative('C:/a'), true);
     expect(context.isRelative(r'C:\a'), true);
     expect(context.isRelative(r'\\a'), true);
+    expect(context.isRelative('~/a'), true);
+    expect(context.isRelative('~user/a'), true);
   });
 
   group('join', () {
@@ -616,5 +622,16 @@ void main() {
     test('with a Uri object', () {
       expect(context.prettyUri(Uri.parse('a/b')), 'a/b');
     });
+  });
+  group('tilde', () {
+    String homedir = ((Platform.environment.containsKey('HOME'))?Platform.environment['HOME']:"")!;
+    String usern = ((Platform.environment.containsKey('USER'))?Platform.environment['USER']:"")!;
+    test('simple cases', () {
+      expect(context.tildeExpansion('~').toString(), homedir);
+      expect(context.tildeExpansion('~/a/b.txt').toString(), '$homedir/a/b.txt');
+      expect(context.tildeExpansion('~user').toString(), '~user');
+      expect(context.tildeExpansion('~$usern/a/b.txt').toString(), '$homedir/a/b.txt');
+    });
+
   });
 }

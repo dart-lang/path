@@ -2,6 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
+import 'package:posix/posix.dart';
+
 import '../characters.dart' as chars;
 import '../internal_style.dart';
 import '../parsed_path.dart';
@@ -70,5 +74,25 @@ class PosixStyle extends InternalStyle {
     }
 
     return Uri(scheme: 'file', pathSegments: parsed.parts);
+  }
+
+  @override
+  String tildeExpansion(String path){
+    if(path.startsWith('~'))
+    {
+      List<String> parts = path.split(separator);
+      if(parts[0] == '~') parts[0] = ((Platform.environment.containsKey('HOME'))?Platform.environment['HOME']:"")!;
+      else {
+        String user = parts[0].replaceAll('~', '');
+        try {
+          parts[0] = getpwnam(user).homePathTo;
+        }
+        catch(e){
+          //print("failed to find user $user");
+        }
+      }
+      path = parts.join(separator);
+    }
+    return path;
   }
 }

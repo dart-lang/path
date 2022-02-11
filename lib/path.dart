@@ -459,3 +459,8 @@ Uri toUri(String path) => context.toUri(path);
 ///     p.prettyUri('https://dart.dev/root/path/a/b.dart'); // -> r'a/b.dart'
 ///     p.prettyUri('file:///root/path'); // -> 'file:///root/path'
 String prettyUri(uri) => context.prettyUri(uri);
+/// Tilde expansion [path], find an replace ~[user] wherever possible and replace by home path.
+///
+///     context.tiledExpansion('~/path/'); // -> '/home/user/path'
+///     posix doesn't say what happens when the user is not found, here the original path is returned
+String tildeExpansion(String path) => context.tildeExpansion(path);

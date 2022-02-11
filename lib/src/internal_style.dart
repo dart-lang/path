@@ -87,4 +87,7 @@ abstract class InternalStyle extends Style {
   int canonicalizeCodeUnit(int codeUnit) => codeUnit;
 
   String canonicalizePart(String part) => part;
+  /// tries to interpret the tilde at the start of the parth and to resolve it into
+  /// a user home path, returns original otherwise
+  String tildeExpansion(String part) => part;
 }

@@ -1068,6 +1068,23 @@ class Context {
   }
 
   ParsedPath _parse(String path) => ParsedPath.parse(path, style);
+
+  /// Tilde expansion [path], find an replace ~[user] wherever possible and replace by home path.
+  ///
+  ///     context.tiledExpansion('~/path/'); // -> '/home/user/path'
+  ///     posix doesn't say what happens when the user is not found, here the original path is returned
+  String tildeExpansion(String path) {
+    if (!_needsTildeExpansion(path)) return path;
+    //final parsed = _parse(path);
+    final parsed = style.tildeExpansion(path);
+    return parsed;
+  }
+  /// Returns whether [path] needs to be tilde expansed.
+  bool _needsTildeExpansion(String path) {
+    if (style == Style.windows) return false;
+    if(path.contains('~')) return true;
+    return false;
+  }
 }
 
 /// Parses argument if it's a [String] or returns it intact if it's a [Uri].
