@@ -1,3 +1,7 @@
+## 1.8.2-dev
+
+* Enable the `avoid_dynamic_calls` lint.
+
 ## 1.8.1
 
 * Don't crash when an empty string is passed to `toUri()`.

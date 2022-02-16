@@ -1,5 +1,5 @@
 name: path
-version: 1.8.1
+version: 1.8.2-dev
 
 description: >-
   A string-based path manipulation library. All of the path operations you know
