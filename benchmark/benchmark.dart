@@ -41,7 +41,7 @@ void main(List<String> args) {
     final context = p.Context(style: style);
     final files = <String>[...genericPaths, ...platformPaths[style]!];
 
-    void benchmark(String name, Function function) {
+    void benchmark(String name, void Function(String) function) {
       runBenchmark('${style.name}-$name', 100000, () {
         for (var file in files) {
           function(file);
@@ -85,7 +85,7 @@ void main(List<String> args) {
   runBenchmark('current', 100000, () => p.current);
 }
 
-void runBenchmark(String name, int count, Function function) {
+void runBenchmark(String name, int count, void Function() function) {
   // If names are passed on the command-line, they select which benchmarks are
   // run.
   if (arguments.isNotEmpty && !arguments.contains(name)) return;
