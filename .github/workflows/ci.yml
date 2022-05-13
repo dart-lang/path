@@ -1,4 +1,4 @@
-name: ci
+name: Dart CI
 
 on:
   # Run on PRs and pushes to the default branch.
