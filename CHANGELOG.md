@@ -1,6 +1,7 @@
-## 1.8.2-dev
+## 1.8.2
 
 * Enable the `avoid_dynamic_calls` lint.
+* Popuate the pubspec `repository` field.
 
 ## 1.8.1
 
