@@ -32,11 +32,10 @@ the path style (POSIX, Windows, or URLs) of the host platform. For example:
 p.join('directory', 'file.txt');
 ```
 
-This calls the top-level `join()` function to join "directory" and
+This calls the top-level `join()` function to join the "directory" and
 "file.txt" using the current platform's directory separator.
 
-If you want to work with paths for a specific platform regardless of the
-underlying platform that the program is running on, you can create a
+If you want to work with paths for a specific platform regardless of the underlying platform that the program is running on, you can create a
 [Context] and give it an explicit [Style]:
 
 ```dart
@@ -55,8 +54,8 @@ major version would probably cause a lot of versioning pain, so some flexibility
 is necessary.
 
 We try to guarantee that **operations with valid inputs and correct output will
-not change**. Operations where one or more inputs are invalid according to the
-semantics of the corresponding platform may produce different output over time.
+not change**. Operations, where one or more inputs are invalid according to the
+semantics of the corresponding platform, may produce different outputs over time.
 Operations for which `path` produces incorrect output will also change so that
 we can fix bugs.
 
@@ -118,3 +117,4 @@ We believe this library handles most of the corner cases of Windows paths
 
 If you use this package in a browser, then it considers the "platform" to be
 the browser itself and uses URL strings to represent "browser paths".
+
