@@ -215,7 +215,7 @@ class Context {
   /// If any part ends in a path separator, then a redundant separator will not
   /// be added:
   ///
-  ///     context.join('path/', 'to', 'foo'); // -> 'path/to/foo
+  ///     context.join('path/', 'to', 'foo'); // -> 'path/to/foo'
   ///
   /// If a part is an absolute path, then anything before that will be ignored:
   ///
@@ -250,7 +250,7 @@ class Context {
   /// If any part ends in a path separator, then a redundant separator will not
   /// be added:
   ///
-  ///     context.joinAll(['path/', 'to', 'foo']); // -> 'path/to/foo
+  ///     context.joinAll(['path/', 'to', 'foo']); // -> 'path/to/foo'
   ///
   /// If a part is an absolute path, then anything before that will be ignored:
   ///

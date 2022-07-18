@@ -249,7 +249,7 @@ bool isRootRelative(String path) => context.isRootRelative(path);
 /// If any part ends in a path separator, then a redundant separator will not
 /// be added:
 ///
-///     p.join('path/', 'to', 'foo'); // -> 'path/to/foo
+///     p.join('path/', 'to', 'foo'); // -> 'path/to/foo'
 ///
 /// If a part is an absolute path, then anything before that will be ignored:
 ///
@@ -272,7 +272,7 @@ String join(String part1,
 /// If any part ends in a path separator, then a redundant separator will not
 /// be added:
 ///
-///     p.joinAll(['path/', 'to', 'foo']); // -> 'path/to/foo
+///     p.joinAll(['path/', 'to', 'foo']); // -> 'path/to/foo'
 ///
 /// If a part is an absolute path, then anything before that will be ignored:
 ///
