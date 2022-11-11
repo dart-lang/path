@@ -219,17 +219,28 @@ void main() {
           r'a\b\c\d\e\f\g\h\i');
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
           r'a\b\c\d\e\f\g\h\i\j');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
           r'a\b\c\d\e\f\g\h\i\j\k');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
           r'a\b\c\d\e\f\g\h\i\j\k\l');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
           r'a\b\c\d\e\f\g\h\i\j\k\l\m');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n'),
           r'a\b\c\d\e\f\g\h\i\j\k\l\m\n');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o'),
           r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o', 'p'),
           r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p');
     });
 
@@ -275,7 +286,26 @@ void main() {
 
   group('joinAll', () {
     test('allows more than sixteen parts', () {
-      expect(context.joinAll(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q']),
+      expect(
+          context.joinAll([
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q'
+          ]),
           r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q');
     });
 
@@ -679,13 +709,21 @@ void main() {
           r'C:\root\path\a\b\c\d\e\f\g\h\j');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'),
           r'C:\root\path\a\b\c\d\e\f\g\h\j\k');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
           r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
           r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
           r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m\n');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o'),
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k',
+              'l', 'm', 'n', 'o'),
           r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m\n\o');
     });
 

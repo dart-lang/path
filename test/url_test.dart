@@ -209,17 +209,28 @@ void main() {
           'a/b/c/d/e/f/g/h/i');
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
           'a/b/c/d/e/f/g/h/i/j');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
           'a/b/c/d/e/f/g/h/i/j/k');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
           'a/b/c/d/e/f/g/h/i/j/k/l');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
           'a/b/c/d/e/f/g/h/i/j/k/l/m');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n'),
           'a/b/c/d/e/f/g/h/i/j/k/l/m/n');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o'),
           'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o');
-      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'),
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o', 'p'),
           'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p');
     });
 
@@ -302,7 +313,26 @@ void main() {
 
   group('joinAll', () {
     test('allows more than sixteen parts', () {
-      expect(context.joinAll(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q']),
+      expect(
+          context.joinAll([
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q'
+          ]),
           'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q');
     });
 
@@ -800,13 +830,21 @@ void main() {
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o'),
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k',
+              'l', 'm', 'n', 'o'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n/o');
     });
 
