@@ -113,7 +113,8 @@ class Context {
       return part1;
     }
 
-    return join(current, part1, part2, part3, part4, part5, part6, part7);
+    return join(current, part1, part2, part3, part4, part5, part6, part7, part8,
+        part9, part10, part11, part12, part13, part14, part15);
   }
 
   /// Gets the part of [path] after the last separator on the context's
