@@ -195,7 +195,7 @@ void main() {
   });
 
   group('join', () {
-    test('allows up to eight parts', () {
+    test('allows up to sixteen parts', () {
       expect(context.join('a'), 'a');
       expect(context.join('a', 'b'), 'a/b');
       expect(context.join('a', 'b', 'c'), 'a/b/c');
@@ -205,6 +205,22 @@ void main() {
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g'), 'a/b/c/d/e/f/g');
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
           'a/b/c/d/e/f/g/h');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
+          'a/b/c/d/e/f/g/h/i');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+          'a/b/c/d/e/f/g/h/i/j');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+          'a/b/c/d/e/f/g/h/i/j/k');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+          'a/b/c/d/e/f/g/h/i/j/k/l');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+          'a/b/c/d/e/f/g/h/i/j/k/l/m');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n'),
+          'a/b/c/d/e/f/g/h/i/j/k/l/m/n');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o'),
+          'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p'),
+          'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p');
     });
 
     test('does not add separator if a part ends in one', () {
@@ -285,9 +301,9 @@ void main() {
   });
 
   group('joinAll', () {
-    test('allows more than eight parts', () {
-      expect(context.joinAll(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']),
-          'a/b/c/d/e/f/g/h/i');
+    test('allows more than sixteen parts', () {
+      expect(context.joinAll(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q']),
+          'a/b/c/d/e/f/g/h/i/j/k/l/m/n/o/p/q');
     });
 
     test('ignores parts before an absolute path', () {
@@ -763,7 +779,7 @@ void main() {
   });
 
   group('absolute', () {
-    test('allows up to seven parts', () {
+    test('allows up to fifteen parts', () {
       expect(context.absolute('a'), 'https://dart.dev/root/path/a');
       expect(context.absolute('a', 'b'), 'https://dart.dev/root/path/a/b');
       expect(
@@ -776,6 +792,22 @@ void main() {
           'https://dart.dev/root/path/a/b/c/d/e/f');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'o'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n/o');
     });
 
     test('does not add separator if a part ends in one', () {

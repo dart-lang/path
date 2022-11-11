@@ -80,9 +80,17 @@ class Context {
       String? part4,
       String? part5,
       String? part6,
-      String? part7]) {
+      String? part7,
+      String? part8,
+      String? part9,
+      String? part10,
+      String? part11,
+      String? part12,
+      String? part13,
+      String? part14,
+      String? part15]) {
     _validateArgList(
-        'absolute', [part1, part2, part3, part4, part5, part6, part7]);
+        'absolute', [part1, part2, part3, part4, part5, part6, part7, part8, part9, part10, part11, part12, part13, part14, part15]);
 
     // If there's a single absolute path, just return it. This is a lot faster
     // for the common case of `p.absolute(path)`.
@@ -228,7 +236,15 @@ class Context {
       String? part5,
       String? part6,
       String? part7,
-      String? part8]) {
+      String? part8,
+      String? part9,
+      String? part10,
+      String? part11,
+      String? part12,
+      String? part13,
+      String? part14,
+      String? part15,
+      String? part16]) {
     final parts = <String?>[
       part1,
       part2,
@@ -237,7 +253,15 @@ class Context {
       part5,
       part6,
       part7,
-      part8
+      part8,
+      part9,
+      part10,
+      part11,
+      part12,
+      part13,
+      part14,
+      part15,
+      part16,
     ];
     _validateArgList('join', parts);
     return joinAll(parts.whereType<String>());
