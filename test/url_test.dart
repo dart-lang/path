@@ -826,26 +826,28 @@ void main() {
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
           'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j/k');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j/k/l');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j/k/l/m');
       expect(
-          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k',
-              'l', 'm', 'n', 'o'),
-          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/j/k/l/m/n/o');
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j/k/l/m/n');
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n', 'o'),
+          'https://dart.dev/root/path/a/b/c/d/e/f/g/h/i/j/k/l/m/n/o');
     });
 
     test('does not add separator if a part ends in one', () {

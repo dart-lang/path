@@ -705,26 +705,28 @@ void main() {
           r'C:\root\path\a\b\c\d\e\f\g\h');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
           r'C:\root\path\a\b\c\d\e\f\g\h\i');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j');
-      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j\k');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l');
       expect(
           context.absolute(
-              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m\n');
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m');
       expect(
-          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k',
-              'l', 'm', 'n', 'o'),
-          r'C:\root\path\a\b\c\d\e\f\g\h\j\k\l\m\n\o');
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m\n');
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n', 'o'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o');
     });
 
     test('does not add separator if a part ends in one', () {
