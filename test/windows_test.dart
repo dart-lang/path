@@ -205,7 +205,7 @@ void main() {
   });
 
   group('join', () {
-    test('allows up to eight parts', () {
+    test('allows up to sixteen parts', () {
       expect(context.join('a'), 'a');
       expect(context.join('a', 'b'), r'a\b');
       expect(context.join('a', 'b', 'c'), r'a\b\c');
@@ -215,6 +215,33 @@ void main() {
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g'), r'a\b\c\d\e\f\g');
       expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
           r'a\b\c\d\e\f\g\h');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
+          r'a\b\c\d\e\f\g\h\i');
+      expect(context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+          r'a\b\c\d\e\f\g\h\i\j');
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+          r'a\b\c\d\e\f\g\h\i\j\k');
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+          r'a\b\c\d\e\f\g\h\i\j\k\l');
+      expect(
+          context.join(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+          r'a\b\c\d\e\f\g\h\i\j\k\l\m');
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n'),
+          r'a\b\c\d\e\f\g\h\i\j\k\l\m\n');
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o'),
+          r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o');
+      expect(
+          context.join('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
+              'l', 'm', 'n', 'o', 'p'),
+          r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p');
     });
 
     test('does not add separator if a part ends or begins in one', () {
@@ -258,9 +285,28 @@ void main() {
   });
 
   group('joinAll', () {
-    test('allows more than eight parts', () {
-      expect(context.joinAll(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']),
-          r'a\b\c\d\e\f\g\h\i');
+    test('allows more than sixteen parts', () {
+      expect(
+          context.joinAll([
+            'a',
+            'b',
+            'c',
+            'd',
+            'e',
+            'f',
+            'g',
+            'h',
+            'i',
+            'j',
+            'k',
+            'l',
+            'm',
+            'n',
+            'o',
+            'p',
+            'q'
+          ]),
+          r'a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q');
     });
 
     test('does not add separator if a part ends or begins in one', () {
@@ -644,7 +690,7 @@ void main() {
   });
 
   group('absolute', () {
-    test('allows up to seven parts', () {
+    test('allows up to fifteen parts', () {
       expect(context.absolute('a'), r'C:\root\path\a');
       expect(context.absolute('a', 'b'), r'C:\root\path\a\b');
       expect(context.absolute('a', 'b', 'c'), r'C:\root\path\a\b\c');
@@ -655,6 +701,32 @@ void main() {
           r'C:\root\path\a\b\c\d\e\f');
       expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g'),
           r'C:\root\path\a\b\c\d\e\f\g');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'),
+          r'C:\root\path\a\b\c\d\e\f\g\h');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i');
+      expect(context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j');
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k');
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l');
+      expect(
+          context.absolute(
+              'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m');
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m\n');
+      expect(
+          context.absolute('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+              'k', 'l', 'm', 'n', 'o'),
+          r'C:\root\path\a\b\c\d\e\f\g\h\i\j\k\l\m\n\o');
     });
 
     test('does not add separator if a part ends in one', () {

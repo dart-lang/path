@@ -1,3 +1,7 @@
+## 1.8.3
+
+* Support up to 16 arguments in join function and up to 15 arguments in absolute function. 
+
 ## 1.8.2
 
 * Enable the `avoid_dynamic_calls` lint.
