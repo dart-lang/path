@@ -117,3 +117,4 @@ We believe this library handles most of the corner cases of Windows paths
 
 If you use this package in a browser, then it considers the "platform" to be
 the browser itself and uses URL strings to represent "browser paths".
+
