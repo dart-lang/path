@@ -23,7 +23,7 @@ class PosixStyle extends InternalStyle {
   @override
   final rootPattern = RegExp(r'^/');
   @override
-  final relativeRootPattern = null;
+  Pattern? get relativeRootPattern => null;
 
   @override
   bool containsSeparator(String path) => path.contains('/');
