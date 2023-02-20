@@ -27,6 +27,8 @@
 ///
 /// This will join "directory" and "file.txt" using the Windows path separator,
 /// even when the program is run on a POSIX machine.
+library;
+
 import 'src/context.dart';
 import 'src/style.dart';
 
@@ -50,7 +52,7 @@ final Context url = Context(style: Style.url);
 
 /// The system path context.
 ///
-/// This differs from a context created with [new Context] in that its
+/// This differs from a context created with [Context.new] in that its
 /// [Context.current] is always the current working directory, rather than being
 /// set once when the context is created.
 final Context context = createInternal();
@@ -432,7 +434,7 @@ String setExtension(String path, String extension) =>
 /// If [uri] is relative, a relative path will be returned.
 ///
 ///     p.fromUri('path/to/foo'); // -> 'path/to/foo'
-String fromUri(uri) => context.fromUri(uri);
+String fromUri(Object? uri) => context.fromUri(uri!);
 
 /// Returns the URI that represents [path].
 ///
@@ -476,4 +478,4 @@ Uri toUri(String path) => context.toUri(path);
 ///     // URL at "https://dart.dev/root/path"
 ///     p.prettyUri('https://dart.dev/root/path/a/b.dart'); // -> r'a/b.dart'
 ///     p.prettyUri('file:///root/path'); // -> 'file:///root/path'
-String prettyUri(uri) => context.prettyUri(uri);
+String prettyUri(Object? uri) => context.prettyUri(uri!);

@@ -1037,7 +1037,7 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(uri) => style.pathFromUri(_parseUri(uri));
+  String fromUri(Object? uri) => style.pathFromUri(_parseUri(uri!));
 
   /// Returns the URI that represents [path].
   ///
@@ -1088,8 +1088,8 @@ class Context {
   ///     context.prettyUri('https://dart.dev/root/path/a/b.dart');
   ///         // -> r'a/b.dart'
   ///     context.prettyUri('file:///root/path'); // -> 'file:///root/path'
-  String prettyUri(uri) {
-    final typedUri = _parseUri(uri);
+  String prettyUri(Object? uri) {
+    final typedUri = _parseUri(uri!);
     if (typedUri.scheme == 'file' && style == Style.url) {
       return typedUri.toString();
     } else if (typedUri.scheme != 'file' &&
@@ -1113,7 +1113,7 @@ class Context {
 /// Parses argument if it's a [String] or returns it intact if it's a [Uri].
 ///
 /// Throws an [ArgumentError] otherwise.
-Uri _parseUri(uri) {
+Uri _parseUri(Object uri) {
   if (uri is String) return Uri.parse(uri);
   if (uri is Uri) return uri;
   throw ArgumentError.value(uri, 'uri', 'Value must be a String or a Uri');

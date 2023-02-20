@@ -1,3 +1,7 @@
+## 1.8.4-dev
+
+* Require Dart 2.19
+
 ## 1.8.3
 
 * Support up to 16 arguments in join function and up to 15 arguments in absolute function. 
@@ -5,7 +9,7 @@
 ## 1.8.2
 
 * Enable the `avoid_dynamic_calls` lint.
-* Popuate the pubspec `repository` field.
+* Populate the pubspec `repository` field.
 
 ## 1.8.1
 
@@ -45,7 +49,7 @@
 ## 1.6.3
 
 * Don't throw a FileSystemException from `current` if the working directory has
-  been deleted but we have a cached one we can use.
+  been deleted, but we have a cached one we can use.
 
 ## 1.6.2
 
