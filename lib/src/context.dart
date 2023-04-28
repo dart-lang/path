@@ -356,7 +356,7 @@ class Context {
   ///     // Windows
   ///     context.split(r'C:\path\to\foo'); // -> [r'C:\', 'path', 'to', 'foo']
   ///     context.split(r'\\server\share\path\to\foo');
-  ///       // -> [r'\\server\share', 'foo', 'bar', 'baz']
+  ///       // -> [r'\\server\share', 'path', 'to', 'foo']
   ///
   ///     // Browser
   ///     context.split('https://dart.dev/path/to/foo');
