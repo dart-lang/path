@@ -456,7 +456,7 @@ String fromUri(Object? uri) => context.fromUri(uri!);
 /// If [path] is relative, a relative URI will be returned.
 ///
 ///     p.toUri('path/to/foo') // -> Uri.parse('path/to/foo')
-Uri toUri(String path) => context.toUri(path);
+Uri toUri(String path) => context.toUrl(path);
 
 /// Returns a terse, human-readable representation of [uri].
 ///

@@ -812,26 +812,26 @@ void main() {
     });
   });
 
-  test('toUri', () {
+  test('toUrl', () {
     expect(
-        context.toUri(r'C:\path\to\foo'), Uri.parse('file:///C:/path/to/foo'));
-    expect(context.toUri(r'C:\path\to\foo\'),
+        context.toUrl(r'C:\path\to\foo'), Uri.parse('file:///C:/path/to/foo'));
+    expect(context.toUrl(r'C:\path\to\foo\'),
         Uri.parse('file:///C:/path/to/foo/'));
-    expect(context.toUri(r'path\to\foo\'), Uri.parse('path/to/foo/'));
-    expect(context.toUri(r'C:\'), Uri.parse('file:///C:/'));
-    expect(context.toUri(r'\\server\share'), Uri.parse('file://server/share'));
+    expect(context.toUrl(r'path\to\foo\'), Uri.parse('path/to/foo/'));
+    expect(context.toUrl(r'C:\'), Uri.parse('file:///C:/'));
+    expect(context.toUrl(r'\\server\share'), Uri.parse('file://server/share'));
     expect(
-        context.toUri(r'\\server\share\'), Uri.parse('file://server/share/'));
-    expect(context.toUri(r'foo\bar'), Uri.parse('foo/bar'));
-    expect(context.toUri(r'C:\path\to\foo#bar'),
+        context.toUrl(r'\\server\share\'), Uri.parse('file://server/share/'));
+    expect(context.toUrl(r'foo\bar'), Uri.parse('foo/bar'));
+    expect(context.toUrl(r'C:\path\to\foo#bar'),
         Uri.parse('file:///C:/path/to/foo%23bar'));
-    expect(context.toUri(r'\\server\share\path\to\foo#bar'),
+    expect(context.toUrl(r'\\server\share\path\to\foo#bar'),
         Uri.parse('file://server/share/path/to/foo%23bar'));
-    expect(context.toUri(r'C:\_{_}_`_^_ _"_%_'),
+    expect(context.toUrl(r'C:\_{_}_`_^_ _"_%_'),
         Uri.parse('file:///C:/_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(r'_{_}_`_^_ _"_%_'),
+    expect(context.toUrl(r'_{_}_`_^_ _"_%_'),
         Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(''), Uri.parse(''));
+    expect(context.toUrl(''), Uri.parse(''));
   });
 
   group('prettyUri', () {

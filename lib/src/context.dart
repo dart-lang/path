@@ -1055,7 +1055,7 @@ class Context {
   ///     // URL
   ///     context.toUri('https://dart.dev/path/to/foo')
   ///       // -> Uri.parse('https://dart.dev/path/to/foo')
-  Uri toUri(String path) {
+  Uri toUrl(String path) {
     if (isRelative(path)) {
       return style.relativePathToUri(path);
     } else {

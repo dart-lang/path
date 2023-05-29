@@ -926,24 +926,24 @@ void main() {
     });
   });
 
-  test('toUri', () {
-    expect(context.toUri('https://dart.dev/path/to/foo'),
+  test('toUrl', () {
+    expect(context.toUrl('https://dart.dev/path/to/foo'),
         Uri.parse('https://dart.dev/path/to/foo'));
-    expect(context.toUri('https://dart.dev/path/to/foo/'),
+    expect(context.toUrl('https://dart.dev/path/to/foo/'),
         Uri.parse('https://dart.dev/path/to/foo/'));
-    expect(context.toUri('path/to/foo/'), Uri.parse('path/to/foo/'));
+    expect(context.toUrl('path/to/foo/'), Uri.parse('path/to/foo/'));
     expect(
-        context.toUri('file:///path/to/foo'), Uri.parse('file:///path/to/foo'));
-    expect(context.toUri('foo/bar'), Uri.parse('foo/bar'));
-    expect(context.toUri('https://dart.dev/path/to/foo%23bar'),
+        context.toUrl('file:///path/to/foo'), Uri.parse('file:///path/to/foo'));
+    expect(context.toUrl('foo/bar'), Uri.parse('foo/bar'));
+    expect(context.toUrl('https://dart.dev/path/to/foo%23bar'),
         Uri.parse('https://dart.dev/path/to/foo%23bar'));
     // Since the input path is also a URI, special characters should already
     // be percent encoded there too.
-    expect(context.toUri(r'http://foo.com/_%7B_%7D_%60_%5E_%20_%22_%25_'),
+    expect(context.toUrl(r'http://foo.com/_%7B_%7D_%60_%5E_%20_%22_%25_'),
         Uri.parse('http://foo.com/_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(r'_%7B_%7D_%60_%5E_%20_%22_%25_'),
+    expect(context.toUrl(r'_%7B_%7D_%60_%5E_%20_%22_%25_'),
         Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(''), Uri.parse(''));
+    expect(context.toUrl(''), Uri.parse(''));
   });
 
   group('prettyUri', () {

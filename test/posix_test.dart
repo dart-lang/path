@@ -650,19 +650,19 @@ void main() {
     });
   });
 
-  test('toUri', () {
-    expect(context.toUri('/path/to/foo'), Uri.parse('file:///path/to/foo'));
-    expect(context.toUri('/path/to/foo/'), Uri.parse('file:///path/to/foo/'));
-    expect(context.toUri('path/to/foo/'), Uri.parse('path/to/foo/'));
-    expect(context.toUri('/'), Uri.parse('file:///'));
-    expect(context.toUri('foo/bar'), Uri.parse('foo/bar'));
-    expect(context.toUri('/path/to/foo#bar'),
+  test('toUrl', () {
+    expect(context.toUrl('/path/to/foo'), Uri.parse('file:///path/to/foo'));
+    expect(context.toUrl('/path/to/foo/'), Uri.parse('file:///path/to/foo/'));
+    expect(context.toUrl('path/to/foo/'), Uri.parse('path/to/foo/'));
+    expect(context.toUrl('/'), Uri.parse('file:///'));
+    expect(context.toUrl('foo/bar'), Uri.parse('foo/bar'));
+    expect(context.toUrl('/path/to/foo#bar'),
         Uri.parse('file:///path/to/foo%23bar'));
-    expect(context.toUri(r'/_{_}_`_^_ _"_%_'),
+    expect(context.toUrl(r'/_{_}_`_^_ _"_%_'),
         Uri.parse('file:///_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(r'_{_}_`_^_ _"_%_'),
+    expect(context.toUrl(r'_{_}_`_^_ _"_%_'),
         Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_'));
-    expect(context.toUri(''), Uri.parse(''));
+    expect(context.toUrl(''), Uri.parse(''));
   });
 
   group('prettyUri', () {

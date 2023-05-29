@@ -77,7 +77,7 @@ void main(List<String> args) {
         // Do nothing.
       }
     });
-    benchmark('toUri', context.toUri);
+    benchmark('toUri', context.toUrl);
     benchmark('prettyUri', context.prettyUri);
     benchmarkPairs('isWithin', context.isWithin);
   }
