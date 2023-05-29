@@ -5,9 +5,8 @@ description: >-
   and love, with solid support for Windows, POSIX (Linux and Mac OS X), and the
   web.
 repository: https://github.com/dart-lang/path
-
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dev_dependencies:
   dart_flutter_team_lints: ^0.1.0
