@@ -178,3 +178,8 @@
 # 1.1.0
 
 * `path.fromUri` now accepts strings as well as `Uri` objects.
+
+# 1.8.4
+
+* `toUrl` was renamed to `toUrl`.
+* `fromUri` was renamed to `fromUrl`.

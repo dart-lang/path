@@ -1023,20 +1023,20 @@ class Context {
   /// style, this will just convert [uri] to a string.
   ///
   ///     // POSIX
-  ///     context.fromUri('file:///path/to/foo')
+  ///     context.fromUrl('file:///path/to/foo')
   ///       // -> '/path/to/foo'
   ///
   ///     // Windows
-  ///     context.fromUri('file:///C:/path/to/foo')
+  ///     context.fromUrl('file:///C:/path/to/foo')
   ///       // -> r'C:\path\to\foo'
   ///
   ///     // URL
-  ///     context.fromUri('https://dart.dev/path/to/foo')
+  ///     context.fromUrl('https://dart.dev/path/to/foo')
   ///       // -> 'https://dart.dev/path/to/foo'
   ///
   /// If [uri] is relative, a relative path will be returned.
   ///
-  ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
+  ///     path.fromUrl('path/to/foo'); // -> 'path/to/foo'
   String fromUrl(Object? uri) => style.pathFromUri(_parseUri(uri!));
 
   /// Returns the URI that represents [path].
@@ -1045,15 +1045,15 @@ class Context {
   /// style, this will just convert [path] to a [Uri].
   ///
   ///     // POSIX
-  ///     context.toUri('/path/to/foo')
+  ///     context.toUrl('/path/to/foo')
   ///       // -> Uri.parse('file:///path/to/foo')
   ///
   ///     // Windows
-  ///     context.toUri(r'C:\path\to\foo')
+  ///     context.toUrl(r'C:\path\to\foo')
   ///       // -> Uri.parse('file:///C:/path/to/foo')
   ///
   ///     // URL
-  ///     context.toUri('https://dart.dev/path/to/foo')
+  ///     context.toUrl('https://dart.dev/path/to/foo')
   ///       // -> Uri.parse('https://dart.dev/path/to/foo')
   Uri toUrl(String path) {
     if (isRelative(path)) {
