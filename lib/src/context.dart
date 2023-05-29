@@ -1037,7 +1037,7 @@ class Context {
   /// If [uri] is relative, a relative path will be returned.
   ///
   ///     path.fromUri('path/to/foo'); // -> 'path/to/foo'
-  String fromUri(Object? uri) => style.pathFromUri(_parseUri(uri!));
+  String fromUrl(Object? uri) => style.pathFromUri(_parseUri(uri!));
 
   /// Returns the URI that represents [path].
   ///
@@ -1098,7 +1098,7 @@ class Context {
       return typedUri.toString();
     }
 
-    final path = normalize(fromUri(typedUri));
+    final path = normalize(fromUrl(typedUri));
     final rel = relative(path);
 
     // Only return a relative path if it's actually shorter than the absolute

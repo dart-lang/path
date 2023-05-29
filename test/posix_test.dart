@@ -628,25 +628,25 @@ void main() {
     expect(context.setExtension('a/b.c//', '.x'), 'a/b//.x');
   });
 
-  group('fromUri', () {
+  group('fromUrl', () {
     test('with a URI', () {
-      expect(context.fromUri(Uri.parse('file:///path/to/foo')), '/path/to/foo');
+      expect(context.fromUrl(Uri.parse('file:///path/to/foo')), '/path/to/foo');
       expect(
-          context.fromUri(Uri.parse('file:///path/to/foo/')), '/path/to/foo/');
-      expect(context.fromUri(Uri.parse('file:///')), '/');
-      expect(context.fromUri(Uri.parse('foo/bar')), 'foo/bar');
-      expect(context.fromUri(Uri.parse('/path/to/foo')), '/path/to/foo');
-      expect(context.fromUri(Uri.parse('///path/to/foo')), '/path/to/foo');
-      expect(context.fromUri(Uri.parse('file:///path/to/foo%23bar')),
+          context.fromUrl(Uri.parse('file:///path/to/foo/')), '/path/to/foo/');
+      expect(context.fromUrl(Uri.parse('file:///')), '/');
+      expect(context.fromUrl(Uri.parse('foo/bar')), 'foo/bar');
+      expect(context.fromUrl(Uri.parse('/path/to/foo')), '/path/to/foo');
+      expect(context.fromUrl(Uri.parse('///path/to/foo')), '/path/to/foo');
+      expect(context.fromUrl(Uri.parse('file:///path/to/foo%23bar')),
           '/path/to/foo#bar');
-      expect(context.fromUri(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
+      expect(context.fromUrl(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
           r'_{_}_`_^_ _"_%_');
-      expect(() => context.fromUri(Uri.parse('https://dart.dev')),
+      expect(() => context.fromUrl(Uri.parse('https://dart.dev')),
           throwsArgumentError);
     });
 
     test('with a string', () {
-      expect(context.fromUri('file:///path/to/foo'), '/path/to/foo');
+      expect(context.fromUrl('file:///path/to/foo'), '/path/to/foo');
     });
   });
 

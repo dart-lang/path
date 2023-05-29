@@ -434,7 +434,7 @@ String setExtension(String path, String extension) =>
 /// If [uri] is relative, a relative path will be returned.
 ///
 ///     p.fromUri('path/to/foo'); // -> 'path/to/foo'
-String fromUri(Object? uri) => context.fromUri(uri!);
+String fromUri(Object? uri) => context.fromUrl(uri!);
 
 /// Returns the URI that represents [path].
 ///

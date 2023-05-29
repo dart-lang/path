@@ -903,25 +903,25 @@ void main() {
     expect(context.setExtension('a/b.c//', '.x'), 'a/b//.x');
   });
 
-  group('fromUri', () {
+  group('fromUrl', () {
     test('with a URI', () {
-      expect(context.fromUri(Uri.parse('https://dart.dev/path/to/foo')),
+      expect(context.fromUrl(Uri.parse('https://dart.dev/path/to/foo')),
           'https://dart.dev/path/to/foo');
-      expect(context.fromUri(Uri.parse('https://dart.dev/path/to/foo/')),
+      expect(context.fromUrl(Uri.parse('https://dart.dev/path/to/foo/')),
           'https://dart.dev/path/to/foo/');
-      expect(context.fromUri(Uri.parse('file:///path/to/foo')),
+      expect(context.fromUrl(Uri.parse('file:///path/to/foo')),
           'file:///path/to/foo');
-      expect(context.fromUri(Uri.parse('foo/bar')), 'foo/bar');
-      expect(context.fromUri(Uri.parse('https://dart.dev/path/to/foo%23bar')),
+      expect(context.fromUrl(Uri.parse('foo/bar')), 'foo/bar');
+      expect(context.fromUrl(Uri.parse('https://dart.dev/path/to/foo%23bar')),
           'https://dart.dev/path/to/foo%23bar');
       // Since the resulting "path" is also a URL, special characters should
       // remain percent-encoded in the result.
-      expect(context.fromUri(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
+      expect(context.fromUrl(Uri.parse('_%7B_%7D_%60_%5E_%20_%22_%25_')),
           r'_%7B_%7D_%60_%5E_%20_%22_%25_');
     });
 
     test('with a string', () {
-      expect(context.fromUri('https://dart.dev/path/to/foo'),
+      expect(context.fromUrl('https://dart.dev/path/to/foo'),
           'https://dart.dev/path/to/foo');
     });
   });
