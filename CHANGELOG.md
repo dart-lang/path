@@ -1,6 +1,6 @@
-## 1.8.4-dev
+## 1.8.4-wip
 
-* Require Dart 2.19
+* Require Dart 3.0
 * Fixed an issue with the `split` method doc comment.
 
 ## 1.8.3
