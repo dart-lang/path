@@ -301,6 +301,19 @@ void main() {
           'file://host/c:/baz/qux');
     });
 
+    test(
+        'treats drive letters as part of the root for file: URLs '
+        'with encoded colons', () {
+      expect(context.join('file:///c%3A/foo/bar', '/baz/qux'),
+          'file:///c%3A/baz/qux');
+      expect(context.join('file:///D%3A/foo/bar', '/baz/qux'),
+          'file:///D%3A/baz/qux');
+      expect(context.join('file:///c%3A/', '/baz/qux'), 'file:///c%3A/baz/qux');
+      expect(context.join('file:///c%3A', '/baz/qux'), 'file:///c%3A/baz/qux');
+      expect(context.join('file://host/c%3A/foo/bar', '/baz/qux'),
+          'file://host/c%3A/baz/qux');
+    });
+
     test('treats drive letters as normal components for non-file: URLs', () {
       expect(context.join('http://foo.com/c:/foo/bar', '/baz/qux'),
           'http://foo.com/baz/qux');
@@ -884,7 +897,7 @@ void main() {
     expect(context.withoutExtension('a/b.c//'), 'a/b//');
   });
 
-  test('withoutExtension', () {
+  test('setExtension', () {
     expect(context.setExtension('', '.x'), '.x');
     expect(context.setExtension('a', '.x'), 'a.x');
     expect(context.setExtension('.a', '.x'), '.a.x');

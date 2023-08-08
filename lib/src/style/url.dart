@@ -64,8 +64,7 @@ class UrlStyle extends InternalStyle {
         // See https://url.spec.whatwg.org/#file-slash-state.
         if (!withDrive || path.length < index + 3) return index;
         if (!path.startsWith('file://')) return index;
-        if (!isDriveLetter(path, index + 1)) return index;
-        return path.length == index + 3 ? index + 3 : index + 4;
+        return driveLetterEnd(path, index + 1) ?? index;
       }
     }
 

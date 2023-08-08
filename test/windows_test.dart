@@ -761,7 +761,7 @@ void main() {
     expect(context.withoutExtension(r'a\b.c\'), r'a\b\');
   });
 
-  test('withoutExtension', () {
+  test('setExtension', () {
     expect(context.setExtension('', '.x'), '.x');
     expect(context.setExtension('a', '.x'), 'a.x');
     expect(context.setExtension('.a', '.x'), '.a.x');
@@ -784,9 +784,12 @@ void main() {
     test('with a URI', () {
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo')),
           r'C:\path\to\foo');
+      expect(context.fromUri(Uri.parse('file:///C%3A/path/to/foo')),
+          r'C:\path\to\foo');
       expect(context.fromUri(Uri.parse('file://server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/')), r'C:\');
+      expect(context.fromUri(Uri.parse('file:///C%3A/')), r'C:\');
       expect(
           context.fromUri(Uri.parse('file://server/share')), r'\\server\share');
       expect(context.fromUri(Uri.parse('foo/bar')), r'foo\bar');
@@ -796,6 +799,8 @@ void main() {
       expect(context.fromUri(Uri.parse('//server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo%23bar')),
+          r'C:\path\to\foo#bar');
+      expect(context.fromUri(Uri.parse('file:///C%3A/path/to/foo%23bar')),
           r'C:\path\to\foo#bar');
       expect(
           context.fromUri(Uri.parse('file://server/share/path/to/foo%23bar')),
@@ -809,6 +814,7 @@ void main() {
 
     test('with a string', () {
       expect(context.fromUri('file:///C:/path/to/foo'), r'C:\path\to\foo');
+      expect(context.fromUri('file:///C%3A/path/to/foo'), r'C:\path\to\foo');
     });
   });
 
@@ -843,6 +849,16 @@ void main() {
       expect(
           context.prettyUri('file:///D:/root/path/a/b'), r'D:\root\path\a\b');
       expect(context.prettyUri('file:///C:/root/other'), r'..\other');
+    });
+
+    test('with a file: URI with encoded colons', () {
+      expect(context.prettyUri('file:///C%3A/root/path/a/b'), r'a\b');
+      expect(context.prettyUri('file:///C%3A/root/path/a/../b'), r'b');
+      expect(context.prettyUri('file:///C%3A/other/path/a/b'),
+          r'C:\other\path\a\b');
+      expect(
+          context.prettyUri('file:///D%3A/root/path/a/b'), r'D:\root\path\a\b');
+      expect(context.prettyUri('file:///C%3A/root/other'), r'..\other');
     });
 
     test('with an http: URI', () {
