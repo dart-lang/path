@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:path/path.dart' as path;
+import 'package:path/src/utils.dart';
 import 'package:test/test.dart';
 
 import 'utils.dart';
@@ -43,7 +44,7 @@ void main() {
     expect(context.rootPrefix('a'), '');
     expect(context.rootPrefix(r'a\b'), '');
     expect(context.rootPrefix(r'C:\a\c'), r'C:\');
-    expect(context.rootPrefix('C:\\'), r'C:\');
+    expect(context.rootPrefix(r'C:\'), r'C:\');
     expect(context.rootPrefix('C:/'), 'C:/');
     expect(context.rootPrefix(r'\\server\share\a\b'), r'\\server\share');
     expect(context.rootPrefix(r'\\server\share'), r'\\server\share');
@@ -761,7 +762,7 @@ void main() {
     expect(context.withoutExtension(r'a\b.c\'), r'a\b\');
   });
 
-  test('withoutExtension', () {
+  test('setExtension', () {
     expect(context.setExtension('', '.x'), '.x');
     expect(context.setExtension('a', '.x'), 'a.x');
     expect(context.setExtension('.a', '.x'), '.a.x');
@@ -784,9 +785,12 @@ void main() {
     test('with a URI', () {
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo')),
           r'C:\path\to\foo');
+      expect(context.fromUri(Uri.parse('file:///C%3A/path/to/foo')),
+          r'C:\path\to\foo');
       expect(context.fromUri(Uri.parse('file://server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/')), r'C:\');
+      expect(context.fromUri(Uri.parse('file:///C%3A/')), r'C:\');
       expect(
           context.fromUri(Uri.parse('file://server/share')), r'\\server\share');
       expect(context.fromUri(Uri.parse('foo/bar')), r'foo\bar');
@@ -796,6 +800,8 @@ void main() {
       expect(context.fromUri(Uri.parse('//server/share/path/to/foo')),
           r'\\server\share\path\to\foo');
       expect(context.fromUri(Uri.parse('file:///C:/path/to/foo%23bar')),
+          r'C:\path\to\foo#bar');
+      expect(context.fromUri(Uri.parse('file:///C%3A/path/to/foo%23bar')),
           r'C:\path\to\foo#bar');
       expect(
           context.fromUri(Uri.parse('file://server/share/path/to/foo%23bar')),
@@ -809,6 +815,7 @@ void main() {
 
     test('with a string', () {
       expect(context.fromUri('file:///C:/path/to/foo'), r'C:\path\to\foo');
+      expect(context.fromUri('file:///C%3A/path/to/foo'), r'C:\path\to\foo');
     });
   });
 
@@ -845,6 +852,16 @@ void main() {
       expect(context.prettyUri('file:///C:/root/other'), r'..\other');
     });
 
+    test('with a file: URI with encoded colons', () {
+      expect(context.prettyUri('file:///C%3A/root/path/a/b'), r'a\b');
+      expect(context.prettyUri('file:///C%3A/root/path/a/../b'), r'b');
+      expect(context.prettyUri('file:///C%3A/other/path/a/b'),
+          r'C:\other\path\a\b');
+      expect(
+          context.prettyUri('file:///D%3A/root/path/a/b'), r'D:\root\path\a\b');
+      expect(context.prettyUri('file:///C%3A/root/other'), r'..\other');
+    });
+
     test('with an http: URI', () {
       expect(context.prettyUri('https://dart.dev/a/b'), 'https://dart.dev/a/b');
     });
@@ -860,5 +877,30 @@ void main() {
     test('with a Uri object', () {
       expect(context.prettyUri(Uri.parse('a/b')), r'a\b');
     });
+  });
+
+  test('driveLetterEnd', () {
+    expect(driveLetterEnd('', 0), null);
+    expect(driveLetterEnd('foo.dart', 0), null);
+    expect(driveLetterEnd('@', 0), null);
+
+    expect(driveLetterEnd('c:', 0), 2);
+
+    // colons
+    expect(driveLetterEnd('c:/', 0), 3);
+    expect(driveLetterEnd('c:/a', 0), 3);
+
+    // escaped colons lowercase
+    expect(driveLetterEnd('c%3a/', 0), 5);
+    expect(driveLetterEnd('c%3a/a', 0), 5);
+
+    // escaped colons uppercase
+    expect(driveLetterEnd('c%3A/', 0), 5);
+    expect(driveLetterEnd('c%3A/a', 0), 5);
+
+    // non-drive letter
+    expect(driveLetterEnd('ab:/c', 0), null);
+    expect(driveLetterEnd('ab%3a/c', 0), null);
+    expect(driveLetterEnd('ab%3A/c', 0), null);
   });
 }

@@ -15,10 +15,34 @@ bool isNumeric(int char) => char >= chars.zero && char <= chars.nine;
 
 /// Returns whether [path] has a URL-formatted Windows drive letter beginning at
 /// [index].
-bool isDriveLetter(String path, int index) {
-  if (path.length < index + 2) return false;
-  if (!isAlphabetic(path.codeUnitAt(index))) return false;
-  if (path.codeUnitAt(index + 1) != chars.colon) return false;
-  if (path.length == index + 2) return true;
-  return path.codeUnitAt(index + 2) == chars.slash;
+bool isDriveLetter(String path, int index) =>
+    driveLetterEnd(path, index) != null;
+
+/// Returns the index of the first character after the drive letter or a
+/// URL-formatted path, or `null` if [index] is not the start of a drive letter.
+/// A valid drive letter must be followed by a colon and then either a `/` or
+/// the end of string.
+///
+/// ```
+/// d:/abc => 3
+/// d:/    => 3
+/// d:     => 2
+/// d      => null
+/// ```
+int? driveLetterEnd(String path, int index) {
+  if (path.length < index + 2) return null;
+  if (!isAlphabetic(path.codeUnitAt(index))) return null;
+  if (path.codeUnitAt(index + 1) != chars.colon) {
+    // If not a raw colon, check for escaped colon
+    if (path.length < index + 4) return null;
+    if (path.substring(index + 1, index + 4).toLowerCase() != '%3a') {
+      return null;
+    }
+    // Offset the index to account for the extra 2 characters from the
+    // colon encoding.
+    index += 2;
+  }
+  if (path.length == index + 2) return index + 2;
+  if (path.codeUnitAt(index + 2) != chars.slash) return null;
+  return index + 3;
 }
