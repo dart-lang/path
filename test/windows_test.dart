@@ -3,6 +3,7 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'package:path/path.dart' as path;
+import 'package:path/src/utils.dart';
 import 'package:test/test.dart';
 
 import 'utils.dart';
@@ -43,7 +44,7 @@ void main() {
     expect(context.rootPrefix('a'), '');
     expect(context.rootPrefix(r'a\b'), '');
     expect(context.rootPrefix(r'C:\a\c'), r'C:\');
-    expect(context.rootPrefix('C:\\'), r'C:\');
+    expect(context.rootPrefix(r'C:\'), r'C:\');
     expect(context.rootPrefix('C:/'), 'C:/');
     expect(context.rootPrefix(r'\\server\share\a\b'), r'\\server\share');
     expect(context.rootPrefix(r'\\server\share'), r'\\server\share');
@@ -876,5 +877,30 @@ void main() {
     test('with a Uri object', () {
       expect(context.prettyUri(Uri.parse('a/b')), r'a\b');
     });
+  });
+
+  test('driveLetterEnd', () {
+    expect(driveLetterEnd('', 0), null);
+    expect(driveLetterEnd('foo.dart', 0), null);
+    expect(driveLetterEnd('@', 0), null);
+
+    expect(driveLetterEnd('c:', 0), 2);
+
+    // colons
+    expect(driveLetterEnd('c:/', 0), 3);
+    expect(driveLetterEnd('c:/a', 0), 3);
+
+    // escaped colons lowercase
+    expect(driveLetterEnd('c%3a/', 0), 5);
+    expect(driveLetterEnd('c%3a/a', 0), 5);
+
+    // escaped colons uppercase
+    expect(driveLetterEnd('c%3A/', 0), 5);
+    expect(driveLetterEnd('c%3A/a', 0), 5);
+
+    // non-drive letter
+    expect(driveLetterEnd('ab:/c', 0), null);
+    expect(driveLetterEnd('ab%3a/c', 0), null);
+    expect(driveLetterEnd('ab%3A/c', 0), null);
   });
 }

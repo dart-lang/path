@@ -18,8 +18,17 @@ bool isNumeric(int char) => char >= chars.zero && char <= chars.nine;
 bool isDriveLetter(String path, int index) =>
     driveLetterEnd(path, index) != null;
 
-/// Returns the index of the first character after the drive letter, or `null`
-/// if [index] is not the start of a drive letter.
+/// Returns the index of the first character after the drive letter or a
+/// URL-formatted path, or `null` if [index] is not the start of a drive letter.
+/// A valid drive letter must be followed by a colon and then either a `/` or
+/// the end of string.
+///
+/// ```
+/// d:/abc => 3
+/// d:/    => 3
+/// d:     => 2
+/// d      => null
+/// ```
 int? driveLetterEnd(String path, int index) {
   if (path.length < index + 2) return null;
   if (!isAlphabetic(path.codeUnitAt(index))) return null;
