@@ -327,7 +327,7 @@ void main() {
 
   group('split', () {
     test('simple cases', () {
-      expect(context.split(''), []);
+      expect(context.split(''), <String>[]);
       expect(context.split('.'), ['.']);
       expect(context.split('..'), ['..']);
       expect(context.split('foo'), equals(['foo']));

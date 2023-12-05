@@ -1,8 +1,8 @@
-## 1.9.0-wip
+## 1.9.0
 
-* Require Dart 3.0
-* Fixed an issue with the `split` method doc comment.
 * Allow percent-encoded colons (`%3a`) in drive letters in `fromUri`.
+* Fixed an issue with the `split` method doc comment.
+* Require Dart 3.0
 
 ## 1.8.3
 
