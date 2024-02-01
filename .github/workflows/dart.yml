@@ -50,3 +50,7 @@ jobs:
           sdk: ${{ matrix.sdk }}
       - run: dart pub get
       - run: dart test --platform vm,chrome
+      - name: Run Chrome tests - wasm
+        run: dart test --platform chrome --compiler dart2wasm
+        # TODO: drop `dev` filter when dart2wasm is working on stable
+        if: always() && steps.install.outcome == 'success' && matrix.sdk == 'dev'
