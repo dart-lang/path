@@ -12,3 +12,6 @@ environment:
 dev_dependencies:
   dart_flutter_team_lints: ^2.0.0
   test: ^1.16.0
+
+topics:
+ - file-system
