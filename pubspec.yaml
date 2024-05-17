@@ -6,12 +6,12 @@ description: >-
   web.
 repository: https://github.com/dart-lang/path
 
+topics:
+ - file-system
+
 environment:
   sdk: ^3.0.0
 
 dev_dependencies:
   dart_flutter_team_lints: ^2.0.0
   test: ^1.16.0
-
-topics:
- - file-system
