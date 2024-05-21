@@ -6,6 +6,9 @@ description: >-
   web.
 repository: https://github.com/dart-lang/path
 
+topics:
+ - file-system
+
 environment:
   sdk: ^3.0.0
 
