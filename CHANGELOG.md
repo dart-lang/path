@@ -1,3 +1,7 @@
+## 1.9.1-wip
+
+- Require Dart 3.4
+
 ## 1.9.0
 
 * Allow percent-encoded colons (`%3a`) in drive letters in `fromUri`.
